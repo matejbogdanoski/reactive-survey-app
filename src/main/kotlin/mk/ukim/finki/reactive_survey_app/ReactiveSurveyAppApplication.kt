@@ -9,7 +9,3 @@ class ReactiveSurveyAppApplication
 fun main(args: Array<String>) {
     runApplication<ReactiveSurveyAppApplication>(*args)
 }
-
-class TestController{
-
-}
