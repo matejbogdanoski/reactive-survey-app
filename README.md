@@ -24,6 +24,10 @@
 ### Frontend
 * node v14+
 * npm 6+
+* install packages
+    ```
+    npm i
+    ```
 * Run with npm in the `/ng-reactive-survey` directory
 
     ```
