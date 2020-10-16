@@ -1,11 +1,12 @@
 package mk.ukim.finki.reactive_survey_app.domain
 
+import mk.ukim.finki.reactive_survey_app.constants.Schemas
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion.Companion.TABLE_NAME
 import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
-@Table(TABLE_NAME)
+@Table("${Schemas.SURVEY}.${TABLE_NAME}")
 data class SurveyQuestion(
         @Id
         val id: Long? = null,
@@ -23,6 +24,6 @@ data class SurveyQuestion(
         val isRequired: Boolean
 ) {
     companion object {
-        const val TABLE_NAME = "survey.survey_questions"
+        const val TABLE_NAME = "survey_questions"
     }
 }
