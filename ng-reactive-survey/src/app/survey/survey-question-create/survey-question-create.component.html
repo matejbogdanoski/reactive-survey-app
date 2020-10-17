@@ -1,0 +1,15 @@
+<h1>Test create page</h1>
+
+<div *ngFor='let question of (questions$ | async)'>
+
+  <h3>Question name: {{question.name}}</h3>
+  <p>Question type: {{question.questionType}}</p>
+  <button (click)='updateQuestionSurveyType(question.id, QUESTION_TYPE.DROPDOWN)'>
+    Change to dropdown
+  </button>
+
+  <button (click)='delete(question.id)'>Delete question!</button>
+
+</div>
+
+<button (click)='createSurveyQuestion()'>CREATE new question</button>

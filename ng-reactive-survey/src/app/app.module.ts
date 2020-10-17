@@ -9,6 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
+import { SurveyModule } from './survey/survey.module';
 
 @NgModule({
   declarations: [
@@ -18,10 +19,13 @@ import { AppEffects } from './app.effects';
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([AppEffects])
+    !environment.production ? StoreDevtoolsModule.instrument({
+      maxAge: 25
+    }) : [],
+    EffectsModule.forRoot([AppEffects]),
+    SurveyModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
