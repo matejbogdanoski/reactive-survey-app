@@ -1,32 +1,17 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { SurveyQuestionCreate } from '../interfaces/survey-question.interface';
 
-export const CREATE = '[Survey Question] Create';
-export const UPDATE = '[Survey Question] Update';
-export const DELETE = '[Survey Question] Delete';
+export const addSurveyQuestion = createAction(
+  '[Survey Question] Add Survey Question', props<{ surveyQuestion: SurveyQuestionCreate }>()
+);
 
-export class Create implements Action {
-  readonly type = CREATE;
+export const updateSurveyQuestion = createAction(
+  '[Survey Question] Update', props<{
+    id: number,
+    changes: Partial<SurveyQuestionCreate>
+  }>()
+);
 
-  constructor(public surveyQuestion: SurveyQuestionCreate) {
-  }
-}
-
-export class Update implements Action {
-  readonly type = UPDATE;
-
-  constructor(
-    public id: number,
-    public changes: Partial<SurveyQuestionCreate>
-  ) {
-  }
-}
-
-export class Delete implements Action {
-  readonly type = DELETE;
-
-  constructor(public id: number) {
-  }
-}
-
-export type SurveyQuestionCreateActions = Create | Update | Delete;
+export const deleteSurveyQuestion = createAction(
+  '[Survey Question] Delete', props<{ id: number }>()
+);

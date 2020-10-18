@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import * as actions from './survey-question-create.actions';
 import * as surveyQuestionSelectors from './survey-question-create.selectors';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { SurveyQuestionCreateState } from './survey-question-create.state';
 import { SurveyQuestionCreate } from '../interfaces/survey-question.interface';
 import { QuestionType } from '../enum/question-type.enum';
-import { Survey } from '../interfaces/survey.interface';
+import { addSurveyQuestion, deleteSurveyQuestion, updateSurveyQuestion } from './survey-question-create.actions';
 
 @Component({
   templateUrl: './survey-question-create.component.html',
@@ -25,7 +24,7 @@ export class SurveyQuestionCreateComponent implements OnInit {
   }
 
   createSurveyQuestion() {
-    const survey: SurveyQuestionCreate = {
+    const surveyQuestion: SurveyQuestionCreate = {
       id: new Date().getMilliseconds(),
       isRequired: false,
       name: 'Untitled question',
@@ -34,17 +33,15 @@ export class SurveyQuestionCreateComponent implements OnInit {
       position: -1
     };
 
-    this.store.dispatch(new actions.Create(survey));
+    this.store.dispatch(addSurveyQuestion({ surveyQuestion }));
   }
 
   updateQuestionSurveyType(id: number, questionType: QuestionType) {
-    this.store.dispatch(new actions.Update(id, {
-      questionType
-    }));
+    this.store.dispatch(updateSurveyQuestion({ id: id, changes: { questionType } }));
   }
 
   delete(id: number) {
-    this.store.dispatch(new actions.Delete(id));
+    this.store.dispatch(deleteSurveyQuestion({ id }));
   }
 
 }

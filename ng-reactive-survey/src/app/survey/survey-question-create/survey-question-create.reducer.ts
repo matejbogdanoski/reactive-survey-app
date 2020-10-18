@@ -1,9 +1,10 @@
-import * as actions from './survey-question-create.actions';
 import { SurveyQuestionCreateState } from './survey-question-create.state';
-import { surveyQuestionCreateAdapter } from './survey-question-create.adapters';
 import { QuestionType } from '../enum/question-type.enum';
-import { Survey } from '../interfaces/survey.interface';
 import { QuestionOption } from '../interfaces/question-option.interface';
+import { createReducer, on } from '@ngrx/store';
+import * as SurveyQuestionCreateActions from './survey-question-create.actions';
+import { createEntityAdapter } from '@ngrx/entity';
+import { SurveyQuestionCreate } from '../interfaces/survey-question.interface';
 
 //Default data / initial state
 const defaultSurvey = {
@@ -20,30 +21,21 @@ const defaultSurvey = {
   }
 };
 
+export const surveyQuestionCreateAdapter = createEntityAdapter<SurveyQuestionCreate>();
+
 export const initialState: SurveyQuestionCreateState = surveyQuestionCreateAdapter.getInitialState(defaultSurvey);
 
 //Reducer
-export function surveyQuestionCreateReducer(
-  state: SurveyQuestionCreateState = initialState,
-  action: actions.SurveyQuestionCreateActions
-) {
-
-  switch (action.type) {
-
-    case actions.CREATE:
-      return surveyQuestionCreateAdapter.addOne(action.surveyQuestion, state);
-
-    case actions.UPDATE:
-      return surveyQuestionCreateAdapter.updateOne({
-        id: action.id,
-        changes: action.changes
-      }, state);
-
-    case actions.DELETE:
-      return surveyQuestionCreateAdapter.removeOne(action.id, state);
-
-    default:
-      return state;
-  }
-
-}
+export const surveyQuestionCreateReducer = createReducer(
+  initialState,
+  on(SurveyQuestionCreateActions.addSurveyQuestion,
+    (state, action) => surveyQuestionCreateAdapter.addOne(action.surveyQuestion, state)
+  ),
+  on(SurveyQuestionCreateActions.deleteSurveyQuestion, (state, action) => surveyQuestionCreateAdapter.removeOne(action.id, state)),
+  on(SurveyQuestionCreateActions.updateSurveyQuestion,
+    (state, action) => surveyQuestionCreateAdapter.updateOne({
+      id: action.id,
+      changes: action.changes
+    }, state)
+  )
+);
