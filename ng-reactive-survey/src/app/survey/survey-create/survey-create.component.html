@@ -1,1 +1,29 @@
-<p>survey-create works!</p>
+<h1>Test create page</h1>
+
+<form [formGroup]='form'>
+
+  <div>
+    <input formControlName='title'
+           placeholder='Survey Title'
+           type='text'>
+  </div>
+
+  <div>
+    <input formControlName='description'
+           placeholder='Survey Description'
+           type='text'>
+  </div>
+
+  <div>
+    <label>
+      Can take anonymously ?
+      <input type='checkbox'
+             formControlName='canTakeAnonymously'>
+    </label>
+  </div>
+
+  <survey-question-create></survey-question-create>
+  <br>
+  <button (click)='onFormSubmit()'>Create survey !</button>
+
+</form>

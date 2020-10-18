@@ -8,23 +8,34 @@ import { SurveyCreateComponent } from './survey-create/survey-create.component';
 import { EffectsModule } from '@ngrx/effects';
 import { SurveyQuestionCreateEffects } from './survey-question-create/survey-question-create.effects';
 import { SurveyQuestionService } from './services/survey-question.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SurveyCreateEffects } from './survey-create/survey-create.effects';
+import { SurveyService } from './services/survey.service';
 
 const components = [
-  SurveyQuestionCreateComponent
+  SurveyQuestionCreateComponent,
+  SurveyCreateComponent
 ];
 
 const services = [
-  SurveyQuestionService
+  SurveyQuestionService,
+  SurveyService
+];
+
+const effects = [
+  SurveyQuestionCreateEffects,
+  SurveyCreateEffects
 ];
 
 @NgModule({
   providers: [...services],
-  declarations: [...components, SurveyCreateComponent],
+  declarations: [...components],
   imports: [
     CommonModule,
     StoreModule.forFeature('survey', reducers),
     SurveyRoutingModule,
-    EffectsModule.forFeature([SurveyQuestionCreateEffects])
+    EffectsModule.forFeature(effects),
+    ReactiveFormsModule
   ]
 })
 export class SurveyModule {}

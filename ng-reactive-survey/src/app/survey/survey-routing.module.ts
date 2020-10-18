@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { SurveyQuestionCreateComponent } from './survey-question-create/survey-question-create.component';
+import { SurveyCreateComponent } from './survey-create/survey-create.component';
 
 const routes: Route[] = [
   {
     path: '',
-    component: SurveyQuestionCreateComponent
-  },
+    component: SurveyCreateComponent
+  }
 ];
 
 @NgModule({

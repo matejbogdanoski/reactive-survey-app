@@ -1,7 +1,5 @@
-export interface Survey {
-  id?: number;
+export interface SurveyCreate {
   title: string;
   description: string;
-  naturalKey: string;
   canTakeAnonymously: boolean;
 }

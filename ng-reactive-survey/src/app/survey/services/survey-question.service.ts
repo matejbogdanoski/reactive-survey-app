@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class SurveyQuestionService {
-  private readonly path = `api/survey/questions`;
+  private readonly path = `api/surveys/questions`;
 
   constructor(
     private _http: HttpClient

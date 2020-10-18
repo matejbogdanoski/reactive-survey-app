@@ -8,39 +8,40 @@ import { addSurveyQuestion, deleteSurveyQuestion, updateSurveyQuestion } from '.
 import { selectSurveyQuestions } from './survey-question-create.selectors';
 
 @Component({
-  templateUrl: './survey-question-create.component.html',
-  styleUrls: ['./survey-question-create.component.scss']
+    selector: 'survey-question-create',
+    templateUrl: './survey-question-create.component.html',
+    styleUrls: ['./survey-question-create.component.scss']
 })
 export class SurveyQuestionCreateComponent implements OnInit {
 
-  QUESTION_TYPE = QuestionType;
+    QUESTION_TYPE = QuestionType;
 
-  questions$: Observable<SurveyQuestionCreate[]>;
+    questions$: Observable<SurveyQuestionCreate[]>;
 
-  constructor(private store: Store<SurveyQuestionCreateState>) { }
+    constructor(private _store: Store<SurveyQuestionCreateState>) { }
 
-  ngOnInit(): void {
-    this.questions$ = this.store.select(selectSurveyQuestions);
-  }
+    ngOnInit(): void {
+        this.questions$ = this._store.select(selectSurveyQuestions);
+    }
 
-  createSurveyQuestion() {
-    const surveyQuestion: SurveyQuestionCreate = {
-      isRequired: false,
-      name: 'Untitled question',
-      options: [],
-      questionType: QuestionType.MULTIPLE_CHOICE,
-      position: -1
-    };
+    createSurveyQuestion() {
+        const surveyQuestion: SurveyQuestionCreate = {
+            isRequired: false,
+            name: 'Untitled question',
+            options: [],
+            questionType: QuestionType.MULTIPLE_CHOICE,
+            position: -1
+        };
 
-    this.store.dispatch(addSurveyQuestion({ surveyQuestion }));
-  }
+        this._store.dispatch(addSurveyQuestion({ surveyQuestion }));
+    }
 
-  updateQuestionSurveyType(question: SurveyQuestionCreate, questionType: QuestionType) {
-    this.store.dispatch(updateSurveyQuestion({ surveyQuestion: question, changes: { questionType } }));
-  }
+    updateQuestionSurveyType(question: SurveyQuestionCreate, questionType: QuestionType) {
+        this._store.dispatch(updateSurveyQuestion({ surveyQuestion: question, changes: { questionType } }));
+    }
 
-  delete(question: SurveyQuestionCreate) {
-    this.store.dispatch(deleteSurveyQuestion({ surveyQuestion: question }));
-  }
+    delete(question: SurveyQuestionCreate) {
+        this._store.dispatch(deleteSurveyQuestion({ surveyQuestion: question }));
+    }
 
 }
