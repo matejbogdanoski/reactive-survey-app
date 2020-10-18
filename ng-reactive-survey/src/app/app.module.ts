@@ -10,6 +10,7 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
 import { SurveyModule } from './survey/survey.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SurveyModule } from './survey/survey.module';
       maxAge: 25
     }) : [],
     EffectsModule.forRoot([AppEffects]),
-    SurveyModule
+    SurveyModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,17 +1,26 @@
 import { createAction, props } from '@ngrx/store';
 import { SurveyQuestionCreate } from '../interfaces/survey-question.interface';
 
+//Add survey question
 export const addSurveyQuestion = createAction(
-  '[Survey Question] Add Survey Question', props<{ surveyQuestion: SurveyQuestionCreate }>()
+  '[Survey Question Create Component] Add Survey Question', props<{ surveyQuestion: SurveyQuestionCreate }>()
+);
+
+export const addSurveyQuestionSuccess = createAction(
+  '[Survey Question Create Effect] Add Survey Question Success', props<{ surveyQuestion: SurveyQuestionCreate }>()
+);
+
+export const addSurveyQuestionFailure = createAction(
+  '[Survey Question Create Effect] Add Survey Question Failure', props<{ error: any}>()
 );
 
 export const updateSurveyQuestion = createAction(
   '[Survey Question] Update', props<{
-    id: number,
+    surveyQuestion: SurveyQuestionCreate,
     changes: Partial<SurveyQuestionCreate>
   }>()
 );
 
 export const deleteSurveyQuestion = createAction(
-  '[Survey Question] Delete', props<{ id: number }>()
+  '[Survey Question] Delete', props<{ surveyQuestion: SurveyQuestionCreate }>()
 );
