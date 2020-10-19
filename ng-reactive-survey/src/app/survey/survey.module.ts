@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SurveyQuestionCreateComponent } from './survey-question-create/survey-question-create.component';
+import { SurveyQuestionCreateComponent } from './components/survey-question-create/survey-question-create.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers } from './reducers';
 import { SurveyRoutingModule } from './survey-routing.module';
-import { SurveyCreateComponent } from './survey-create/survey-create.component';
+import { SurveyCreateComponent } from './components/survey-create/survey-create.component';
 import { EffectsModule } from '@ngrx/effects';
-import { SurveyQuestionCreateEffects } from './survey-question-create/survey-question-create.effects';
 import { SurveyQuestionService } from './services/survey-question.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SurveyCreateEffects } from './survey-create/survey-create.effects';
 import { SurveyService } from './services/survey.service';
+import { SurveyEditPage } from './pages/survey-edit/survey-edit.page';
+import { HomePage } from './pages/home/home.page';
+import { SurveyEffects } from './store/survey.effects';
+import { surveyReducer } from './store/survey.reducers';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -22,19 +23,19 @@ const services = [
   SurveyService
 ];
 
-const effects = [
-  SurveyQuestionCreateEffects,
-  SurveyCreateEffects
+const pages = [
+  SurveyEditPage,
+  HomePage
 ];
 
 @NgModule({
   providers: [...services],
-  declarations: [...components],
+  declarations: [...components, ...pages],
   imports: [
     CommonModule,
-    StoreModule.forFeature('survey', reducers),
+    StoreModule.forFeature('survey', surveyReducer),
     SurveyRoutingModule,
-    EffectsModule.forFeature(effects),
+    EffectsModule.forFeature([SurveyEffects]),
     ReactiveFormsModule
   ]
 })

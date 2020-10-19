@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { SurveyCreateComponent } from './survey-create/survey-create.component';
+import { SurveyEditPage } from './pages/survey-edit/survey-edit.page';
+import { HomePage } from './pages/home/home.page';
 
 const routes: Route[] = [
   {
     path: '',
-    component: SurveyCreateComponent
+    component: HomePage
+  },
+  {
+    path: ':naturalKey',
+    component: SurveyEditPage
   }
 ];
 

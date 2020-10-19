@@ -1,18 +1,34 @@
 import { Injectable } from '@angular/core';
-import { SurveyQuestionCreate } from '../interfaces/survey-question.interface';
+import { SurveyQuestion } from '../interfaces/survey-question.interface';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { QuestionType } from '../enum/question-type.enum';
+import { QuestionOption } from '../interfaces/question-option.interface';
 
 @Injectable()
 export class SurveyQuestionService {
   private readonly path = `api/surveys/questions`;
+
+  private readonly mockQuestion = {
+    questionType: QuestionType.MULTIPLE_CHOICE,
+    position: 1,
+    name: 'Untitled Question',
+    options: [
+      {
+        id: 1,
+        label: 'Option 1'
+      } as QuestionOption
+    ],
+    isRequired: false
+  } as SurveyQuestion;
 
   constructor(
     private _http: HttpClient
   ) {
   }
 
-  public createSurveyQuestion(surveyQuestion: SurveyQuestionCreate): Observable<SurveyQuestionCreate> {
-    return this._http.post<SurveyQuestionCreate>(`${this.path}`, { surveyQuestion });
+  public createSurveyQuestion(): Observable<SurveyQuestion> {
+    return of({ id: new Date().getMilliseconds(), ...this.mockQuestion });
+    // return this._http.post<SurveyQuestion>(`${this.path}`, { });
   }
 }
