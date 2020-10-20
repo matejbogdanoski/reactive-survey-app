@@ -6,3 +6,9 @@ export interface SurveyState {
   questions: SurveyQuestion[];
   error: any;
 }
+
+export const initialState: SurveyState = {
+  questions: [],
+  survey: {} as Survey,
+  error: undefined
+};

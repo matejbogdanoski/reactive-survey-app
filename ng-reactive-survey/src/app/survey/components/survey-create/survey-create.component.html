@@ -4,12 +4,14 @@
 
   <div>
     <input formControlName='title'
+           (change)='onValueUpdate()'
            placeholder='Survey Title'
            type='text'>
   </div>
 
   <div>
     <input formControlName='description'
+           (change)='onValueUpdate()'
            placeholder='Survey Description'
            type='text'>
   </div>
@@ -17,8 +19,9 @@
   <div>
     <label>
       Can take anonymously ?
-      <input type='checkbox'
-             formControlName='canTakeAnonymously'>
+      <input formControlName='canTakeAnonymously'
+             (change)='onValueUpdate()'
+             type='checkbox'>
     </label>
   </div>
 </form>

@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SurveyService } from '../../services/survey.service';
+import { SurveyService } from '../../services/survey/survey.service';
 import { SurveyState } from '../../store/survey.state';
 import { Store } from '@ngrx/store';
 import { selectSurvey } from '../../store/survey.selectors';
 import { findSurvey } from './survey-edit-page.actions';
+import { takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   templateUrl: './survey-edit.page.html',
   styleUrls: ['./survey-edit.page.scss']
 })
-export class SurveyEditPage implements OnInit {
+export class SurveyEditPage implements OnInit, OnDestroy {
+
+  private _destroySubject = new Subject<void>();
 
   constructor(
     private _route: ActivatedRoute,
@@ -19,14 +23,21 @@ export class SurveyEditPage implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._state.select(selectSurvey).subscribe(survey => {
-        const naturalKey = this._route.snapshot.paramMap.get('naturalKey');
-        if (naturalKey !== survey.naturalKey) {
+    this._state.select(selectSurvey).pipe(
+      takeUntil(this._destroySubject),
+      withLatestFrom(this._route.paramMap),
+      tap(([survey, params]) => {
+        const naturalKey = params.get('naturalKey');
+        if (survey.naturalKey !== naturalKey) {
           //dispatch action to find the survey from backend
           this._state.dispatch(findSurvey({ naturalKey }));
         }
-      }
-    );
+      })
+    ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this._destroySubject.next();
   }
 
 }

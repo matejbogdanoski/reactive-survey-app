@@ -1,19 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { editSurvey } from './survey-create.actions';
-import { Survey } from '../../interfaces/survey.interface';
 import { selectSurvey } from '../../store/survey.selectors';
 import { SurveyState } from '../../store/survey.state';
+import { patchFormValues } from '../../../operators/patch-form-values.rx-operator';
+import { SurveyEditInfo } from '../../interfaces/survey-edit-info.interface';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-survey-create',
   templateUrl: './survey-create.component.html',
   styleUrls: ['./survey-create.component.scss']
 })
-export class SurveyCreateComponent implements OnInit {
+export class SurveyCreateComponent implements OnInit, OnDestroy {
 
   form: FormGroup = this._formDefinition;
+
+  private _destroySubject = new Subject<void>();
 
   constructor(
     private _builder: FormBuilder,
@@ -21,14 +26,15 @@ export class SurveyCreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._store.select(selectSurvey).subscribe(data => {
-      this.form.patchValue(data);
-    });
+    this._store.select(selectSurvey).pipe(
+      takeUntil(this._destroySubject),
+      patchFormValues(this.form)
+    ).subscribe();
   }
 
-  onFormSubmit() {
-    const survey = this.form.getRawValue() as Survey;
-    this._store.dispatch(editSurvey({ survey }));
+  onValueUpdate() {
+    const surveyEditInfo = this.form.getRawValue() as SurveyEditInfo;
+    this._store.dispatch(editSurvey({ surveyEditInfo }));
   }
 
   get _formDefinition() {
@@ -37,6 +43,10 @@ export class SurveyCreateComponent implements OnInit {
       description: [''],
       canTakeAnonymously: ['']
     });
+  }
+
+  ngOnDestroy(): void {
+    this._destroySubject.next();
   }
 
 }

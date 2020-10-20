@@ -1,14 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { Survey } from '../../interfaces/survey.interface';
+import { SurveyEditInfo } from '../../interfaces/survey-edit-info.interface';
 
-export const editSurvey = createAction(
-  '[Survey Edit Component] Edit survey', props<{ survey: Survey }>()
-);
+const source = '[Survey Edit Component]';
 
-export const editSurveySuccess = createAction(
-  '[Survey Edit Effect] Edit survey success', props<{ survey: Survey }>()
-);
-
-export const editSurveyCreateFailure = createAction(
-  '[Survey Edit Effect] Edit survey failure', props<{ error: any }>()
-);
+export const editSurvey = createAction(`${source} Edit survey`, props<{ surveyEditInfo: Partial<SurveyEditInfo> }>());

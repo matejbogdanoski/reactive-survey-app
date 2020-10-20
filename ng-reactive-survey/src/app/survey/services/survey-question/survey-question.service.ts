@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { SurveyQuestion } from '../interfaces/survey-question.interface';
+import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { QuestionType } from '../enum/question-type.enum';
-import { QuestionOption } from '../interfaces/question-option.interface';
+import { QuestionType } from '../../enum/question-type.enum';
+import { QuestionOption } from '../../interfaces/question-option.interface';
 
 @Injectable()
 export class SurveyQuestionService {
