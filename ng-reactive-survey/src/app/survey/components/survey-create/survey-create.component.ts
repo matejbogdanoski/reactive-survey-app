@@ -5,7 +5,7 @@ import { editSurvey } from './survey-create.actions';
 import { selectSurvey } from '../../store/survey.selectors';
 import { SurveyState } from '../../store/survey.state';
 import { patchFormValues } from '../../../operators/patch-form-values.rx-operator';
-import { SurveyEditInfo } from '../../interfaces/survey-edit-info.interface';
+import { SurveyEditInfo } from '../../interfaces/edit-infos/survey-edit-info.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

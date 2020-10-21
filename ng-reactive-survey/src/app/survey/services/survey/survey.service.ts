@@ -5,7 +5,7 @@ import { Survey } from '../../interfaces/survey.interface';
 import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { QuestionType } from '../../enum/question-type.enum';
 import { QuestionOption } from '../../interfaces/question-option.interface';
-import { SurveyEditInfo } from '../../interfaces/survey-edit-info.interface';
+import { SurveyEditInfo } from '../../interfaces/edit-infos/survey-edit-info.interface';
 
 @Injectable()
 export class SurveyService {

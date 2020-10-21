@@ -5,7 +5,6 @@ const source = '[Survey Question Create Component]';
 
 export const addSurveyQuestion = createAction(`${source} Add Survey Question`);
 
-export const updateSurveyQuestion = createAction(`${source} Update`,
-  props<{ surveyQuestion: SurveyQuestion, changes: Partial<SurveyQuestion> }>());
+export const editSurveyQuestion = createAction(`${source} Update`, props<{ id: number, changes: Partial<SurveyQuestion> }>());
 
-export const deleteSurveyQuestion = createAction(`${source} Delete`, props<{ surveyQuestion: SurveyQuestion }>());
+export const deleteSurveyQuestion = createAction(`${source} Delete`, props<{ id: number }>());

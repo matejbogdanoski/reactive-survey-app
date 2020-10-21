@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { QuestionType } from '../../enum/question-type.enum';
-import { addSurveyQuestion, deleteSurveyQuestion, updateSurveyQuestion } from './survey-question-create.actions';
+import { addSurveyQuestion, deleteSurveyQuestion, editSurveyQuestion } from './survey-question-create.actions';
 import { selectSurveyQuestions } from '../../store/survey.selectors';
 import { SurveyState } from '../../store/survey.state';
 
@@ -29,11 +29,11 @@ export class SurveyQuestionCreateComponent implements OnInit {
   }
 
   updateQuestionSurveyType(question: SurveyQuestion, questionType: QuestionType) {
-    this._store.dispatch(updateSurveyQuestion({ surveyQuestion: question, changes: { questionType } }));
+    this._store.dispatch(editSurveyQuestion({ id: question.id, changes: { questionType } }));
   }
 
   delete(question: SurveyQuestion) {
-    this._store.dispatch(deleteSurveyQuestion({ surveyQuestion: question }));
+    this._store.dispatch(deleteSurveyQuestion({ id: question.id }));
   }
 
 }

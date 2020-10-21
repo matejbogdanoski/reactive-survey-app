@@ -1,15 +1,21 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, SurveyState } from './survey.state';
-import { deleteSurveyQuestion, updateSurveyQuestion } from '../components/survey-question-create/survey-question-create.actions';
-import { update } from '../../helpers/helper-functions';
 import {
   createSurveyFailure,
   createSurveySuccess,
-  editSurveyCreateFailure, editSurveySuccess,
+  editSurveyCreateFailure,
+  editSurveySuccess,
   findSurveyFailure,
   findSurveySuccess
 } from '../services/survey/survey.actions';
-import { addSurveyQuestionFailure, addSurveyQuestionSuccess } from '../services/survey-question/survey-question.actions';
+import {
+  addSurveyQuestionFailure,
+  addSurveyQuestionSuccess,
+  deleteSurveyQuestionFailure,
+  deleteSurveyQuestionSuccess,
+  editSurveyQuestionFailure,
+  editSurveyQuestionSuccess
+} from '../services/survey-question/survey-question.actions';
 
 export const surveyModuleKey = 'survey';
 
@@ -24,21 +30,34 @@ export const reducer = createReducer(
   on(editSurveySuccess, (state, action) => ({ ...state, survey: action.survey })),
   on(editSurveyCreateFailure, (state, action) => ({ ...state, error: action.error })),
 
-  on(addSurveyQuestionSuccess, (state, action) => ({ ...state, questions: [...state.questions, action.surveyQuestion] })),
+  on(addSurveyQuestionSuccess, (state, action) => ({
+    ...state,
+    survey: { ...state.survey, questions: [...state.survey.questions, action.surveyQuestion] }
+  })),
   on(addSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error })),
 
-  on(deleteSurveyQuestion, (state, action) => ({ ...state, questions: state.questions.filter(it => it != action.surveyQuestion) })),
-  on(updateSurveyQuestion,
+  on(deleteSurveyQuestionSuccess, (state, action) => ({
+    ...state,
+    survey: { ...state.survey, questions: state.survey.questions.filter(it => it.id != action.surveyQuestionId) }
+  })),
+  on(deleteSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error })),
+
+  on(editSurveyQuestionSuccess,
     (state, action) => ({
       ...state,
-      questions: state.questions.map(it => {
-        if (it == action.surveyQuestion) {
-          return update(it, action.changes);
-        } else {
-          return it;
-        }
-      })
-    }))
+      survey: {
+        ...state.survey,
+        questions: state.survey.questions.map(it => {
+          const surveyQuestion = action.surveyQuestion;
+          if (it.id == surveyQuestion.id) {
+            return surveyQuestion;
+          } else {
+            return it;
+          }
+        })
+      }
+    })),
+  on(editSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error }))
 );
 
 export function surveyReducer(state: SurveyState | undefined, action: Action) {

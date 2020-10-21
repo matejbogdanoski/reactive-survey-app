@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { SurveyEditInfo } from '../../interfaces/survey-edit-info.interface';
+import { SurveyEditInfo } from '../../interfaces/edit-infos/survey-edit-info.interface';
 
 const source = '[Survey Edit Component]';
 

@@ -7,15 +7,27 @@ import { Router } from '@angular/router';
 import { SurveyQuestionService } from '../services/survey-question/survey-question.service';
 import {
   createSurveyFailure,
-  createSurveySuccess, editSurveyCreateFailure,
+  createSurveySuccess,
+  editSurveyCreateFailure,
   editSurveySuccess,
   findSurveyFailure,
   findSurveySuccess
 } from '../services/survey/survey.actions';
 import { findSurvey } from '../pages/survey-edit/survey-edit-page.actions';
-import { addSurveyQuestion } from '../components/survey-question-create/survey-question-create.actions';
+import {
+  addSurveyQuestion,
+  deleteSurveyQuestion,
+  editSurveyQuestion
+} from '../components/survey-question-create/survey-question-create.actions';
 import { createSurvey } from '../pages/home/home.actions';
-import { addSurveyQuestionFailure, addSurveyQuestionSuccess } from '../services/survey-question/survey-question.actions';
+import {
+  addSurveyQuestionFailure,
+  addSurveyQuestionSuccess,
+  deleteSurveyQuestionFailure,
+  deleteSurveyQuestionSuccess,
+  editSurveyQuestionFailure,
+  editSurveyQuestionSuccess
+} from '../services/survey-question/survey-question.actions';
 import { editSurvey } from '../components/survey-create/survey-create.actions';
 import { SurveyState } from './survey.state';
 import { Store } from '@ngrx/store';
@@ -38,18 +50,6 @@ export class SurveyEffects {
         map(survey => createSurveySuccess({ survey })),
         tap(it => this._router.navigate([`survey/${it.survey.naturalKey}`])),
         catchError(error => of(createSurveyFailure({ error })))
-        )
-      )
-    )
-  );
-
-  createSurveyQuestion$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(addSurveyQuestion),
-      mergeMap(_ =>
-        this._surveyQuestionService.createSurveyQuestion().pipe(
-          map(surveyQuestion => addSurveyQuestionSuccess({ surveyQuestion })),
-          catchError(error => of(addSurveyQuestionFailure({ error })))
         )
       )
     )
@@ -79,4 +79,41 @@ export class SurveyEffects {
       )
     )
   );
+
+  createSurveyQuestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addSurveyQuestion),
+      mergeMap(_ =>
+        this._surveyQuestionService.createSurveyQuestion().pipe(
+          map(surveyQuestion => addSurveyQuestionSuccess({ surveyQuestion })),
+          catchError(error => of(addSurveyQuestionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  editSurveyQuestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(editSurveyQuestion),
+      mergeMap(action =>
+        this._surveyQuestionService.editSurveyQuestion(action.id, action.changes).pipe(
+          map(surveyQuestion => editSurveyQuestionSuccess({ surveyQuestion })),
+          catchError(error => of(editSurveyQuestionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  deleteSurveyQuestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteSurveyQuestion),
+      mergeMap(action =>
+        this._surveyQuestionService.deleteSurveyQuestion(action.id).pipe(
+          map(surveyQuestionId => deleteSurveyQuestionSuccess({ surveyQuestionId })),
+          catchError(error => of(deleteSurveyQuestionFailure({ error })))
+        )
+      )
+    )
+  );
+
 }
