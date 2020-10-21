@@ -1,15 +1,33 @@
 <div>
   <div *ngFor='let question of (questions$ | async)'>
-
-    <h3>Question name: {{question.name}}</h3>
-    <p>Question type: {{question.questionType}}</p>
-    <button (click)='updateQuestionSurveyType(question, QUESTION_TYPE.DROPDOWN)'>
-      Change to dropdown
+    <div>
+      <mat-form-field>
+        <mat-label>Question name:</mat-label>
+        <input matInput
+               [value]='question.name'
+               placeholder='Question name'
+               type='text'>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Question type:</mat-label>
+        <mat-select>
+          <mat-option *ngFor='let type of questionTypes$ | async' [value]='type'>
+            {{type}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button mat-stroked-button
+            color='warn'
+            (click)='delete(question)'>Delete question!
     </button>
-
-    <button (click)='delete(question)'>Delete question!</button>
-
   </div>
 
-  <button (click)='createSurveyQuestion()'>CREATE new question</button>
+  <button mat-raised-button
+          color='primary'
+          (click)='createSurveyQuestion()'>CREATE new question
+  </button>
+
 </div>

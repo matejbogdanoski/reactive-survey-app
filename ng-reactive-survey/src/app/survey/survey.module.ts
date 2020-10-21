@@ -12,6 +12,11 @@ import { SurveyEditPage } from './pages/survey-edit/survey-edit.page';
 import { HomePage } from './pages/home/home.page';
 import { SurveyEffects } from './store/survey.effects';
 import { surveyModuleKey, surveyReducer } from './store/survey.reducers';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -31,7 +36,12 @@ const pages = [
 const modules = [
   CommonModule,
   SurveyRoutingModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  MatSelectModule,
+  MatInputModule,
+  MatButtonModule,
+  MatCheckboxModule
 ];
 
 const store = [

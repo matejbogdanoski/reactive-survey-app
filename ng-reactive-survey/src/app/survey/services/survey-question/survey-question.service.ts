@@ -3,9 +3,9 @@ import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { QuestionType } from '../../enum/question-type.enum';
-import { QuestionOption } from '../../interfaces/question-option.interface';
 import { SurveyQuestionEditInfo } from '../../interfaces/edit-infos/survey-question-edit-info.interface';
 import { map } from 'rxjs/operators';
+import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
 
 @Injectable()
 export class SurveyQuestionService {
@@ -19,7 +19,7 @@ export class SurveyQuestionService {
       {
         id: 1,
         label: 'Option 1'
-      } as QuestionOption
+      } as SurveyQuestionOption
     ],
     isRequired: false
   } as SurveyQuestion;

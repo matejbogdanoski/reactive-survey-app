@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Survey } from '../../interfaces/survey.interface';
-import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { QuestionType } from '../../enum/question-type.enum';
-import { QuestionOption } from '../../interfaces/question-option.interface';
 import { SurveyEditInfo } from '../../interfaces/edit-infos/survey-edit-info.interface';
+import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
+import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 
 @Injectable()
 export class SurveyService {
@@ -26,7 +26,7 @@ export class SurveyService {
           {
             id: 1,
             label: 'Option 1'
-          } as QuestionOption
+          } as SurveyQuestionOption
         ],
         isRequired: false
       } as SurveyQuestion
