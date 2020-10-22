@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { SurveyQuestionCreateComponent } from './components/survey-question-create/survey-question-create.component';
 import { StoreModule } from '@ngrx/store';
 import { SurveyRoutingModule } from './survey-routing.module';
@@ -17,10 +16,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { SharedModule } from '../shared/shared.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SurveyQuestionOptionsCreateComponent } from './components/survey-question-options-create/survey-question-options-create.component';
 
 const components = [
   SurveyQuestionCreateComponent,
-  SurveyCreateComponent
+  SurveyCreateComponent,
+  SurveyQuestionOptionsCreateComponent
 ];
 
 const services = [
@@ -34,14 +40,18 @@ const pages = [
 ];
 
 const modules = [
-  CommonModule,
+  SharedModule,
   SurveyRoutingModule,
   ReactiveFormsModule,
   MatFormFieldModule,
   MatSelectModule,
   MatInputModule,
   MatButtonModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatIconModule,
+  MatCardModule,
+  MatTooltipModule,
+  MatSlideToggleModule
 ];
 
 const store = [

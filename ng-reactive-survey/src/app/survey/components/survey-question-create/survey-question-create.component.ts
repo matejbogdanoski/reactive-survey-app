@@ -36,4 +36,8 @@ export class SurveyQuestionCreateComponent implements OnInit {
     this._store.dispatch(deleteSurveyQuestion({ id: question.id }));
   }
 
+  duplicate(question: SurveyQuestion) {
+    //todo not yet implemented
+  }
+
 }

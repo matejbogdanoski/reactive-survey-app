@@ -1,0 +1,10 @@
+<div [ngSwitch]='questionType'>
+  <div *ngSwitchCase='QUESTION_TYPES.LONG_TEXT'>long text ()</div>
+  <div *ngSwitchCase='QUESTION_TYPES.SHORT_TEXT'>short text ()</div>
+  <div *ngSwitchCase='QUESTION_TYPES.MULTIPLE_CHOICE'>multiple choice ()</div>
+  <div *ngSwitchCase='QUESTION_TYPES.DROPDOWN'>dropdown ()</div>
+  <div *ngSwitchCase='QUESTION_TYPES.CHECKBOX'>checkbox ()</div>
+  <div *ngSwitchCase='QUESTION_TYPES.LINEAR_SCALE'>linear scale ()</div>
+  <div *ngSwitchCase='QUESTION_TYPES.DATE'>date ()</div>
+  <div *ngSwitchCase='QUESTION_TYPES.TIME'>time ()</div>
+</div>

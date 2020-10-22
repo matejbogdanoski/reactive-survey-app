@@ -1,0 +1,10 @@
+{
+  "SHORT_TEXT": "Short text",
+  "LONG_TEXT": "Long text",
+  "MULTIPLE_CHOICE": "Multiple choice",
+  "CHECKBOX": "Checkbox",
+  "DROPDOWN": "Dropdown",
+  "LINEAR_SCALE": "Linear scale",
+  "DATE": "Date",
+  "TIME": "Time"
+}

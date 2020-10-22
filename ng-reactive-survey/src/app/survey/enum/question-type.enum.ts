@@ -14,3 +14,11 @@ export enum QuestionType {
 export function getQuestionTypes(): Observable<QuestionType[]> {
   return of(Object.values(QuestionType));
 }
+
+export function hasOptions(type: QuestionType): Observable<boolean> {
+  return of([
+    QuestionType.MULTIPLE_CHOICE,
+    QuestionType.CHECKBOX,
+    QuestionType.DROPDOWN
+  ].includes(type));
+}
