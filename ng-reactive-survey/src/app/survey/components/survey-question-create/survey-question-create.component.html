@@ -1,54 +1,67 @@
-<mat-card class='mt-2' *ngFor='let question of (questions$ | async)'>
-  <div class='d-flex'>
-    <div class='w-75 mr-4'>
-      <mat-form-field>
-        <mat-label>Question name:</mat-label>
-        <input matInput
-               onClick='this.setSelectionRange(0, this.value.length)'
-               [value]='question.name'
-               placeholder='Question name'
-               type='text'>
-      </mat-form-field>
+<div *ngIf='(questions$ | async) as questions'
+     [formGroup]='form'
+     cdkDropList
+     (cdkDropListDropped)='changePosition($event)'>
+  <mat-card *ngFor='let question of questions'
+            cdkDrag
+            [cdkDragData]='question'
+            class='mt-2'>
+    <div class='text-center handle' cdkDragHandle>
+      <mat-icon>drag_handle</mat-icon>
     </div>
-    <div class='w-25'>
-      <mat-form-field>
-        <mat-label>Question type:</mat-label>
-        <mat-select (selectionChange)='updateQuestionSurveyType(question, $event.value)'
-                    [value]='question.questionType'>
-          <mat-option *ngFor='let type of questionTypes$ | async' [value]='type'>
-            {{type | translate}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <survey-question-options-create
-    [questionType]='question.questionType'></survey-question-options-create>
-
-  <mat-card-footer class='d-flex justify-content-between py-2'>
-    <div></div>
-    <div class='d-flex justify-content-between'>
-      <div class='mr-3'>
-        <a (click)='delete(question)'>
-          <mat-icon matTooltip='Delete'>delete</mat-icon>
-        </a>
+    <div class='d-flex'>
+      <div class='w-75 mr-4'>
+        <mat-form-field>
+          <mat-label>Question name:</mat-label>
+          <input matInput
+                 [formControlName]='"question_" + question.id'
+                 onClick='this.setSelectionRange(0, this.value.length)'
+                 [value]='question.name'
+                 (change)='updateQuestionSurveyName(question)'
+                 placeholder='Question name'
+                 type='text'>
+        </mat-form-field>
       </div>
-      <div class='mr-4'>
-        <a (click)='duplicate(question)'>
-          <mat-icon matTooltip='Duplicate'>content_copy</mat-icon>
-        </a>
-      </div>
-      <div class='mr-3'>
-        <mat-slide-toggle color='primary'
-                          labelPosition='before'>
-          Required
-        </mat-slide-toggle>
+      <div class='w-25'>
+        <mat-form-field>
+          <mat-label>Question type:</mat-label>
+          <mat-select (selectionChange)='updateQuestionSurveyType(question, $event.value)'
+                      [value]='question.questionType'>
+            <mat-option *ngFor='let type of questionTypes$ | async' [value]='type'>
+              {{type | translate}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
 
-  </mat-card-footer>
-</mat-card>
+    <survey-question-options-create
+      [questionType]='question.questionType'></survey-question-options-create>
+
+    <mat-card-footer class='d-flex justify-content-between py-2'>
+      <div></div>
+      <div class='d-flex justify-content-between'>
+        <div class='mr-3'>
+          <a (click)='delete(question)'>
+            <mat-icon matTooltip='Delete'>delete</mat-icon>
+          </a>
+        </div>
+        <div class='mr-4'>
+          <a (click)='duplicate(question)'>
+            <mat-icon matTooltip='Duplicate'>content_copy</mat-icon>
+          </a>
+        </div>
+        <div class='mr-3'>
+          <mat-slide-toggle color='primary'
+                            labelPosition='before'>
+            Required
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+    </mat-card-footer>
+  </mat-card>
+</div>
 
 <div class='d-flex justify-content-between'>
   <div></div>

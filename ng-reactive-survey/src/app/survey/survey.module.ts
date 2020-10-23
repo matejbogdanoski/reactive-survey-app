@@ -22,6 +22,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SurveyQuestionOptionsCreateComponent } from './components/survey-question-options-create/survey-question-options-create.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -51,7 +52,8 @@ const modules = [
   MatIconModule,
   MatCardModule,
   MatTooltipModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  DragDropModule
 ];
 
 const store = [

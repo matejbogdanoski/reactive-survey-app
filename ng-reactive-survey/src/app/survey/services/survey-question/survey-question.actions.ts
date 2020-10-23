@@ -12,3 +12,13 @@ export const editSurveyQuestionFailure = createAction(`${source} Edit Survey Que
 
 export const deleteSurveyQuestionSuccess = createAction(`${source} Delete Survey Question Success`, props<{ surveyQuestionId: number }>());
 export const deleteSurveyQuestionFailure = createAction(`${source} Delete Survey Question Failure`, props<{ error: any }>());
+
+export const updateSurveyQuestionPositionSuccess = createAction(`${source} Update Survey Question Position Success`,
+  props<{ surveyQuestions: SurveyQuestion[] }>());
+export const updateSurveyQuestionPositionFailure = createAction(`${source} Update Survey Question Position Failure`,
+  props<{ error: any }>());
+
+export const duplicateSurveyQuestionSuccess = createAction(`${source} Duplicate Survey Question Success`,
+  props<{ surveyQuestions: SurveyQuestion[] }>());
+export const duplicateSurveyQuestionFailure = createAction(`${source} Duplicate Survey Question Failure`,
+  props<{ error: any }>());

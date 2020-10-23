@@ -13,8 +13,12 @@ import {
   addSurveyQuestionSuccess,
   deleteSurveyQuestionFailure,
   deleteSurveyQuestionSuccess,
+  duplicateSurveyQuestionFailure,
+  duplicateSurveyQuestionSuccess,
   editSurveyQuestionFailure,
-  editSurveyQuestionSuccess
+  editSurveyQuestionSuccess,
+  updateSurveyQuestionPositionFailure,
+  updateSurveyQuestionPositionSuccess
 } from '../services/survey-question/survey-question.actions';
 
 export const surveyModuleKey = 'survey';
@@ -57,7 +61,25 @@ export const reducer = createReducer(
         })
       }
     })),
-  on(editSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error }))
+  on(editSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error })),
+
+  on(updateSurveyQuestionPositionSuccess, ((state, action) => ({
+    ...state,
+    survey: {
+      ...state.survey,
+      questions: action.surveyQuestions
+    }
+  }))),
+  on(updateSurveyQuestionPositionFailure, (state, action) => ({ ...state, error: action.error })),
+
+  on(duplicateSurveyQuestionSuccess, (state, action) => ({
+    ...state,
+    survey: {
+      ...state.survey,
+      questions: action.surveyQuestions
+    }
+  })),
+  on(duplicateSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error }))
 );
 
 export function surveyReducer(state: SurveyState | undefined, action: Action) {

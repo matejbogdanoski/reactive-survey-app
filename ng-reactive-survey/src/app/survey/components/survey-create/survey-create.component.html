@@ -1,30 +1,32 @@
-<h1>Test create page</h1>
-
 <form [formGroup]='form'>
+  <mat-card>
+    <div>
+      <mat-form-field>
+        <mat-label>Survey Title</mat-label>
+        <input class='title'
+               matInput
+               formControlName='title'
+               (change)='onValueUpdate()'
+               onClick='this.setSelectionRange(0, this.value.length)'
+               placeholder='Survey Title'
+               type='text'>
+      </mat-form-field>
+    </div>
 
-  <div>
-    <mat-form-field>
-      <mat-label>Survey Title</mat-label>
-      <input matInput formControlName='title'
-             (change)='onValueUpdate()'
-             placeholder='Survey Title'
-             type='text'>
-    </mat-form-field>
-  </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Survey Description</mat-label>
+        <textarea matInput formControlName='description'
+                  (change)='onValueUpdate()'
+                  placeholder='Survey Description'></textarea>
+      </mat-form-field>
+    </div>
 
-  <div>
-    <mat-form-field>
-      <mat-label>Survey Description</mat-label>
-      <textarea matInput formControlName='description'
-                (change)='onValueUpdate()'
-                placeholder='Survey Description'></textarea>
-    </mat-form-field>
-  </div>
-
-  <div>
-    <mat-checkbox formControlName='canTakeAnonymously'
-                  (change)='onValueUpdate()'>
-      Can take anonymously ?
-    </mat-checkbox>
-  </div>
+    <div>
+      <mat-checkbox formControlName='canTakeAnonymously'
+                    (change)='onValueUpdate()'>
+        Can take anonymously ?
+      </mat-checkbox>
+    </div>
+  </mat-card>
 </form>

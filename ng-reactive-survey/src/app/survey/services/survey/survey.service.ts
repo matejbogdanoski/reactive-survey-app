@@ -14,8 +14,8 @@ export class SurveyService {
   private readonly mockSurvey = {
     naturalKey: 'b2a3d658-1244-11eb-adc1-0242ac120002',
     canTakeAnonymously: false,
-    description: 'Survey Description',
-    title: 'Survey Title',
+    description: null,
+    title: 'Untitled Survey',
     questions: [
       {
         id: new Date().getMilliseconds(),

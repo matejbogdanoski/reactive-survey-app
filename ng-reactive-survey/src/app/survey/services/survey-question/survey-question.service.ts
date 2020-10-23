@@ -6,6 +6,8 @@ import { QuestionType } from '../../enum/question-type.enum';
 import { SurveyQuestionEditInfo } from '../../interfaces/edit-infos/survey-question-edit-info.interface';
 import { map } from 'rxjs/operators';
 import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
+import * as _ from 'lodash';
 
 @Injectable()
 export class SurveyQuestionService {
@@ -44,6 +46,29 @@ export class SurveyQuestionService {
       id: surveyQuestionId
     });
     // return this._http.patch<SurveyQuestion>(`${this.path}/${surveyQuestionId}`, { surveyQuestionUpdated });
+  }
+
+  public updateSurveyQuestionPosition(surveyQuestionId: number,
+                                      previousIndex: number,
+                                      currentIndex: number,
+                                      //todo delete this only for mock purposes
+                                      surveyQuestions: SurveyQuestion[]): Observable<SurveyQuestion[]> {
+    const clonedQuestions = _.cloneDeep(surveyQuestions);
+    moveItemInArray(clonedQuestions, previousIndex, currentIndex);
+    return of(clonedQuestions);
+    // return this._http.post<SurveyQuestion[]>(`${this.path}/${surveyQuestionId}/update-position`, { previousIndex, currentIndex });
+  }
+
+  public duplicateQuestion(surveyQuestion: SurveyQuestion,
+                           //todo delete this only for mock purposes
+                           surveyQuestions: SurveyQuestion[]
+  ): Observable<SurveyQuestion[]> {
+    const clonedQuestions = _.cloneDeep(surveyQuestions);
+    const duplicatedQuestion = { ...surveyQuestion, id: new Date().getMilliseconds(), position: surveyQuestion.position + 1 };
+    clonedQuestions.push(duplicatedQuestion);
+    clonedQuestions.sort((q1, q2) => q1.position - q2.position);
+    return of(clonedQuestions);
+    // return this._http.post<SurveyQuestion>(`${this.path}/${surveyQuestion.id}/duplicate`, {});
   }
 
   public deleteSurveyQuestion(surveyQuestionId: number): Observable<number> {

@@ -17,7 +17,9 @@ import { findSurvey } from '../pages/survey-edit/survey-edit-page.actions';
 import {
   addSurveyQuestion,
   deleteSurveyQuestion,
-  editSurveyQuestion
+  duplicateSurveyQuestion,
+  editSurveyQuestion,
+  updateSurveyQuestionPosition
 } from '../components/survey-question-create/survey-question-create.actions';
 import { createSurvey } from '../pages/home/home.actions';
 import {
@@ -25,8 +27,12 @@ import {
   addSurveyQuestionSuccess,
   deleteSurveyQuestionFailure,
   deleteSurveyQuestionSuccess,
+  duplicateSurveyQuestionFailure,
+  duplicateSurveyQuestionSuccess,
   editSurveyQuestionFailure,
-  editSurveyQuestionSuccess
+  editSurveyQuestionSuccess,
+  updateSurveyQuestionPositionFailure,
+  updateSurveyQuestionPositionSuccess
 } from '../services/survey-question/survey-question.actions';
 import { editSurvey } from '../components/survey-create/survey-create.actions';
 import { SurveyState } from './survey.state';
@@ -103,6 +109,35 @@ export class SurveyEffects {
       )
     )
   );
+
+  updateSurveyQuestionPosition$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateSurveyQuestionPosition),
+      //todo delete this
+      withLatestFrom(this._state),
+      mergeMap(([action, state]) =>
+        this._surveyQuestionService.updateSurveyQuestionPosition(action.id, action.previousIndex, action.currentIndex,
+          //todo delete this
+          state.survey.questions).pipe(
+          map(surveyQuestions => updateSurveyQuestionPositionSuccess({ surveyQuestions })),
+          catchError(error => of(updateSurveyQuestionPositionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  duplicateSurveyQuestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(duplicateSurveyQuestion),
+      withLatestFrom(this._state),
+      mergeMap(([action, state]) =>
+        this._surveyQuestionService.duplicateQuestion(action.question,
+          //todo delete this
+          state.survey.questions).pipe(
+          map(surveyQuestions => duplicateSurveyQuestionSuccess({ surveyQuestions })),
+          catchError(error => of(duplicateSurveyQuestionFailure({ error })))
+        ))
+    ));
 
   deleteSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
