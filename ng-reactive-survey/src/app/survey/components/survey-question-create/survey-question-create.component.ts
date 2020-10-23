@@ -63,6 +63,7 @@ export class SurveyQuestionCreateComponent implements OnInit {
   }
 
   changePosition(event: CdkDragDrop<SurveyQuestion[]>) {
+    if(event.previousIndex === event.currentIndex) return ;
     const surveyQuestion = event.item.data as SurveyQuestion;
     this._store.dispatch(updateSurveyQuestionPosition({
       id: surveyQuestion.id,

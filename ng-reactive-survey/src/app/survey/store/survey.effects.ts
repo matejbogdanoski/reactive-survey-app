@@ -118,7 +118,7 @@ export class SurveyEffects {
       mergeMap(([action, state]) =>
         this._surveyQuestionService.updateSurveyQuestionPosition(action.id, action.previousIndex, action.currentIndex,
           //todo delete this
-          state.survey.questions).pipe(
+          state.survey).pipe(
           map(surveyQuestions => updateSurveyQuestionPositionSuccess({ surveyQuestions })),
           catchError(error => of(updateSurveyQuestionPositionFailure({ error })))
         )

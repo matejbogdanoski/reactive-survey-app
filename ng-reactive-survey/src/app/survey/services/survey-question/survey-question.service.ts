@@ -52,7 +52,8 @@ export class SurveyQuestionService {
                                       previousIndex: number,
                                       currentIndex: number,
                                       //todo delete this only for mock purposes
-                                      surveyQuestions: SurveyQuestion[]): Observable<SurveyQuestion[]> {
+                                      survey: any): Observable<SurveyQuestion[]> {
+    const surveyQuestions = survey.survey.questions as SurveyQuestion[];
     const clonedQuestions = _.cloneDeep(surveyQuestions);
     moveItemInArray(clonedQuestions, previousIndex, currentIndex);
     return of(clonedQuestions);

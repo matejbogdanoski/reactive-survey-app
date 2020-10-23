@@ -4,6 +4,7 @@
      (cdkDropListDropped)='changePosition($event)'>
   <mat-card *ngFor='let question of questions'
             cdkDrag
+            cdkDragLockAxis='y'
             [cdkDragData]='question'
             class='mt-2'>
     <div class='text-center handle' cdkDragHandle>

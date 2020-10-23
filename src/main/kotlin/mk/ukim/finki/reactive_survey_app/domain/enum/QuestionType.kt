@@ -6,7 +6,6 @@ enum class QuestionType {
     MULTIPLE_CHOICE,
     CHECKBOX,
     DROPDOWN,
-    LINEAR_SCALE,
     DATE,
     TIME
 }
