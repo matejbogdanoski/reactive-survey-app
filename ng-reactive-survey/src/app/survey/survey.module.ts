@@ -23,6 +23,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SurveyQuestionOptionsCreateComponent } from './components/survey-question-options-create/survey-question-options-create.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { QuestionTypeIconPipe } from './pipes/question-type-icon.pipe';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -56,6 +57,10 @@ const modules = [
   DragDropModule
 ];
 
+const pipes = [
+  QuestionTypeIconPipe
+];
+
 const store = [
   StoreModule.forFeature(surveyModuleKey, surveyReducer),
   EffectsModule.forFeature([SurveyEffects])
@@ -63,7 +68,7 @@ const store = [
 
 @NgModule({
   providers: [...services],
-  declarations: [...components, ...pages],
+  declarations: [...components, ...pages, ...pipes],
   imports: [...modules, ...store]
 })
 export class SurveyModule {}

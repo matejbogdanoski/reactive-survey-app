@@ -62,8 +62,9 @@ export class SurveyQuestionService {
 
   public duplicateQuestion(surveyQuestion: SurveyQuestion,
                            //todo delete this only for mock purposes
-                           surveyQuestions: SurveyQuestion[]
+                           survey: any
   ): Observable<SurveyQuestion[]> {
+    const surveyQuestions = survey.survey.questions as SurveyQuestion[];
     const clonedQuestions = _.cloneDeep(surveyQuestions);
     const duplicatedQuestion = { ...surveyQuestion, id: new Date().getMilliseconds(), position: surveyQuestion.position + 1 };
     clonedQuestions.push(duplicatedQuestion);

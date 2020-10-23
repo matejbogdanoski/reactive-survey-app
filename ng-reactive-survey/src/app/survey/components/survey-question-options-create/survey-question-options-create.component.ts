@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { QuestionType } from '../../enum/question-type.enum';
+import { hasOptions, QuestionType } from '../../enum/question-type.enum';
 
 @Component({
   selector: 'survey-question-options-create',
@@ -12,6 +12,7 @@ export class SurveyQuestionOptionsCreateComponent implements OnInit {
   readonly QUESTION_TYPES = QuestionType;
 
   @Input() questionType: QuestionType;
+  hasOptions = hasOptions;
 
   constructor() { }
 

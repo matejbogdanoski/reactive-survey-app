@@ -1,0 +1,16 @@
+hr.dotted {
+  border-top: 1px dotted gray;
+  margin-top: 5px;
+}
+
+.type-preview {
+  :hover {
+    cursor: default;
+    user-select: none;
+  }
+
+  :first-child {
+    color: darkgray;
+  }
+}
+

@@ -1,9 +1,29 @@
-<div [ngSwitch]='questionType'>
-  <div *ngSwitchCase='QUESTION_TYPES.LONG_TEXT'>long text ()</div>
-  <div *ngSwitchCase='QUESTION_TYPES.SHORT_TEXT'>short text ()</div>
-  <div *ngSwitchCase='QUESTION_TYPES.MULTIPLE_CHOICE'>multiple choice ()</div>
-  <div *ngSwitchCase='QUESTION_TYPES.DROPDOWN'>dropdown ()</div>
-  <div *ngSwitchCase='QUESTION_TYPES.CHECKBOX'>checkbox ()</div>
-  <div *ngSwitchCase='QUESTION_TYPES.DATE'>date ()</div>
-  <div *ngSwitchCase='QUESTION_TYPES.TIME'>time ()</div>
+<div *ngIf='hasOptions(questionType) | async; else noOptions'>
+  Has options!
 </div>
+<ng-template #noOptions>
+  <div [ngSwitch]='questionType'>
+    <div class='type-preview w-50' *ngSwitchCase='QUESTION_TYPES.LONG_TEXT'>
+      <div>Long answer text</div>
+      <hr class='dotted'>
+    </div>
+    <div class='type-preview w-25' *ngSwitchCase='QUESTION_TYPES.SHORT_TEXT'>
+      <div>Short answer text</div>
+      <hr class='dotted'>
+    </div>
+    <div class='type-preview w-25' *ngSwitchCase='QUESTION_TYPES.DATE'>
+      <div class='d-flex justify-content-between'>
+        <div>Month, day, year</div>
+        <mat-icon>calendar_today</mat-icon>
+      </div>
+      <hr class='dotted'>
+    </div>
+    <div class='type-preview w-25' *ngSwitchCase='QUESTION_TYPES.TIME'>
+      <div class='d-flex justify-content-between'>
+        <div>Time</div>
+        <mat-icon>access_time</mat-icon>
+      </div>
+      <hr class='dotted'>
+    </div>
+  </div>
+</ng-template>

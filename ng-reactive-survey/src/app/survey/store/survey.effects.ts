@@ -129,11 +129,12 @@ export class SurveyEffects {
   duplicateSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(duplicateSurveyQuestion),
+      //todo delete this
       withLatestFrom(this._state),
       mergeMap(([action, state]) =>
         this._surveyQuestionService.duplicateQuestion(action.question,
           //todo delete this
-          state.survey.questions).pipe(
+          state.survey).pipe(
           map(surveyQuestions => duplicateSurveyQuestionSuccess({ surveyQuestions })),
           catchError(error => of(duplicateSurveyQuestionFailure({ error })))
         ))
