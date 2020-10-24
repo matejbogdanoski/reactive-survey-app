@@ -25,7 +25,8 @@ export class SurveyService {
         options: [
           {
             id: 1,
-            label: 'Option 1'
+            label: 'Option 1',
+            position: 1
           } as SurveyQuestionOption
         ],
         isRequired: false

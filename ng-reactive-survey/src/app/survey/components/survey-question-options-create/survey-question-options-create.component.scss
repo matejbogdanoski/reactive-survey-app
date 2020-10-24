@@ -14,3 +14,15 @@ hr.dotted {
   }
 }
 
+mat-icon {
+  user-select: none;
+  color: darkgray;
+}
+
+.remove {
+  cursor: pointer;
+}
+
+.handle:hover {
+  cursor: grabbing;
+}
