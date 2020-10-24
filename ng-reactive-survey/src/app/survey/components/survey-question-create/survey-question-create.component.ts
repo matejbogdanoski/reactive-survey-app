@@ -4,10 +4,14 @@ import { Store } from '@ngrx/store';
 import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { getQuestionTypes, QuestionType } from '../../enum/question-type.enum';
 import {
+  addQuestionOption,
   addSurveyQuestion,
+  deleteQuestionOption,
   deleteSurveyQuestion,
   duplicateSurveyQuestion,
   editSurveyQuestion,
+  updateQuestionOptionLabel,
+  updateQuestionOptionPosition,
   updateSurveyQuestionPosition
 } from './survey-question-create.actions';
 import { selectSurveyQuestions } from '../../store/survey.selectors';
@@ -15,6 +19,7 @@ import { SurveyState } from '../../store/survey.state';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { tap } from 'rxjs/operators';
+import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
 
 @Component({
   selector: 'survey-question-create',
@@ -63,12 +68,40 @@ export class SurveyQuestionCreateComponent implements OnInit {
   }
 
   changePosition(event: CdkDragDrop<SurveyQuestion[]>) {
-    if(event.previousIndex === event.currentIndex) return ;
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
     const surveyQuestion = event.item.data as SurveyQuestion;
     this._store.dispatch(updateSurveyQuestionPosition({
       id: surveyQuestion.id,
       previousIndex: event.previousIndex,
       currentIndex: event.currentIndex
+    }));
+  }
+
+  //option actions
+  addOption(surveyQuestion: SurveyQuestion) {
+    this._store.dispatch(addQuestionOption({ surveyQuestion }));
+  }
+
+  deleteOption(surveyQuestion: SurveyQuestion, surveyQuestionOption: SurveyQuestionOption) {
+    this._store.dispatch(deleteQuestionOption({ surveyQuestion, surveyQuestionOption }));
+  }
+
+  changeOptionPosition(surveyQuestion: SurveyQuestion, optionId: number, previousIndex: number, currentIndex: number) {
+    this._store.dispatch(updateQuestionOptionPosition({
+      surveyQuestion,
+      optionId,
+      previousIndex,
+      currentIndex
+    }));
+  }
+
+  changeOptionLabel(optionId: number, surveyQuestion: SurveyQuestion, changedLabel: string) {
+    this._store.dispatch(updateQuestionOptionLabel({
+      optionId,
+      surveyQuestion,
+      changedLabel
     }));
   }
 

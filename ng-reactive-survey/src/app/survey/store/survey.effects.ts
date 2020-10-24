@@ -15,10 +15,14 @@ import {
 } from '../services/survey/survey.actions';
 import { findSurvey } from '../pages/survey-edit/survey-edit-page.actions';
 import {
+  addQuestionOption,
   addSurveyQuestion,
+  deleteQuestionOption,
   deleteSurveyQuestion,
   duplicateSurveyQuestion,
   editSurveyQuestion,
+  updateQuestionOptionLabel,
+  updateQuestionOptionPosition,
   updateSurveyQuestionPosition
 } from '../components/survey-question-create/survey-question-create.actions';
 import { createSurvey } from '../pages/home/home.actions';
@@ -37,6 +41,17 @@ import {
 import { editSurvey } from '../components/survey-create/survey-create.actions';
 import { SurveyState } from './survey.state';
 import { Store } from '@ngrx/store';
+import { SurveyQuestionOptionService } from '../services/survey-question-option/survey-question-option.service';
+import {
+  addSurveyQuestionOptionFailure,
+  addSurveyQuestionOptionSuccess,
+  deleteSurveyQuestionOptionFailure,
+  deleteSurveyQuestionOptionSuccess,
+  updateQuestionOptionLabelFailure,
+  updateQuestionOptionLabelSuccess,
+  updateQuestionOptionPositionFailure,
+  updateQuestionOptionPositionSuccess
+} from '../services/survey-question-option/survey-question-option.actions';
 
 @Injectable()
 export class SurveyEffects {
@@ -45,10 +60,12 @@ export class SurveyEffects {
     private actions$: Actions,
     private _surveyService: SurveyService,
     private _surveyQuestionService: SurveyQuestionService,
+    private _surveyQuestionOptionService: SurveyQuestionOptionService,
     private _router: Router,
     private _state: Store<SurveyState>
   ) {}
 
+  //Survey Effects
   createSurvey$ = createEffect(() =>
     this.actions$.pipe(
       ofType(createSurvey),
@@ -86,6 +103,7 @@ export class SurveyEffects {
     )
   );
 
+  //Survey Question Effects
   createSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(addSurveyQuestion),
@@ -147,6 +165,56 @@ export class SurveyEffects {
         this._surveyQuestionService.deleteSurveyQuestion(action.id).pipe(
           map(surveyQuestionId => deleteSurveyQuestionSuccess({ surveyQuestionId })),
           catchError(error => of(deleteSurveyQuestionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  //Survey Question Option Effects
+  addQuestionOption$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addQuestionOption),
+      mergeMap(action =>
+        this._surveyQuestionOptionService.addNewQuestionOption(action.surveyQuestion).pipe(
+          map(surveyQuestion => addSurveyQuestionOptionSuccess({ surveyQuestion })),
+          catchError(error => of(addSurveyQuestionOptionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  deleteQuestionOption$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteQuestionOption),
+      mergeMap(action =>
+        this._surveyQuestionOptionService.deleteQuestionOption(action.surveyQuestion, action.surveyQuestionOption).pipe(
+          map(surveyQuestion => deleteSurveyQuestionOptionSuccess({ surveyQuestion })),
+          catchError(error => of(deleteSurveyQuestionOptionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  updateQuestionOptionPosition$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateQuestionOptionPosition),
+      mergeMap(action =>
+        this._surveyQuestionOptionService.updateQuestionOptionPosition(action.surveyQuestion, action.optionId, action.previousIndex,
+          action.currentIndex).pipe(
+          map(surveyQuestion => updateQuestionOptionPositionSuccess({ surveyQuestion })),
+          catchError(error => of(updateQuestionOptionPositionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  updateQuestionOptionLabel$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateQuestionOptionLabel),
+      mergeMap(action =>
+        this._surveyQuestionOptionService.updateQuestionOptionLabel(action.surveyQuestion, action.optionId, action.changedLabel).pipe(
+          map(surveyQuestion => updateQuestionOptionLabelSuccess({ surveyQuestion })),
+          catchError(error => of(updateQuestionOptionLabelFailure({ error })))
         )
       )
     )

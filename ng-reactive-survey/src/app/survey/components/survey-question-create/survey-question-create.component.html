@@ -43,9 +43,15 @@
       </div>
     </div>
 
+    <!--    todo think about the event arguments -->
     <survey-question-options-create
       [questionType]='question.questionType'
-      [questionOptions]='question.options'></survey-question-options-create>
+      [questionOptions]='question.options'
+      (onAddOption)='addOption(question)'
+      (onDeleteOption)='deleteOption(question, $event)'
+      (onChangeOptionLabel)='changeOptionLabel($event.option.id, question, $event.newLabel)'
+      (onChangeOptionPosition)='changeOptionPosition(question, $event.option.id, $event.previousIndex, $event.currentIndex)'>
+    </survey-question-options-create>
 
     <mat-card-footer class='d-flex justify-content-between py-2'>
       <div></div>

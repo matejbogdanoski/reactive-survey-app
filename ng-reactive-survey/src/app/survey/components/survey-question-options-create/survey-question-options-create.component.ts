@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { hasOptions, QuestionType } from '../../enum/question-type.enum';
 import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
@@ -14,11 +14,16 @@ export class SurveyQuestionOptionsCreateComponent implements OnInit {
 
   readonly QUESTION_TYPES = QuestionType;
 
+  hasOptions = hasOptions;
   form = this._builder.group({});
 
   @Input() questionType: QuestionType;
   @Input() questionOptions: SurveyQuestionOption[];
-  hasOptions = hasOptions;
+
+  @Output() onAddOption = new EventEmitter<void>();
+  @Output() onDeleteOption = new EventEmitter<SurveyQuestionOption>();
+  @Output() onChangeOptionPosition = new EventEmitter<{ option: SurveyQuestionOption, previousIndex: number, currentIndex: number }>();
+  @Output() onChangeOptionLabel = new EventEmitter<{ option: SurveyQuestionOption, newLabel: string }>();
 
   constructor(
     private _builder: FormBuilder
@@ -32,23 +37,28 @@ export class SurveyQuestionOptionsCreateComponent implements OnInit {
   }
 
   deleteOption(option: SurveyQuestionOption) {
-    //todo not yet implemented
+    this.onDeleteOption.emit(option);
   }
 
   addOption() {
-    //todo not yet implemented
-
+    this.onAddOption.emit();
   }
 
   changeOptionPosition(event: CdkDragDrop<SurveyQuestionOption[]>) {
-    //todo not yet implemented
     if (event.previousIndex === event.currentIndex) {
       return;
     }
+    const option = event.item.data as SurveyQuestionOption;
+    this.onChangeOptionPosition.emit({
+      option: option,
+      currentIndex: event.currentIndex,
+      previousIndex: event.previousIndex
+    });
   }
 
   updateQuestionOptionLabel(option: SurveyQuestionOption) {
-    //todo not yet implemented
+    const newLabel = this.form.get(`option_${option.id}`).value;
+    this.onChangeOptionLabel.emit({ option, newLabel: newLabel });
   }
 
 }

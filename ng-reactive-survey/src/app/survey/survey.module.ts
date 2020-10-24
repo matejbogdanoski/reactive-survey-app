@@ -24,6 +24,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SurveyQuestionOptionsCreateComponent } from './components/survey-question-options-create/survey-question-options-create.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuestionTypeIconPipe } from './pipes/question-type-icon.pipe';
+import { SurveyQuestionOptionService } from './services/survey-question-option/survey-question-option.service';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -33,7 +34,8 @@ const components = [
 
 const services = [
   SurveyQuestionService,
-  SurveyService
+  SurveyService,
+  SurveyQuestionOptionService
 ];
 
 const pages = [
