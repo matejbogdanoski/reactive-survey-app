@@ -10,7 +10,7 @@ class SurveyInstance(
         @Id
         val id: Long? = null,
 
-        val survey: Survey,
+        val surveyId: Long,
 
         val data: Map<String, Any?>?
 ) {

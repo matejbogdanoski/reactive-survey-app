@@ -2,7 +2,6 @@ package mk.ukim.finki.reactive_survey_app.domain
 
 import mk.ukim.finki.reactive_survey_app.constants.Schemas
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion.Companion.TABLE_NAME
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
@@ -11,13 +10,11 @@ data class SurveyQuestion(
         @Id
         val id: Long? = null,
 
-        val survey: Survey,
+        val surveyId: Long,
 
-        val questionType: QuestionType,
+        val questionTypeId: Long,
 
         val name: String?,
-
-        val options: String?,
 
         val position: Int,
 
