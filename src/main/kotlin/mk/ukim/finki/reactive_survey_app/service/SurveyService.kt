@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono
 
 interface SurveyService {
     fun findOneByNaturalKey(naturalKey: String): Mono<Survey>
+    fun createSurvey(): Mono<Survey>
 }

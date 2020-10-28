@@ -40,8 +40,8 @@ export class SurveyService {
   }
 
   public createSurvey(): Observable<Survey> {
-    return of({ id: new Date().getMilliseconds(), ...this.mockSurvey });
-    // return this._http.post<Survey>(`${this.path}`, {});
+    // return of({ id: new Date().getMilliseconds(), ...this.mockSurvey });
+    return this._http.post<Survey>(`${this.path}`, {});
   }
 
   public editSurveyInfo(surveyId: number, surveyUpdated: Partial<SurveyEditInfo>): Observable<Survey> {

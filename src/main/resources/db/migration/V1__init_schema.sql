@@ -4,7 +4,7 @@ create table survey.surveys (
     id bigserial primary key,
     title text,
     description text,
-    natural_key text not null default uuid_in(
+    natural_key text not null unique default uuid_in(
             overlay(overlay(md5(random()::text || ':' || clock_timestamp()::text) placing '4' from 13) placing
                     to_hex(floor(random() * (11 - 8 + 1) + 8)::int)::text from 17)::cstring)::text,
     can_take_anonymously boolean not null default false
@@ -45,3 +45,16 @@ create table survey.survey_instances (
     survey_id bigint references survey.surveys(id) not null,
     data jsonb
 );
+
+
+----test survey
+insert into survey.surveys(title, description, can_take_anonymously)
+values ('Test survey', 'Survey Description', true);
+
+insert into survey.survey_questions(survey_id, question_type_id, name, position, is_required)
+VALUES ((select id from survey.surveys s where s.title = 'Test survey'), 0, 'Question 1', 1, false),
+((select id from survey.surveys s where s.title = 'Test survey'), 2, 'Question 2', 1, false);
+
+insert into survey.survey_question_options(label, position, survey_question_id)
+values ('Option 1', 1, (select id from survey.survey_questions where name = 'Question 2')),
+('Option 2', 2, (select id from survey.survey_questions where name = 'Question 2'));

@@ -3,10 +3,7 @@ package mk.ukim.finki.reactive_survey_app.api
 import mk.ukim.finki.reactive_survey_app.mappers.SurveyMapper
 import mk.ukim.finki.reactive_survey_app.responses.SurveyResponse
 import mk.ukim.finki.reactive_survey_app.service.SurveyService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
 @RestController
@@ -19,5 +16,8 @@ class SurveyController(
     @GetMapping("/natural-key/{naturalKey}")
     fun findOneByNaturalKey(@PathVariable naturalKey: String): Mono<SurveyResponse> =
             service.findOneByNaturalKey(naturalKey).let(mapper::mapSurveyToResponse)
+
+    @PostMapping
+    fun createSurvey(): Mono<SurveyResponse> = service.createSurvey().let(mapper::mapSurveyToResponse)
 
 }
