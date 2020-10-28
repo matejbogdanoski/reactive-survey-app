@@ -12,5 +12,6 @@ class SurveyQuestionOptionServiceImpl(
 ) : SurveyQuestionOptionService {
 
     override fun findAllBySurveyQuestionId(
-            surveyQuestionId: Long): Flux<SurveyQuestionOption> = repository.findAllBySurveyQuestionId(surveyQuestionId)
+            surveyQuestionId: Long): Flux<SurveyQuestionOption> = repository.findAllBySurveyQuestionIdOrderByPosition(
+            surveyQuestionId)
 }

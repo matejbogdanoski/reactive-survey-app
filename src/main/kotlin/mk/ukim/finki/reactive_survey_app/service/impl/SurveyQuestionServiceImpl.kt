@@ -11,5 +11,6 @@ class SurveyQuestionServiceImpl(
         private val repository: SurveyQuestionRepository
 ) : SurveyQuestionService {
 
-    override fun findAllBySurveyId(surveyId: Long): Flux<SurveyQuestion> = repository.findAllBySurveyId(surveyId)
+    override fun findAllBySurveyId(
+            surveyId: Long): Flux<SurveyQuestion> = repository.findAllBySurveyIdOrderByPosition(surveyId)
 }

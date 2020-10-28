@@ -41,7 +41,7 @@ export class SurveyQuestionCreateComponent implements OnInit {
   ngOnInit(): void {
     this.questions$ = this._store.select(selectSurveyQuestions).pipe(
       //todo make this better
-      tap(questions => questions.forEach(q => this.form.addControl(`question_${q.id}`, new FormControl(q.name))))
+      tap(questions => questions?.forEach(q => this.form.addControl(`question_${q.id}`, new FormControl(q.name))))
     );
     this.questionTypes$ = getQuestionTypes();
   }

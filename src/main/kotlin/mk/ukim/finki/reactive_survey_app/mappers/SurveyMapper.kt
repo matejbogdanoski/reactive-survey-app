@@ -3,7 +3,9 @@ package mk.ukim.finki.reactive_survey_app.mappers
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestionOption
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
+import mk.ukim.finki.reactive_survey_app.mappers.SurveyStaticMapper.mapSurveyQuestionOptionToResponseStatic
+import mk.ukim.finki.reactive_survey_app.mappers.SurveyStaticMapper.mapSurveyQuestionToResponseStatic
+import mk.ukim.finki.reactive_survey_app.mappers.SurveyStaticMapper.mapSurveyToResponseStatic
 import mk.ukim.finki.reactive_survey_app.responses.SurveyQuestionOptionResponse
 import mk.ukim.finki.reactive_survey_app.responses.SurveyQuestionResponse
 import mk.ukim.finki.reactive_survey_app.responses.SurveyResponse
@@ -26,19 +28,9 @@ class SurveyMapper(
                 }.flatMap {
                     Mono.just(it).let(::mapSurveyQuestionToResponse)
                 }
-        return survey.map {
-            with(it) {
-                SurveyResponse(
-                        id = id!!,
-                        description = description,
-                        naturalKey = naturalKey,
-                        canTakeAnonymously = canTakeAnonymously,
-                        questions = emptyList()
-                )
-            }
-        }.flatMap { response ->
+        return survey.map(::mapSurveyToResponseStatic).flatMap { response ->
             surveyQuestions.collectList().map {
-                response.copy(questions = it)
+                response.copy(questions = it.apply { sortBy { q -> q.position } })
             }
         }
     }
@@ -46,33 +38,16 @@ class SurveyMapper(
     fun mapSurveyQuestionToResponse(surveyQuestion: Mono<SurveyQuestion>): Mono<SurveyQuestionResponse> {
         val questionOptions = surveyQuestion.flatMapMany {
             surveyQuestionOptionService.findAllBySurveyQuestionId(it.id!!)
-        }.flatMap {
-            Mono.just(it).let(::mapSurveyQuestionOptionToResponse)
-        }
-        return surveyQuestion.map {
-            with(it) {
-                SurveyQuestionResponse(id = id!!,
-                                       questionType = QuestionType.values()[questionTypeId.toInt()],
-                                       name = name,
-                                       options = emptyList(),
-                                       position = position,
-                                       isRequired = false)
-            }
-        }.flatMap { response ->
+        }.flatMap { Mono.just(it).let(::mapSurveyQuestionOptionToResponse) }
+
+        return surveyQuestion.map(::mapSurveyQuestionToResponseStatic).flatMap { response ->
             questionOptions.collectList().map {
-                response.copy(options = it)
+                response.copy(options = it.apply { sortBy { o -> o.position } })
             }
         }
     }
 
     fun mapSurveyQuestionOptionToResponse(
-            surveyQuestionOptions: Mono<SurveyQuestionOption>): Mono<SurveyQuestionOptionResponse> = surveyQuestionOptions.map {
-        with(it) {
-            SurveyQuestionOptionResponse(
-                    id = id!!,
-                    label = label,
-                    position = position
-            )
-        }
-    }
+            surveyQuestionOptions: Mono<SurveyQuestionOption>): Mono<SurveyQuestionOptionResponse> = surveyQuestionOptions.map(
+            ::mapSurveyQuestionOptionToResponseStatic)
 }

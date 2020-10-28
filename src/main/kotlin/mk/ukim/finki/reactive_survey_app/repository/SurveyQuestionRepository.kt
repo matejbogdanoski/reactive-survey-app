@@ -7,5 +7,5 @@ import reactor.core.publisher.Flux
 
 @Repository
 interface SurveyQuestionRepository : ReactiveCrudRepository<SurveyQuestion, Long> {
-    fun findAllBySurveyId(surveyId: Long): Flux<SurveyQuestion>
+    fun findAllBySurveyIdOrderByPosition(surveyId: Long): Flux<SurveyQuestion>
 }

@@ -55,7 +55,7 @@ export class SurveyService {
   }
 
   public findSurveyByNaturalKey(naturalKey: string): Observable<Survey> {
-    return of(this.mockSurvey);
-    // return this._http.get<Survey>(`${this.path}/natural-key/${naturalKey}`);
+    // return of(this.mockSurvey);
+    return this._http.get<Survey>(`${this.path}/natural-key/${naturalKey}`);
   }
 }
