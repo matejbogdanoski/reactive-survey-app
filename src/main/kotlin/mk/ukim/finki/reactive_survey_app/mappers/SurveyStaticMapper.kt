@@ -12,14 +12,23 @@ object SurveyStaticMapper {
 
     fun mapSurveyToResponseStatic(it: Survey) =
             with(it) {
-                SurveyResponse(
-                        id = id!!,
-                        title = title,
-                        description = description,
-                        naturalKey = naturalKey,
-                        canTakeAnonymously = canTakeAnonymously,
-                        questions = emptyList()
-                )
+                SurveyResponse(id = id!!,
+                               title = title,
+                               description = description,
+                               naturalKey = naturalKey,
+                               canTakeAnonymously = canTakeAnonymously,
+                               questions = questions.map(::mapSurveyQuestionToResponseStatic))
+            }
+
+    fun mapSurveyQuestionToResponseStatic(it: SurveyQuestion) =
+            with(it) {
+                SurveyQuestionResponse(id = id!!,
+                                       questionType = QuestionType.values()[questionTypeId.toInt()],
+                                       name = name,
+                                       options =
+                                       options?.map(::mapSurveyQuestionOptionToResponseStatic) ?: emptyList(),
+                                       position = position,
+                                       isRequired = isRequired)
             }
 
     fun mapSurveyQuestionOptionToResponseStatic(it: SurveyQuestionOption) =
@@ -29,15 +38,5 @@ object SurveyStaticMapper {
                         label = label,
                         position = position
                 )
-            }
-
-    fun mapSurveyQuestionToResponseStatic(it: SurveyQuestion) =
-            with(it) {
-                SurveyQuestionResponse(id = id!!,
-                                       questionType = QuestionType.values()[questionTypeId.toInt()],
-                                       name = name,
-                                       options = emptyList(),
-                                       position = position,
-                                       isRequired = false)
             }
 }

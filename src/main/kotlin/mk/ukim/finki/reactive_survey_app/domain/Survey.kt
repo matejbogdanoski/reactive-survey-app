@@ -16,7 +16,9 @@ data class Survey(
 
         val naturalKey: String,
 
-        val canTakeAnonymously: Boolean
+        val canTakeAnonymously: Boolean,
+
+        val questions: List<SurveyQuestion> = emptyList()
 
 ) {
     companion object {
