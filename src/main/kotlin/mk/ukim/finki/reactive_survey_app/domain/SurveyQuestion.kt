@@ -18,9 +18,7 @@ data class SurveyQuestion(
 
         val position: Int,
 
-        val isRequired: Boolean,
-
-        val options: List<SurveyQuestionOption>?
+        val isRequired: Boolean
 ) {
     companion object {
         const val TABLE_NAME = "survey_questions"

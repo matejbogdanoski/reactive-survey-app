@@ -10,33 +10,29 @@ import mk.ukim.finki.reactive_survey_app.responses.SurveyResponse
 
 object SurveyStaticMapper {
 
-    fun mapSurveyToResponseStatic(it: Survey) =
-            with(it) {
-                SurveyResponse(id = id!!,
-                               title = title,
-                               description = description,
-                               naturalKey = naturalKey,
-                               canTakeAnonymously = canTakeAnonymously,
-                               questions = questions.map(::mapSurveyQuestionToResponseStatic))
-            }
+    fun mapSurveyToResponseStatic(survey: Survey) = with(survey) {
+        SurveyResponse(id = id!!,
+                       title = title,
+                       description = description,
+                       naturalKey = naturalKey,
+                       canTakeAnonymously = canTakeAnonymously,
+                       questions = listOf())
+    }
 
-    fun mapSurveyQuestionToResponseStatic(it: SurveyQuestion) =
-            with(it) {
-                SurveyQuestionResponse(id = id!!,
-                                       questionType = QuestionType.values()[questionTypeId.toInt()],
-                                       name = name,
-                                       options =
-                                       options?.map(::mapSurveyQuestionOptionToResponseStatic) ?: emptyList(),
-                                       position = position,
-                                       isRequired = isRequired)
-            }
+    fun mapSurveyQuestionToResponseStatic(surveyQuestion: SurveyQuestion) = with(surveyQuestion) {
+        SurveyQuestionResponse(id = id!!,
+                               questionType = QuestionType.values()[questionTypeId.toInt()],
+                               name = name,
+                               options = emptyList(),
+                               position = position,
+                               isRequired = isRequired)
+    }
 
-    fun mapSurveyQuestionOptionToResponseStatic(it: SurveyQuestionOption) =
-            with(it) {
-                SurveyQuestionOptionResponse(
-                        id = id!!,
-                        label = label,
-                        position = position
-                )
-            }
+    fun mapSurveyQuestionOptionToResponseStatic(questionOption: SurveyQuestionOption) = with(questionOption) {
+        SurveyQuestionOptionResponse(
+                id = id!!,
+                label = label,
+                position = position
+        )
+    }
 }

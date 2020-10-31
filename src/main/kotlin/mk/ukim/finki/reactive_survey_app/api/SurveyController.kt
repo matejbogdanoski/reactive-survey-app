@@ -15,9 +15,9 @@ class SurveyController(
 
     @GetMapping("/natural-key/{naturalKey}")
     fun findOneByNaturalKey(@PathVariable naturalKey: String): Mono<SurveyResponse> =
-            service.findOneByNaturalKey(naturalKey)
+            service.findOneByNaturalKey(naturalKey).flatMap(mapper::mapSurveyToResponse)
 
     @PostMapping
-    fun createSurvey(): Mono<SurveyResponse> = service.createSurvey()
+    fun createSurvey(): Mono<SurveyResponse> = service.createSurvey().flatMap(mapper::mapSurveyToResponse)
 
 }

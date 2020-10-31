@@ -16,10 +16,7 @@ data class Survey(
 
         val naturalKey: String,
 
-        val canTakeAnonymously: Boolean,
-
-        val questions: List<SurveyQuestion> = emptyList()
-
+        val canTakeAnonymously: Boolean
 ) {
     companion object {
         const val TABLE_NAME = "surveys"
