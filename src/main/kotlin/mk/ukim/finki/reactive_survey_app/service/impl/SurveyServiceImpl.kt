@@ -14,11 +14,10 @@ class SurveyServiceImpl(
 
     override fun findOneByNaturalKey(naturalKey: String): Mono<Survey> = repository.findOneByNaturalKey(naturalKey)
 
-    override fun createSurvey(): Mono<Survey> =
-            repository.save(
-                    Survey(id = null,
-                           title = "Untitled survey",
-                           description = null,
-                           naturalKey = UUID.randomUUID().toString(),
-                           canTakeAnonymously = true))
+    override fun createSurvey(): Mono<Survey> = repository.save(
+            Survey(id = null,
+                   title = "Untitled survey",
+                   description = null,
+                   naturalKey = UUID.randomUUID().toString(),
+                   canTakeAnonymously = true))
 }

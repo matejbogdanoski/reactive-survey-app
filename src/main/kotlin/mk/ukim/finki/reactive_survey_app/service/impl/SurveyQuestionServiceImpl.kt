@@ -6,6 +6,7 @@ import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Service
 class SurveyQuestionServiceImpl(
@@ -14,4 +15,13 @@ class SurveyQuestionServiceImpl(
 
     override fun findAllBySurveyId(
             surveyId: Long): Flux<SurveyQuestion> = repository.findAllBySurveyId(surveyId, Sort.by("position"))
+
+    override fun createSurveyQuestion(surveyId: Long): Mono<SurveyQuestion> = repository.save(
+            SurveyQuestion(id = null,
+                           surveyId = surveyId,
+                           questionTypeId = 0,
+                           name = "Untitled question",
+                           position = 1,
+                           isRequired = false)
+    )
 }

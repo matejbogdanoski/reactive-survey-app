@@ -19,7 +19,8 @@ class SurveyMapper(
 ) {
 
     fun mapSurveyToResponse(survey: Survey): Mono<SurveyResponse> = with(mapSurveyToResponseStatic(survey)) {
-        surveyQuestionService.findAllBySurveyId(id).flatMap { mapSurveyQuestionToResponse(it) }
+        surveyQuestionService.findAllBySurveyId(id)
+                .flatMap(::mapSurveyQuestionToResponse)
                 .collectList()
                 .map { copy(questions = it) }
     }

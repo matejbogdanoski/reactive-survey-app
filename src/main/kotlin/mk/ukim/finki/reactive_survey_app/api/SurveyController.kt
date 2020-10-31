@@ -2,6 +2,7 @@ package mk.ukim.finki.reactive_survey_app.api
 
 import mk.ukim.finki.reactive_survey_app.mappers.SurveyMapper
 import mk.ukim.finki.reactive_survey_app.responses.SurveyResponse
+import mk.ukim.finki.reactive_survey_app.service.SurveyManagingService
 import mk.ukim.finki.reactive_survey_app.service.SurveyService
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
@@ -10,6 +11,7 @@ import reactor.core.publisher.Mono
 @RequestMapping("/api/surveys")
 class SurveyController(
         private val service: SurveyService,
+        private val managingService: SurveyManagingService,
         private val mapper: SurveyMapper
 ) {
 
@@ -18,6 +20,7 @@ class SurveyController(
             service.findOneByNaturalKey(naturalKey).flatMap(mapper::mapSurveyToResponse)
 
     @PostMapping
-    fun createSurvey(): Mono<SurveyResponse> = service.createSurvey().flatMap(mapper::mapSurveyToResponse)
+    fun createSurvey(): Mono<SurveyResponse> = managingService.createSurveyWithQuestion().flatMap(
+            mapper::mapSurveyToResponse)
 
 }
