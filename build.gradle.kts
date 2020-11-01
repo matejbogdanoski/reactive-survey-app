@@ -33,6 +33,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("io.projectreactor:reactor-test")
+    implementation("io.projectreactor.tools:blockhound:1.0.4.RELEASE")
 }
 
 tasks.withType<Test> {

@@ -9,7 +9,7 @@ const routes: Route[] = [
     component: HomePage
   },
   {
-    path: ':naturalKey',
+    path: ':id',
     component: SurveyEditPage
   }
 ];

@@ -27,10 +27,10 @@ export class SurveyEditPage implements OnInit, OnDestroy {
       takeUntil(this._destroySubject),
       withLatestFrom(this._route.paramMap),
       tap(([survey, params]) => {
-        const naturalKey = params.get('naturalKey');
-        if (survey.naturalKey !== naturalKey) {
+        const id = +params.get('id');
+        if (survey.id !== id) {
           //dispatch action to find the survey from backend
-          this._state.dispatch(findSurvey({ naturalKey }));
+          this._state.dispatch(findSurvey({ id }));
         }
       })
     ).subscribe();

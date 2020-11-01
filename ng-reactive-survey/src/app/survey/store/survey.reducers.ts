@@ -17,6 +17,8 @@ import {
   duplicateSurveyQuestionSuccess,
   editSurveyQuestionFailure,
   editSurveyQuestionSuccess,
+  findSurveyQuestionsFailure,
+  findSurveyQuestionsSuccess,
   updateSurveyQuestionPositionFailure,
   updateSurveyQuestionPositionSuccess
 } from '../services/survey-question/survey-question.actions';
@@ -44,15 +46,30 @@ export const reducer = createReducer(
   on(findSurveySuccess, (state, action) => ({ ...state, survey: action.survey })),
   on(findSurveyFailure, (state, action) => ({ ...state, error: action.error })),
 
-  on(editSurveySuccess, (state, action) => ({ ...state, survey: action.survey })),
+  on(editSurveySuccess, (state, action) => (
+    {
+      ...state,
+      survey: {
+        ...state.survey,
+        title: action.survey.title,
+        description: action.survey.description,
+        canTakeAnonymously: action.survey.canTakeAnonymously
+      }
+    })),
   on(editSurveyCreateFailure, (state, action) => ({ ...state, error: action.error })),
 
   //Survey Question Reducers
   on(addSurveyQuestionSuccess, (state, action) => ({
     ...state,
-    survey: { ...state.survey, questions: [...state.survey.questions, action.surveyQuestion] }
+    survey: { ...state.survey, questions: [...state.survey.questions || [], action.surveyQuestion] }
   })),
   on(addSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error })),
+
+  on(findSurveyQuestionsSuccess, (state, action) => ({
+    ...state,
+    survey: { ...state.survey, questions: action.surveyQuestions }
+  })),
+  on(findSurveyQuestionsFailure, (state, action) => ({ ...state, error: action.error })),
 
   on(deleteSurveyQuestionSuccess, (state, action) => ({
     ...state,

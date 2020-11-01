@@ -14,7 +14,7 @@ data class Survey(
 
         val description: String?,
 
-        val naturalKey: String,
+        val naturalKey: String?,
 
         val canTakeAnonymously: Boolean
 ) {

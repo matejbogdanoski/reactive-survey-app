@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { SurveyService } from '../services/survey/survey.service';
-import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { SurveyQuestionService } from '../services/survey-question/survey-question.service';
@@ -35,10 +35,12 @@ import {
   duplicateSurveyQuestionSuccess,
   editSurveyQuestionFailure,
   editSurveyQuestionSuccess,
+  findSurveyQuestionsFailure,
+  findSurveyQuestionsSuccess,
   updateSurveyQuestionPositionFailure,
   updateSurveyQuestionPositionSuccess
 } from '../services/survey-question/survey-question.actions';
-import { editSurvey } from '../components/survey-create/survey-create.actions';
+import { editSurvey, findSurveyQuestions } from '../components/survey-create/survey-create.actions';
 import { SurveyState } from './survey.state';
 import { Store } from '@ngrx/store';
 import { SurveyQuestionOptionService } from '../services/survey-question-option/survey-question-option.service';
@@ -71,7 +73,7 @@ export class SurveyEffects {
       ofType(createSurvey),
       mergeMap(_ => this._surveyService.createSurvey().pipe(
         map(survey => createSurveySuccess({ survey })),
-        tap(it => this._router.navigate([`survey/${it.survey.naturalKey}`])),
+        tap(it => this._router.navigate([`survey/${it.survey.id}`])),
         catchError(error => of(createSurveyFailure({ error })))
         )
       )
@@ -82,8 +84,8 @@ export class SurveyEffects {
     this.actions$.pipe(
       ofType(findSurvey),
       mergeMap(action =>
-        this._surveyService.findSurveyByNaturalKey(action.naturalKey).pipe(
-          map(survey => findSurveySuccess({ survey })),
+        this._surveyService.findSurveyById(action.id).pipe(
+          switchMap(survey => [findSurveyQuestions({ surveyId: survey.id }), findSurveySuccess({ survey })]),
           catchError(error => of(findSurveyFailure({ error })))
         )
       )
@@ -95,7 +97,7 @@ export class SurveyEffects {
       ofType(editSurvey),
       withLatestFrom(this._state),
       mergeMap(([action, state]) =>
-        this._surveyService.editSurveyInfo(state.survey.id, action.surveyEditInfo).pipe(
+        this._surveyService.editSurveyInfo(state.survey, action.surveyEditInfo).pipe(
           map(survey => editSurveySuccess({ survey })),
           catchError(error => of(editSurveyCreateFailure({ error })))
         )
@@ -107,10 +109,23 @@ export class SurveyEffects {
   createSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(addSurveyQuestion),
-      mergeMap(_ =>
-        this._surveyQuestionService.createSurveyQuestion().pipe(
+      withLatestFrom(this._state),
+      mergeMap(([_, state]) =>
+        this._surveyQuestionService.createSurveyQuestion(state.survey).pipe(
           map(surveyQuestion => addSurveyQuestionSuccess({ surveyQuestion })),
           catchError(error => of(addSurveyQuestionFailure({ error })))
+        )
+      )
+    )
+  );
+
+  findSurveyQuestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findSurveyQuestions),
+      mergeMap(action =>
+        this._surveyQuestionService.findAllBySurvey(action.surveyId).pipe(
+          map(surveyQuestions => findSurveyQuestionsSuccess({ surveyQuestions })),
+          catchError(error => of(findSurveyQuestionsFailure({ error })))
         )
       )
     )

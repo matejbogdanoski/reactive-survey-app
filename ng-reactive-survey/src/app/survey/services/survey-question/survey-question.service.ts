@@ -8,10 +8,11 @@ import { map } from 'rxjs/operators';
 import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import * as _ from 'lodash';
+import { Survey } from '../../interfaces/survey.interface';
 
 @Injectable()
 export class SurveyQuestionService {
-  private readonly path = `api/surveys/questions`;
+  private readonly path = (surveyId: number) => `api/surveys/${surveyId}/questions`;
 
   private readonly mockQuestion = {
     questionType: QuestionType.MULTIPLE_CHOICE,
@@ -32,9 +33,13 @@ export class SurveyQuestionService {
   ) {
   }
 
-  public createSurveyQuestion(): Observable<SurveyQuestion> {
-    return of({ id: new Date().getMilliseconds(), ...this.mockQuestion });
-    // return this._http.post<SurveyQuestion>(`${this.path}`, { });
+  public createSurveyQuestion(survey: any): Observable<SurveyQuestion> {
+    const surveyId = (survey.survey as Survey).id;
+    return this._http.post<SurveyQuestion>(`${this.path(surveyId)}`, {});
+  }
+
+  public findAllBySurvey(surveyId: number): Observable<SurveyQuestion[]> {
+    return this._http.get<SurveyQuestion[]>(this.path(surveyId));
   }
 
   public editSurveyQuestion(surveyQuestionId: number, surveyQuestionUpdated: Partial<SurveyQuestionEditInfo>): Observable<SurveyQuestion> {

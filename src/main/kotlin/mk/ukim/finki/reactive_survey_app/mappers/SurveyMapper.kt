@@ -25,7 +25,7 @@ class SurveyMapper(
                 .map { copy(questions = it) }
     }
 
-    private fun mapSurveyQuestionToResponse(surveyQuestion: SurveyQuestion): Mono<SurveyQuestionResponse> = with(
+    fun mapSurveyQuestionToResponse(surveyQuestion: SurveyQuestion): Mono<SurveyQuestionResponse> = with(
             mapSurveyQuestionToResponseStatic(surveyQuestion)) {
         surveyQuestionOptionService.findAllBySurveyQuestionId(id)
                 .collectList()
