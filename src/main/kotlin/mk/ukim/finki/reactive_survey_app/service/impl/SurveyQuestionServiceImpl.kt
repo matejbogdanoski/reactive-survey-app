@@ -47,11 +47,12 @@ class SurveyQuestionServiceImpl(
 
     override fun duplicateSurveyQuestion(surveyId: Long,
                                          surveyQuestionId: Long): Flux<SurveyQuestion> = repository.findById(
-            surveyQuestionId).map {
-        repository.save(it.copy(id = null, position = it.position.plus(1))).doOnNext { savedQuestion ->
-            updatePositions(surveyId, savedQuestion.position, savedQuestion.id!!).subscribe()
-        }
+            surveyQuestionId).flatMap {
+        repository.save(it.copy(id = null, position = it.position.plus(1)))
+    }.flatMap {
+        updatePositions(surveyId, it.position, it.id!!).collectList()
     }.thenMany(findAllBySurveyId(surveyId))
+
 
     private fun updatePositions(surveyId: Long, position: Int, surveyQuestionId: Long): Flux<SurveyQuestion> =
             repository.findAllToIncrementPosition(surveyId, position, surveyQuestionId).flatMap {
