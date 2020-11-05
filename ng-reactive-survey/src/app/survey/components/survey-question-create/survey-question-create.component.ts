@@ -20,6 +20,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { tap } from 'rxjs/operators';
 import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'survey-question-create',
@@ -50,13 +51,18 @@ export class SurveyQuestionCreateComponent implements OnInit {
     this._store.dispatch(addSurveyQuestion());
   }
 
-  updateQuestionSurveyType(question: SurveyQuestion, questionType: QuestionType) {
+  updateSurveyQuestionType(question: SurveyQuestion, questionType: QuestionType) {
     this._store.dispatch(editSurveyQuestion({ id: question.id, changes: { questionType } }));
   }
 
-  updateQuestionSurveyName(question: SurveyQuestion) {
+  updateSurveyQuestionName(question: SurveyQuestion) {
     const name = this.form.get(`question_${question.id}`).value;
     this._store.dispatch(editSurveyQuestion({ id: question.id, changes: { name } }));
+  }
+
+  updateSurveyQuestionRequired(question: SurveyQuestion, event: MatSlideToggleChange){
+    const isRequired = event.checked
+    this._store.dispatch(editSurveyQuestion({ id: question.id, changes: { isRequired } }));
   }
 
   delete(question: SurveyQuestion) {

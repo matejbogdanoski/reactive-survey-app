@@ -20,7 +20,7 @@
                  [formControlName]='"question_" + question.id'
                  onClick='this.setSelectionRange(0, this.value.length)'
                  [value]='question.name'
-                 (change)='updateQuestionSurveyName(question)'
+                 (change)='updateSurveyQuestionName(question)'
                  placeholder='Question'
                  type='text'>
         </mat-form-field>
@@ -28,7 +28,7 @@
       <div class='w-25'>
         <mat-form-field>
           <mat-label>Question type:</mat-label>
-          <mat-select (selectionChange)='updateQuestionSurveyType(question, $event.value)'
+          <mat-select (selectionChange)='updateSurveyQuestionType(question, $event.value)'
                       [value]='question.questionType'>
             <mat-select-trigger class='d-flex'>
               <mat-icon>{{question.questionType | questionTypeIcon}}</mat-icon>
@@ -67,7 +67,9 @@
           </a>
         </div>
         <div class='mr-3'>
-          <mat-slide-toggle color='primary'
+          <mat-slide-toggle (change)='updateSurveyQuestionRequired(question, $event)'
+                            [checked]='question.isRequired'
+                            color='primary'
                             labelPosition='before'>
             Required
           </mat-slide-toggle>

@@ -134,8 +134,9 @@ export class SurveyEffects {
   editSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(editSurveyQuestion),
-      mergeMap(action =>
-        this._surveyQuestionService.editSurveyQuestion(action.id, action.changes).pipe(
+      withLatestFrom(this._state),
+      mergeMap(([action, state]) =>
+        this._surveyQuestionService.editSurveyQuestion(action.id, action.changes, state.survey).pipe(
           map(surveyQuestion => editSurveyQuestionSuccess({ surveyQuestion })),
           catchError(error => of(editSurveyQuestionFailure({ error })))
         )
@@ -176,8 +177,9 @@ export class SurveyEffects {
   deleteSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(deleteSurveyQuestion),
-      mergeMap(action =>
-        this._surveyQuestionService.deleteSurveyQuestion(action.id).pipe(
+      withLatestFrom(this._state),
+      mergeMap(([action, state]) =>
+        this._surveyQuestionService.deleteSurveyQuestion(action.id, state.survey).pipe(
           map(surveyQuestionId => deleteSurveyQuestionSuccess({ surveyQuestionId })),
           catchError(error => of(deleteSurveyQuestionFailure({ error })))
         )
