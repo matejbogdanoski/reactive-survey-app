@@ -51,6 +51,11 @@ class SurveyQuestionServiceImpl(
                     .flatMapMany { updatePositions(surveyId, it.position, it.id!!) }
                     .thenMany(findAllBySurveyId(surveyId))
 
+    override fun updateSurveyQuestionPosition(surveyQuestionId: Long, newPosition: Int): Mono<SurveyQuestion> =
+            repository.updatePositionForQuestion(surveyQuestionId, newPosition).flatMap {
+                repository.findById(surveyQuestionId)
+            }
+
 
     private fun updatePositions(surveyId: Long, position: Int, surveyQuestionId: Long): Flux<SurveyQuestion> =
             repository.findAllToIncrementPosition(surveyId, position, surveyQuestionId).flatMap {

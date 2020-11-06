@@ -27,7 +27,7 @@ class SurveyQuestionController(
     fun duplicateSurveyQuestion(@PathVariable surveyId: Long,
                                 @PathVariable surveyQuestionId: Long): Flux<SurveyQuestionResponse> =
             service.duplicateSurveyQuestion(surveyId, surveyQuestionId)
-            .map { question -> SurveyStaticMapper.mapSurveyQuestionToResponseStatic(question) }
+                    .map { question -> SurveyStaticMapper.mapSurveyQuestionToResponseStatic(question) }
 
     @DeleteMapping("/{surveyQuestionId}")
     fun deleteSurveyQuestion(@PathVariable surveyQuestionId: Long) = service.deleteSurveyQuestion(surveyQuestionId)
@@ -38,5 +38,13 @@ class SurveyQuestionController(
             surveyQuestionId, surveyQuestionUpdated).map { question ->
         SurveyStaticMapper.mapSurveyQuestionToResponseStatic(question)
     }
+
+    @PatchMapping("/{surveyQuestionId}/update-position/{newPosition}")
+    fun updateSurveyQuestionPosition(@PathVariable surveyId: Long,
+                                     @PathVariable surveyQuestionId: Long,
+                                     @PathVariable newPosition: Int) =
+            service.updateSurveyQuestionPosition(surveyQuestionId, newPosition).map { question ->
+                SurveyStaticMapper.mapSurveyQuestionToResponseStatic(question)
+            }
 
 }

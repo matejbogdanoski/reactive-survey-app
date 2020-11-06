@@ -12,4 +12,5 @@ interface SurveyQuestionService {
     fun deleteSurveyQuestion(surveyQuestionId: Long): Mono<Void>
     fun editSurveyQuestionInfo(surveyQuestionId: Long, request: SurveyQuestionUpdateRequest): Mono<SurveyQuestion>
     fun duplicateSurveyQuestion(surveyId: Long, surveyQuestionId: Long): Flux<SurveyQuestion>
+    fun updateSurveyQuestionPosition(surveyQuestionId: Long, newPosition: Int): Mono<SurveyQuestion>
 }

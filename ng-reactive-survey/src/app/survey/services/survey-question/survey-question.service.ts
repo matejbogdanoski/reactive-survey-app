@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { concat, Observable } from 'rxjs';
 import { SurveyQuestionEditInfo } from '../../interfaces/edit-infos/survey-question-edit-info.interface';
 import { map } from 'rxjs/operators';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
@@ -37,11 +37,19 @@ export class SurveyQuestionService {
                                       currentIndex: number,
                                       //todo delete this only for mock purposes
                                       survey: any): Observable<SurveyQuestion[]> {
-    const surveyQuestions = survey.survey.questions as SurveyQuestion[];
+    const surveyEntity = survey.survey as Survey;
+    const surveyQuestions = surveyEntity.questions as SurveyQuestion[];
     const clonedQuestions = _.cloneDeep(surveyQuestions);
     moveItemInArray(clonedQuestions, previousIndex, currentIndex);
-    return of(clonedQuestions);
-    // return this._http.post<SurveyQuestion[]>(`${this.path}/${surveyQuestionId}/update-position`, { previousIndex, currentIndex });
+    const observables = clonedQuestions.map((q, index) => this.updatePosition(surveyEntity, q.id, index));
+    return concat(...observables).pipe(
+      map(_ => clonedQuestions)
+    );
+  }
+
+  private updatePosition(surveyEntity: Survey, surveyQuestionId: number, currentIndex: number) {
+    return this._http.patch<SurveyQuestion>(`${this.path(surveyEntity.id)}/${surveyQuestionId}/update-position/${currentIndex + 1}`,
+      {});
   }
 
   public duplicateQuestion(surveyQuestion: SurveyQuestion,
@@ -61,7 +69,7 @@ export class SurveyQuestionService {
   public deleteSurveyQuestion(surveyQuestionId: number, survey: any): Observable<number> {
     const surveyId = (survey.survey as Survey).id;
     return this._http.delete(`${this.path(surveyId)}/${surveyQuestionId}`).pipe(
-          map(_ => surveyQuestionId),
-        );
+      map(_ => surveyQuestionId)
+    );
   }
 }
