@@ -15,15 +15,13 @@ object SurveyStaticMapper {
                        title = title,
                        description = description,
                        naturalKey = naturalKey,
-                       canTakeAnonymously = canTakeAnonymously,
-                       questions = listOf())
+                       canTakeAnonymously = canTakeAnonymously)
     }
 
     fun mapSurveyQuestionToResponseStatic(surveyQuestion: SurveyQuestion) = with(surveyQuestion) {
         SurveyQuestionResponse(id = id!!,
                                questionType = QuestionType.values()[questionTypeId.toInt()],
                                name = name,
-                               options = emptyList(),
                                position = position,
                                isRequired = isRequired)
     }

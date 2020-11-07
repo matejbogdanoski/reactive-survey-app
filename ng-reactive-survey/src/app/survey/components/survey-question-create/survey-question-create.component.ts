@@ -60,8 +60,8 @@ export class SurveyQuestionCreateComponent implements OnInit {
     this._store.dispatch(editSurveyQuestion({ id: question.id, changes: { name } }));
   }
 
-  updateSurveyQuestionRequired(question: SurveyQuestion, event: MatSlideToggleChange){
-    const isRequired = event.checked
+  updateSurveyQuestionRequired(question: SurveyQuestion, event: MatSlideToggleChange) {
+    const isRequired = event.checked;
     this._store.dispatch(editSurveyQuestion({ id: question.id, changes: { isRequired } }));
   }
 

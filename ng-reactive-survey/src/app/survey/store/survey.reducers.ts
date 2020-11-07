@@ -27,13 +27,13 @@ import {
   addSurveyQuestionOptionSuccess,
   deleteSurveyQuestionOptionFailure,
   deleteSurveyQuestionOptionSuccess,
+  findSurveyQuestionOptionsFailure,
+  findSurveyQuestionOptionsSuccess,
   updateQuestionOptionLabelFailure,
   updateQuestionOptionLabelSuccess,
   updateQuestionOptionPositionFailure,
   updateQuestionOptionPositionSuccess
 } from '../services/survey-question-option/survey-question-option.actions';
-import { SurveyQuestion } from '../interfaces/survey-question.interface';
-import { TypedAction } from '@ngrx/store/src/models';
 
 export const surveyModuleKey = 'survey';
 
@@ -85,7 +85,10 @@ export const reducer = createReducer(
         questions: state.survey.questions.map(it => {
           const surveyQuestion = action.surveyQuestion;
           if (it.id == surveyQuestion.id) {
-            return surveyQuestion;
+            return {
+              ...surveyQuestion,
+              options: it.options
+            };
           } else {
             return it;
           }
@@ -113,44 +116,90 @@ export const reducer = createReducer(
   on(duplicateSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error })),
 
   //Survey Question Options Reducers
+  on(findSurveyQuestionOptionsSuccess, (state, action) => ({
+    ...state,
+    survey: {
+      ...state.survey,
+      questions: state.survey.questions.map(q => {
+        if (q.id === action.surveyQuestionId) {
+          return { ...q, options: action.questionOptions };
+        } else {
+          return q;
+        }
+      })
+    }
+  })),
+  on(findSurveyQuestionOptionsFailure, (state, action) => ({ ...state, error: action.error })),
+
   on(addSurveyQuestionOptionSuccess, (state, action) => ({
     ...state,
-    survey: replaceSurveyQuestion(state, action)
+    survey: {
+      ...state.survey,
+      questions: state.survey.questions.map(q => {
+        if (action.surveyQuestion.id === q.id) {
+          return { ...q, options: [...q.options, action.questionOption] };
+        } else {
+          return q;
+        }
+      })
+    }
   })),
   on(addSurveyQuestionOptionFailure, (state, action) => ({ ...state, error: action.error })),
 
   on(deleteSurveyQuestionOptionSuccess, (state, action) => ({
     ...state,
-    survey: replaceSurveyQuestion(state, action)
+    survey: {
+      ...state.survey,
+      questions: state.survey.questions.map(q => {
+        if (action.surveyQuestion.id === q.id) {
+          return { ...q, options: q.options.filter(o => o.id !== action.questionOptionId) };
+        } else {
+          return q;
+        }
+      })
+    }
   })),
   on(deleteSurveyQuestionOptionFailure, (state, action) => ({ ...state, error: action.error })),
 
   on(updateQuestionOptionPositionSuccess, (state, action) => ({
     ...state,
-    survey: replaceSurveyQuestion(state, action)
+    survey: {
+      ...state.survey,
+      questions: state.survey.questions.map(q => {
+        if (action.surveyQuestion.id === q.id) {
+          return { ...q, options: action.questionOptions };
+        } else {
+          return q;
+        }
+      })
+    }
   })),
   on(updateQuestionOptionPositionFailure, (state, action) => ({ ...state, error: action.error })),
 
   on(updateQuestionOptionLabelSuccess, (state, action) => ({
     ...state,
-    survey: replaceSurveyQuestion(state, action)
+    survey: {
+      ...state.survey,
+      questions: state.survey.questions.map(q => {
+        if (action.surveyQuestion.id === q.id) {
+          return {
+            ...q, options: q.options.map(o => {
+              if (o.id == action.questionOption.id) {
+                return action.questionOption;
+              } else {
+                return o;
+              }
+            })
+          };
+        } else {
+          return q;
+        }
+      })
+    }
   })),
   on(updateQuestionOptionLabelFailure, (state, action) => ({ ...state, error: action.error }))
 );
 
 export function surveyReducer(state: SurveyState | undefined, action: Action) {
   return reducer(state, action);
-}
-
-function replaceSurveyQuestion(state: SurveyState, action: { surveyQuestion: SurveyQuestion } & TypedAction<string> & { type: string }) {
-  return {
-    ...state.survey,
-    questions: state.survey.questions.map(q => {
-      if (q.id === action.surveyQuestion.id) {
-        return action.surveyQuestion;
-      } else {
-        return q;
-      }
-    })
-  };
 }

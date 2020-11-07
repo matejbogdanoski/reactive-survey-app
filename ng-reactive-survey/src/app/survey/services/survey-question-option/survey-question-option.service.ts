@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { SurveyQuestion } from '../../interfaces/survey-question.interface';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { concat, Observable } from 'rxjs';
 import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
 import * as _ from 'lodash';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SurveyQuestionOptionService {
@@ -15,47 +16,39 @@ export class SurveyQuestionOptionService {
   ) {
   }
 
-  public addNewQuestionOption(
-    //todo this will be id
-    surveyQuestion: SurveyQuestion
-  ): Observable<SurveyQuestion> {
-    const clonedQuestion = _.cloneDeep(surveyQuestion);
-    const id = clonedQuestion.options[surveyQuestion.options.length - 1].id + 1;
-    const newOne = {
-      id: id,
-      label: `Option ${id}`,
-      position: id
-    } as SurveyQuestionOption;
-    clonedQuestion.options.push(newOne);
-    return of(clonedQuestion);
-    // return this._http.post<SurveyQuestionOption>(this.path(surveyQuestionId), {});
+  public findAllByQuestion(questionId: number): Observable<SurveyQuestionOption[]> {
+    return this._http.get<SurveyQuestionOption[]>(`${this.path(questionId)}`);
   }
 
-  deleteQuestionOption(surveyQuestion: SurveyQuestion, surveyQuestionOption: SurveyQuestionOption): Observable<SurveyQuestion> {
-    const surveyClone = _.cloneDeep(surveyQuestion);
-    surveyClone.options = surveyQuestion.options.filter(op => op.id != surveyQuestionOption.id);
-    return of(surveyClone);
-    // return this._http.delete(`${this.path(surveyQuestionId)}/${surveyQuestionOption.id}`);
+  public addNewQuestionOption(surveyQuestion: SurveyQuestion): Observable<SurveyQuestionOption> {
+    const surveyQuestionId = surveyQuestion.id;
+    return this._http.post<SurveyQuestionOption>(this.path(surveyQuestionId), {});
+  }
+
+  deleteQuestionOption(surveyQuestion: SurveyQuestion, surveyQuestionOption: SurveyQuestionOption): Observable<number> {
+    const optionId = surveyQuestionOption.id;
+    return this._http.delete(`${this.path(surveyQuestion.id)}/${optionId}`).pipe(
+      map(_ => optionId)
+    );
   }
 
   updateQuestionOptionPosition(surveyQuestion: SurveyQuestion, optionId: number, previousIndex: number,
-                               currentIndex: number): Observable<SurveyQuestion> {
+                               currentIndex: number): Observable<SurveyQuestionOption[]> {
     const questionClone = _.cloneDeep(surveyQuestion);
     const options = questionClone.options;
     options.find(it => it.id === optionId).position = currentIndex;
     moveItemInArray(options, previousIndex, currentIndex);
-    return of(questionClone);
-    // return this._http.patch(`${this.path(surveyQuestionId)}/${surveyQuestionOption.id}/update-position`, {
-    // currentIndex,
-    // previousIndex
-    // });
+    const observables = options.map((o, index) => this.updatePosition(surveyQuestion, o.id, index + 1));
+    return concat(...observables).pipe(
+      map(_ => options)
+    );
   }
 
-  updateQuestionOptionLabel(surveyQuestion: SurveyQuestion, optionId: number, changedLabel: string) {
-    const questionClone = _.cloneDeep(surveyQuestion);
-    const options = questionClone.options;
-    options.find(it => it.id === optionId).label = changedLabel;
-    return of(questionClone);
-    // return this._http.patch(`${this.path(surveyQuestionId)}/${optionId}`, {changedLabel})
+  private updatePosition(surveyQuestion: SurveyQuestion, optionId: number, position: number): Observable<SurveyQuestionOption> {
+    return this._http.patch<SurveyQuestionOption>(`${this.path(surveyQuestion.id)}/${optionId}/update-position/${position}`, {});
+  }
+
+  updateQuestionOptionLabel(surveyQuestion: SurveyQuestion, optionId: number, changedLabel: string): Observable<SurveyQuestionOption> {
+    return this._http.patch<SurveyQuestionOption>(`${this.path(surveyQuestion.id)}/${optionId}`, { changedLabel });
   }
 }

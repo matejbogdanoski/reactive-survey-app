@@ -5,6 +5,5 @@ data class SurveyResponse(
         val title: String?,
         val description: String?,
         val naturalKey: String?,
-        val canTakeAnonymously: Boolean,
-        val questions: List<SurveyQuestionResponse>
+        val canTakeAnonymously: Boolean
 )

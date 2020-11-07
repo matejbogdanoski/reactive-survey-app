@@ -21,6 +21,7 @@ import {
   deleteSurveyQuestion,
   duplicateSurveyQuestion,
   editSurveyQuestion,
+  findSurveyQuestionOptions,
   updateQuestionOptionLabel,
   updateQuestionOptionPosition,
   updateSurveyQuestionPosition
@@ -49,11 +50,14 @@ import {
   addSurveyQuestionOptionSuccess,
   deleteSurveyQuestionOptionFailure,
   deleteSurveyQuestionOptionSuccess,
+  findSurveyQuestionOptionsFailure,
+  findSurveyQuestionOptionsSuccess,
   updateQuestionOptionLabelFailure,
   updateQuestionOptionLabelSuccess,
   updateQuestionOptionPositionFailure,
   updateQuestionOptionPositionSuccess
 } from '../services/survey-question-option/survey-question-option.actions';
+import { hasOptionsStatic } from '../enum/question-type.enum';
 
 @Injectable()
 export class SurveyEffects {
@@ -124,7 +128,11 @@ export class SurveyEffects {
       ofType(findSurveyQuestions),
       mergeMap(action =>
         this._surveyQuestionService.findAllBySurvey(action.surveyId).pipe(
-          map(surveyQuestions => findSurveyQuestionsSuccess({ surveyQuestions })),
+          switchMap(surveyQuestions =>
+            [...surveyQuestions.filter(q => hasOptionsStatic(q.questionType)).map(
+              q => findSurveyQuestionOptions({ surveyQuestionId: q.id })),
+             findSurveyQuestionsSuccess({ surveyQuestions })]
+          ),
           catchError(error => of(findSurveyQuestionsFailure({ error })))
         )
       )
@@ -183,12 +191,27 @@ export class SurveyEffects {
   );
 
   //Survey Question Option Effects
+  findSurveyQuestionOptions$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findSurveyQuestionOptions),
+      mergeMap(action =>
+        this._surveyQuestionOptionService.findAllByQuestion(action.surveyQuestionId).pipe(
+          map(questionOptions => findSurveyQuestionOptionsSuccess({ surveyQuestionId: action.surveyQuestionId, questionOptions })),
+          catchError(error => of(findSurveyQuestionOptionsFailure({ error })))
+        )
+      )
+    )
+  );
+
   addQuestionOption$ = createEffect(() =>
     this.actions$.pipe(
       ofType(addQuestionOption),
       mergeMap(action =>
         this._surveyQuestionOptionService.addNewQuestionOption(action.surveyQuestion).pipe(
-          map(surveyQuestion => addSurveyQuestionOptionSuccess({ surveyQuestion })),
+          map(option => addSurveyQuestionOptionSuccess({
+            surveyQuestion: action.surveyQuestion,
+            questionOption: option
+          })),
           catchError(error => of(addSurveyQuestionOptionFailure({ error })))
         )
       )
@@ -200,7 +223,7 @@ export class SurveyEffects {
       ofType(deleteQuestionOption),
       mergeMap(action =>
         this._surveyQuestionOptionService.deleteQuestionOption(action.surveyQuestion, action.surveyQuestionOption).pipe(
-          map(surveyQuestion => deleteSurveyQuestionOptionSuccess({ surveyQuestion })),
+          map(questionOptionId => deleteSurveyQuestionOptionSuccess({ surveyQuestion: action.surveyQuestion, questionOptionId })),
           catchError(error => of(deleteSurveyQuestionOptionFailure({ error })))
         )
       )
@@ -211,9 +234,9 @@ export class SurveyEffects {
     this.actions$.pipe(
       ofType(updateQuestionOptionPosition),
       mergeMap(action =>
-        this._surveyQuestionOptionService.updateQuestionOptionPosition(action.surveyQuestion, action.optionId, action.previousIndex,
-          action.currentIndex).pipe(
-          map(surveyQuestion => updateQuestionOptionPositionSuccess({ surveyQuestion })),
+        this._surveyQuestionOptionService.updateQuestionOptionPosition(action.surveyQuestion, action.optionId,
+          action.previousIndex, action.currentIndex).pipe(
+          map(questionOptions => updateQuestionOptionPositionSuccess({ surveyQuestion: action.surveyQuestion, questionOptions })),
           catchError(error => of(updateQuestionOptionPositionFailure({ error })))
         )
       )
@@ -225,7 +248,7 @@ export class SurveyEffects {
       ofType(updateQuestionOptionLabel),
       mergeMap(action =>
         this._surveyQuestionOptionService.updateQuestionOptionLabel(action.surveyQuestion, action.optionId, action.changedLabel).pipe(
-          map(surveyQuestion => updateQuestionOptionLabelSuccess({ surveyQuestion })),
+          map(questionOption => updateQuestionOptionLabelSuccess({ questionOption, surveyQuestion: action.surveyQuestion })),
           catchError(error => of(updateQuestionOptionLabelFailure({ error })))
         )
       )

@@ -29,9 +29,6 @@ class SurveyQuestionController(
             service.duplicateSurveyQuestion(surveyId, surveyQuestionId)
                     .map { question -> SurveyStaticMapper.mapSurveyQuestionToResponseStatic(question) }
 
-    @DeleteMapping("/{surveyQuestionId}")
-    fun deleteSurveyQuestion(@PathVariable surveyQuestionId: Long) = service.deleteSurveyQuestion(surveyQuestionId)
-
     @PatchMapping("/{surveyQuestionId}")
     fun updateSurveyQuestionInfo(@PathVariable surveyQuestionId: Long,
                                  @RequestBody surveyQuestionUpdated: SurveyQuestionUpdateRequest) = service.editSurveyQuestionInfo(
@@ -46,5 +43,9 @@ class SurveyQuestionController(
             service.updateSurveyQuestionPosition(surveyQuestionId, newPosition).map { question ->
                 SurveyStaticMapper.mapSurveyQuestionToResponseStatic(question)
             }
+
+    @DeleteMapping("/{surveyQuestionId}")
+    fun deleteSurveyQuestion(@PathVariable surveyQuestionId: Long) = service.deleteSurveyQuestion(surveyQuestionId)
+
 
 }

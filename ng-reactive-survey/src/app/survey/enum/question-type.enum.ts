@@ -21,3 +21,11 @@ export function hasOptions(type: QuestionType): Observable<boolean> {
     QuestionType.DROPDOWN
   ].includes(type));
 }
+
+export function hasOptionsStatic(type: QuestionType): boolean {
+  return [
+    QuestionType.MULTIPLE_CHOICE,
+    QuestionType.CHECKBOX,
+    QuestionType.DROPDOWN
+  ].includes(type);
+}

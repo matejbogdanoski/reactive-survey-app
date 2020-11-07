@@ -15,19 +15,16 @@ export const updateSurveyQuestionPosition = createAction(`${source} Change posit
 
 export const duplicateSurveyQuestion = createAction(`${source} Duplicate Survey Question`, props<{ question: SurveyQuestion }>());
 
-export const addQuestionOption = createAction(`${source} Add Question Option`, props<{
-  //todo change this to id maybe ??
-  surveyQuestion: SurveyQuestion
-}>());
+export const findSurveyQuestionOptions = createAction(`${source} Find Survey Question Options`, props<{ surveyQuestionId: number }>());
+
+export const addQuestionOption = createAction(`${source} Add Question Option`, props<{ surveyQuestion: SurveyQuestion }>());
 
 export const deleteQuestionOption = createAction(`${source} Delete Question Option`, props<{
-  //todo change this to id maybe ??
   surveyQuestion: SurveyQuestion,
   surveyQuestionOption: SurveyQuestionOption
 }>());
 
 export const updateQuestionOptionPosition = createAction(`${source} Update Question Option Position`, props<{
-  //todo change this to id maybe ??
   surveyQuestion: SurveyQuestion,
   optionId: number,
   previousIndex: number,
@@ -35,7 +32,6 @@ export const updateQuestionOptionPosition = createAction(`${source} Update Quest
 }>());
 
 export const updateQuestionOptionLabel = createAction(`${source} Update Question Option Label`, props<{
-  //todo change this to id maybe ??
   surveyQuestion: SurveyQuestion,
   optionId: number,
   changedLabel: string
