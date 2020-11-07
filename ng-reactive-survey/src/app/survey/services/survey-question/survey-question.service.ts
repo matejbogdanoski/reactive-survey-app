@@ -48,13 +48,10 @@ export class SurveyQuestionService {
   }
 
   private updatePosition(surveyEntity: Survey, surveyQuestionId: number, newPosition: number) {
-    return this._http.patch<SurveyQuestion>(`${this.path(surveyEntity.id)}/${surveyQuestionId}/update-position/${newPosition}`,{});
+    return this._http.patch<SurveyQuestion>(`${this.path(surveyEntity.id)}/${surveyQuestionId}/update-position/${newPosition}`, {});
   }
 
-  public duplicateQuestion(surveyQuestion: SurveyQuestion,
-                           //todo delete this only for mock purposes
-                           survey: any
-  ): Observable<SurveyQuestion[]> {
+  public duplicateQuestion(surveyQuestion: SurveyQuestion, survey: any): Observable<SurveyQuestion[]> {
     const surveyEntity = survey.survey as Survey;
     // const surveyQuestions = surveyEntity.questions;
     // const clonedQuestions = _.cloneDeep(surveyQuestions);

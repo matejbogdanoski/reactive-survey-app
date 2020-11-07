@@ -147,12 +147,10 @@ export class SurveyEffects {
   updateSurveyQuestionPosition$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateSurveyQuestionPosition),
-      //todo delete this
       withLatestFrom(this._state),
       mergeMap(([action, state]) =>
-        this._surveyQuestionService.updateSurveyQuestionPosition(action.id, action.previousIndex, action.currentIndex,
-          //todo delete this
-          state.survey).pipe(
+        this._surveyQuestionService.updateSurveyQuestionPosition(action.id, action.previousIndex,
+          action.currentIndex, state.survey).pipe(
           map(surveyQuestions => updateSurveyQuestionPositionSuccess({ surveyQuestions })),
           catchError(error => of(updateSurveyQuestionPositionFailure({ error })))
         )
@@ -163,12 +161,9 @@ export class SurveyEffects {
   duplicateSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(duplicateSurveyQuestion),
-      //todo delete this
       withLatestFrom(this._state),
       mergeMap(([action, state]) =>
-        this._surveyQuestionService.duplicateQuestion(action.question,
-          //todo delete this
-          state.survey).pipe(
+        this._surveyQuestionService.duplicateQuestion(action.question, state.survey).pipe(
           map(surveyQuestions => duplicateSurveyQuestionSuccess({ surveyQuestions })),
           catchError(error => of(duplicateSurveyQuestionFailure({ error })))
         ))
