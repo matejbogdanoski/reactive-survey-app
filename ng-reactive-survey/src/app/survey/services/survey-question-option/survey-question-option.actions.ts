@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { SurveyQuestion } from '../../interfaces/survey-question.interface';
-import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
+import { SurveyQuestion } from '../../../interfaces/survey-question.interface';
+import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
 
 const source = '[Survey Question Options API]';
 

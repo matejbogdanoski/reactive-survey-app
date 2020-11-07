@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Survey } from '../../interfaces/survey.interface';
+import { Survey } from '../../../interfaces/survey.interface';
 
 const source = '[Survey API]';
 

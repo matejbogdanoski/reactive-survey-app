@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { SurveyQuestion } from '../../interfaces/survey-question.interface';
+import { SurveyQuestion } from '../../../interfaces/survey-question.interface';
 import { HttpClient } from '@angular/common/http';
 import { concat, Observable } from 'rxjs';
 import { SurveyQuestionEditInfo } from '../../interfaces/edit-infos/survey-question-edit-info.interface';
 import { map } from 'rxjs/operators';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import * as _ from 'lodash';
-import { Survey } from '../../interfaces/survey.interface';
+import { Survey } from '../../../interfaces/survey.interface';
 
 @Injectable()
 export class SurveyQuestionService {

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SurveyQuestion } from '../../interfaces/survey-question.interface';
+import { SurveyQuestion } from '../../../interfaces/survey-question.interface';
 import { HttpClient } from '@angular/common/http';
 import { concat, Observable } from 'rxjs';
-import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
+import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
 import * as _ from 'lodash';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { map } from 'rxjs/operators';

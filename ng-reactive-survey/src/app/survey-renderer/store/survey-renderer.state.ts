@@ -1,11 +1,11 @@
 import { Survey } from '../../interfaces/survey.interface';
 
-export interface SurveyState {
+export interface SurveyRendererState {
   survey: Survey;
   error: any;
 }
 
-export const initialState: SurveyState = {
+export const initialState: SurveyRendererState = {
   survey: {} as Survey,
   error: undefined
 };

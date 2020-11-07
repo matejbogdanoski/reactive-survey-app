@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { hasOptions, QuestionType } from '../../enum/question-type.enum';
-import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
+import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormControl } from '@angular/forms';
 

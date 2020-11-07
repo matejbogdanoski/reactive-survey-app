@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { SurveyQuestion } from '../../interfaces/survey-question.interface';
+import { SurveyQuestion } from '../../../interfaces/survey-question.interface';
 import { getQuestionTypes, QuestionType } from '../../enum/question-type.enum';
 import {
   addQuestionOption,
@@ -19,7 +19,7 @@ import { SurveyState } from '../../store/survey.state';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { tap } from 'rxjs/operators';
-import { SurveyQuestionOption } from '../../interfaces/survey-question-option.interface';
+import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({

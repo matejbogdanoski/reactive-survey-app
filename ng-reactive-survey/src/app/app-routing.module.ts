@@ -5,6 +5,10 @@ const routes: Routes = [
   {
     path: 'survey',
     loadChildren: () => import('./survey/survey.module').then(m => m.SurveyModule)
+  },
+  {
+    path: 'take-survey',
+    loadChildren: () => import('./survey-renderer/survey-renderer.module').then(m => m.SurveyRendererModule)
   }
 ];
 
