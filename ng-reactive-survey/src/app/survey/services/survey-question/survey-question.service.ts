@@ -32,11 +32,8 @@ export class SurveyQuestionService {
     return this._http.patch<SurveyQuestion>(`${this.path(surveyId)}/${surveyQuestionId}`, surveyQuestionUpdated);
   }
 
-  public updateSurveyQuestionPosition(surveyQuestionId: number,
-                                      previousIndex: number,
-                                      currentIndex: number,
-                                      //todo delete this only for mock purposes
-                                      survey: any): Observable<SurveyQuestion[]> {
+  public updateSurveyQuestionPosition(surveyQuestionId: number, previousIndex: number,
+                                      currentIndex: number, survey: any): Observable<SurveyQuestion[]> {
     const surveyEntity = survey.survey as Survey;
     const surveyQuestions = surveyEntity.questions as SurveyQuestion[];
     const clonedQuestions = _.cloneDeep(surveyQuestions);
