@@ -41,15 +41,14 @@ export class SurveyQuestionService {
     const surveyQuestions = surveyEntity.questions as SurveyQuestion[];
     const clonedQuestions = _.cloneDeep(surveyQuestions);
     moveItemInArray(clonedQuestions, previousIndex, currentIndex);
-    const observables = clonedQuestions.map((q, index) => this.updatePosition(surveyEntity, q.id, index));
+    const observables = clonedQuestions.map((q, index) => this.updatePosition(surveyEntity, q.id, index + 1));
     return concat(...observables).pipe(
       map(_ => clonedQuestions)
     );
   }
 
-  private updatePosition(surveyEntity: Survey, surveyQuestionId: number, currentIndex: number) {
-    return this._http.patch<SurveyQuestion>(`${this.path(surveyEntity.id)}/${surveyQuestionId}/update-position/${currentIndex + 1}`,
-      {});
+  private updatePosition(surveyEntity: Survey, surveyQuestionId: number, newPosition: number) {
+    return this._http.patch<SurveyQuestion>(`${this.path(surveyEntity.id)}/${surveyQuestionId}/update-position/${newPosition}`,{});
   }
 
   public duplicateQuestion(surveyQuestion: SurveyQuestion,
