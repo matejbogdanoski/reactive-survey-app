@@ -15,6 +15,11 @@ import { SurveyRendererComponent } from './components/survey-renderer/survey-ren
 import { TakeSurveyPage } from './pages/take-survey/take-survey.page';
 import { SurveyRendererRoutingModule } from './survey-renderer-routing.module';
 import { SurveyRendererService } from './services/survey-renderer.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const modules = [
   SharedModule,
@@ -25,7 +30,12 @@ const modules = [
   MatInputModule,
   MatButtonModule,
   MatCheckboxModule,
-  MatIconModule
+  MatIconModule,
+  MatCardModule,
+  MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  NgxMaterialTimepickerModule
 ];
 
 const store = [
@@ -45,8 +55,12 @@ const services = [
   SurveyRendererService
 ];
 
+const materialProviders = [
+  MatDatepickerModule
+]
+
 @NgModule({
-  providers: [...services],
+  providers: [...services, ...materialProviders],
   declarations: [...components, ...pages],
   imports: [...modules, ...store]
 })

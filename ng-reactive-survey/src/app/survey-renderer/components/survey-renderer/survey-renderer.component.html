@@ -1,3 +1,87 @@
-<p>
-  {{surveyStructure | json}}
-</p>
+<mat-card>
+  <h1>{{surveyStructure.title}}</h1>
+  <h3>{{surveyStructure.description}}</h3>
+</mat-card>
+
+<mat-card class='my-2' *ngFor='let question of surveyStructure.questions'>
+  <div>
+    <h3>{{question.name}}</h3>
+  </div>
+  <div [ngSwitch]='question.questionType'>
+    <div class='w-50' *ngSwitchCase='questionType.LONG_TEXT'>
+      <mat-form-field>
+      <textarea matInput
+                rows='2'
+                [placeholder]='question.name'></textarea>
+      </mat-form-field>
+    </div>
+    <div class='w-25' *ngSwitchCase='questionType.SHORT_TEXT'>
+      <mat-form-field>
+        <input matInput
+               [placeholder]='question.name'
+               type='text'>
+      </mat-form-field>
+    </div>
+    <div class='w-25' *ngSwitchCase='questionType.DROPDOWN'>
+      <mat-form-field appearance='outline'>
+        <mat-label>{{question.name}}</mat-label>
+        <mat-select>
+          <mat-option *ngFor='let option of question.options'
+                      [value]='option.id'>
+            {{option.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class='w-25' *ngSwitchCase='questionType.MULTIPLE_CHOICE'>
+      <mat-radio-group class='question-option-group'
+                       aria-label='{{question.name}}'>
+        <mat-radio-button class='question-option'
+                          *ngFor='let option of question.options'
+                          [value]='option.id'>
+          {{option.label}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div *ngSwitchCase='questionType.CHECKBOX'>
+      <section class='question-option-group'>
+        <mat-checkbox class='question-option'
+                      *ngFor='let option of question.options'>
+          {{option.label}}
+        </mat-checkbox>
+      </section>
+    </div>
+    <div class='w-25' *ngSwitchCase='questionType.DATE'>
+      <mat-form-field appearance='outline'>
+        <mat-label>{{question.name}}</mat-label>
+        <input matInput [matDatepicker]='picker'>
+        <mat-datepicker-toggle matSuffix [for]='picker'></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class='w-25' *ngSwitchCase='questionType.TIME'>
+      <mat-form-field>
+        <div class='d-flex justify-content-between'>
+          <input matInput [placeholder]='question.name'
+                 [ngxTimepicker]="timePicker" readonly>
+          <ngx-material-timepicker-toggle [for]="timePicker">
+            <mat-icon class='text-white' ngxMaterialTimepickerToggleIcon>access_time</mat-icon>
+          </ngx-material-timepicker-toggle>
+        </div>
+        <ngx-material-timepicker #timePicker
+                                 [theme]="darkTheme">
+        </ngx-material-timepicker>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-card>
+
+<div class='d-flex justify-content-between'>
+  <div></div>
+  <button mat-raised-button
+          color='primary'
+          class='mt-2'
+          (click)='submit()'>
+    Submit !
+  </button>
+</div>
