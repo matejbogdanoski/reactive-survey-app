@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, SurveyRendererState } from './survey-renderer.state';
-import { findFullSurveyFailure, findFullSurveySuccess } from '../services/survey-renderer-service.actions';
+import { findFullSurveyFailure, findFullSurveySuccess } from '../services/survey-renderer/survey-renderer-service.actions';
 
 export const surveyRendererModuleKey = 'survey-renderer';
 

@@ -30,9 +30,10 @@
           <mat-form-field appearance='outline'>
             <mat-label>{{question.name}}</mat-label>
             <mat-select
+              [compareWith]='optionComparator'
               [formControlName]='question.id.toString()'>
               <mat-option *ngFor='let option of question.options'
-                          [value]='option.id'>
+                          [value]='option'>
                 {{option.label}}
               </mat-option>
             </mat-select>
@@ -44,7 +45,7 @@
                            [formControlName]='question.id.toString()'>
             <mat-radio-button class='question-option'
                               *ngFor='let option of question.options'
-                              [value]='option.id'>
+                              [value]='option'>
               {{option.label}}
             </mat-radio-button>
           </mat-radio-group>
@@ -52,7 +53,7 @@
         <div *ngSwitchCase='questionType.CHECKBOX'>
           <label [formArrayName]='question.id.toString()' class='question-option-group'>
             <mat-checkbox class='question-option'
-                          [formControlName]='option.id.toString()'
+                          [formControlName]='getOptionFormControlName(option)'
                           *ngFor='let option of question.options'>
               {{option.label}}
             </mat-checkbox>

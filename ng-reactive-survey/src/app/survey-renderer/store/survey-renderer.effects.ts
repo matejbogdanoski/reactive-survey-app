@@ -3,10 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { SurveyRendererState } from './survey-renderer.state';
 import { Store } from '@ngrx/store';
-import { SurveyRendererService } from '../services/survey-renderer.service';
+import { SurveyRendererService } from '../services/survey-renderer/survey-renderer.service';
 import { findFullSurvey } from '../pages/take-survey/take-survey-page.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { findFullSurveyFailure, findFullSurveySuccess } from '../services/survey-renderer-service.actions';
+import { findFullSurveyFailure, findFullSurveySuccess } from '../services/survey-renderer/survey-renderer-service.actions';
 import { of } from 'rxjs';
 
 @Injectable()
