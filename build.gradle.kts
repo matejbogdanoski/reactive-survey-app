@@ -26,7 +26,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.flywaydb:flyway-core")
     implementation("io.r2dbc:r2dbc-spi")
-    runtimeOnly("io.r2dbc:r2dbc-postgresql")
+    implementation("io.r2dbc:r2dbc-postgresql")
+    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
