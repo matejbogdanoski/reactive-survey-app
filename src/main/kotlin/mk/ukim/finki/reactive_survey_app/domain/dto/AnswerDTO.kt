@@ -1,8 +1,14 @@
 package mk.ukim.finki.reactive_survey_app.domain.dto
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class AnswerDTO(
         val id: Long,
-        val survey_question_id: Long,
+        @SerialName("survey_question_id")
+        val surveyQuestionId: Long,
         val answer: String,
-        val answered_by: Long?
+        @SerialName("answered_by")
+        val answeredBy: Long?
 )

@@ -4,11 +4,12 @@ import io.r2dbc.pool.ConnectionPool
 import io.r2dbc.postgresql.PostgresqlConnectionFactory
 import io.r2dbc.postgresql.api.Notification
 import io.r2dbc.spi.ConnectionFactory
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import mk.ukim.finki.reactive_survey_app.domain.QuestionAnswer
 import mk.ukim.finki.reactive_survey_app.domain.dto.AnswerDTO
 import mk.ukim.finki.reactive_survey_app.repository.QuestionAnswerRepository
 import mk.ukim.finki.reactive_survey_app.service.QuestionAnswerService
-import mk.ukim.finki.reactive_survey_app.utils.JsonUtils
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -43,7 +44,7 @@ class QuestionAnswerServiceImpl(
     }.toFlux().flatMap { repository.save(it) }
 
     override fun getAnswerStream(questionId: Long): Flux<AnswerDTO?> = messages.map {
-        JsonUtils.fromJson<AnswerDTO>(it.parameter)
-    }.filter { it?.survey_question_id == questionId }
+        it.parameter?.let { json -> Json.decodeFromString<AnswerDTO>(json) }
+    }.filter { it?.surveyQuestionId == questionId }
 
 }

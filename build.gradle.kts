@@ -3,7 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "2.3.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.10"
+    kotlin("plugin.serialization") version "1.4.10"
     kotlin("plugin.spring") version "1.3.72"
 }
 
@@ -27,7 +28,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("io.r2dbc:r2dbc-spi")
     implementation("io.r2dbc:r2dbc-postgresql")
-    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
