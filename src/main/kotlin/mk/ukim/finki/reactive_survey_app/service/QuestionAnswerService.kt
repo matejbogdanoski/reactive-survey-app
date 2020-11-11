@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 interface QuestionAnswerService {
-    fun createQuestionAnswer(surveyQuestionId: Long, answer: String?): Mono<QuestionAnswer>
-    fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, Any?>): Flux<QuestionAnswer>
-    fun getAnswerStream(questionId: Long): Flux<AnswerDTO?>
+    fun createQuestionAnswer(surveyQuestionId: Long, answer: String?, surveyId: Long): Mono<QuestionAnswer>
+    fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, Any?>, surveyId: Long): Flux<QuestionAnswer>
+    fun getAnswerStream(surveyId: Long): Flux<AnswerDTO?>
 }

@@ -12,6 +12,8 @@ data class QuestionAnswer(
 
         val surveyQuestionId: Long,
 
+        val surveyId: Long,
+
         val answer: String?,
 
         val answeredBy: Long?

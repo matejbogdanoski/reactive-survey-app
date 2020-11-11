@@ -12,11 +12,11 @@ class QuestionAnswerController(
         private val service: QuestionAnswerService
 ) {
 
-    @PostMapping
-    fun addNewAnswersBulk(
-            @RequestBody questionAnswerMap: Map<Long, Any?>): Flux<QuestionAnswer> = service.bulkCreateQuestionAnswers(
-            questionAnswerMap)
+    @PostMapping("{surveyId}")
+    fun addNewAnswersBulk(@RequestBody questionAnswerMap: Map<Long, Any?>,
+                          @PathVariable surveyId: Long): Flux<QuestionAnswer> = service.bulkCreateQuestionAnswers(
+            questionAnswerMap, surveyId)
 
-    @GetMapping("/stream/{questionId}", produces = [TEXT_EVENT_STREAM_VALUE])
-    fun getAnswerStream(@PathVariable questionId: Long) = service.getAnswerStream(questionId)
+    @GetMapping("/stream/{surveyId}", produces = [TEXT_EVENT_STREAM_VALUE])
+    fun getAnswerStream(@PathVariable surveyId: Long) = service.getAnswerStream(surveyId)
 }

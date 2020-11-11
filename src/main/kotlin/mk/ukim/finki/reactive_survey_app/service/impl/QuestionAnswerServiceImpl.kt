@@ -19,24 +19,26 @@ class QuestionAnswerServiceImpl(
         private val postgresListener: PostgresNotificationListener
 ) : QuestionAnswerService {
 
-    override fun createQuestionAnswer(surveyQuestionId: Long, answer: String?): Mono<QuestionAnswer> = repository.save(
+    override fun createQuestionAnswer(surveyQuestionId: Long, answer: String?, surveyId: Long): Mono<QuestionAnswer> = repository.save(
             QuestionAnswer(id = null,
                            surveyQuestionId = surveyQuestionId,
                            answer = answer,
-                           answeredBy = null)
+                           answeredBy = null,
+                           surveyId = surveyId)
     )
 
     override fun bulkCreateQuestionAnswers(
-            questionAnswerMap: Map<Long, Any?>): Flux<QuestionAnswer> = questionAnswerMap.entries.map {
+            questionAnswerMap: Map<Long, Any?>, surveyId: Long): Flux<QuestionAnswer> = questionAnswerMap.entries.map {
         QuestionAnswer(id = null,
                        surveyQuestionId = it.key,
                        answer = it.value.toString(),
-                       answeredBy = null)
+                       answeredBy = null,
+                       surveyId = surveyId)
     }.toFlux().flatMap(repository::save)
 
-    override fun getAnswerStream(questionId: Long): Flux<AnswerDTO?> =
+    override fun getAnswerStream(surveyId: Long): Flux<AnswerDTO?> =
             postgresListener.listen(ANSWER_SAVED_NOTIFICATION)
                     .map { it.parameter?.let { json -> Json.decodeFromString<AnswerDTO>(json) } }
-                    .filter { it?.surveyQuestionId == questionId }
+                    .filter { it?.surveyId == surveyId }
 
 }
