@@ -9,7 +9,7 @@ export class QuestionAnswerService {
     private _http: HttpClient
   ) {}
 
-  public addBulkQuestionAnswers(questionAnswerMap: Map<string, any>) {
-    return this._http.post(`${this.path}`, questionAnswerMap);
+  public addBulkQuestionAnswers(questionAnswerMap: Map<string, any>, surveyId: number) {
+    return this._http.post(`${this.path}/${surveyId}`, questionAnswerMap);
   }
 }

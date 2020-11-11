@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Survey } from '../../../interfaces/survey.interface';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { SurveyRendererState } from '../../store/survey-renderer.state';
+import { TakeSurveyState } from '../../store/take-survey.state';
 import { Store } from '@ngrx/store';
-import { selectFullSurvey } from '../../store/survey-renderer.selectors';
+import { selectFullSurvey } from '../../store/take-survey.selectors';
 import { findFullSurvey } from './take-survey-page.actions';
 
 @Component({
@@ -18,7 +18,7 @@ export class TakeSurveyPage implements OnInit {
 
   constructor(
     private _route: ActivatedRoute,
-    private _state: Store<SurveyRendererState>
+    private _state: Store<TakeSurveyState>
   ) { }
 
   ngOnInit(): void {

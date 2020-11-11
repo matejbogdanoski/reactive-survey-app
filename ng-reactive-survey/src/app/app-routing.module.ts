@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: 'take-survey',
-    loadChildren: () => import('./survey-renderer/survey-renderer.module').then(m => m.SurveyRendererModule)
+    loadChildren: () => import('./take-survey/take-survey.module').then(m => m.TakeSurveyModule)
   }
 ];
 

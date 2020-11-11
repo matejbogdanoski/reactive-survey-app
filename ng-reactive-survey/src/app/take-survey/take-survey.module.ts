@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { StoreModule } from '@ngrx/store';
-import { surveyRendererModuleKey, surveyRendererReducer } from './store/survey-renderer.reducers';
+import { surveyRendererModuleKey, surveyRendererReducer } from './store/take-survey.reducers';
 import { EffectsModule } from '@ngrx/effects';
-import { SurveyRendererEffects } from './store/survey-renderer.effects';
+import { TakeSurveyEffects } from './store/take-survey.effects';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,7 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { SurveyRendererComponent } from './components/survey-renderer/survey-renderer.component';
 import { TakeSurveyPage } from './pages/take-survey/take-survey.page';
-import { SurveyRendererRoutingModule } from './survey-renderer-routing.module';
+import { TakeSurveyRoutingModule } from './take-survey-routing.module';
 import { SurveyRendererService } from './services/survey-renderer/survey-renderer.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
@@ -23,25 +23,25 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { QuestionAnswerService } from './services/question-answer/question-answer.service';
 
 const modules = [
-  SharedModule,
-  SurveyRendererRoutingModule,
-  ReactiveFormsModule,
-  MatFormFieldModule,
-  MatSelectModule,
-  MatInputModule,
-  MatButtonModule,
-  MatCheckboxModule,
-  MatIconModule,
-  MatCardModule,
-  MatRadioModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  NgxMaterialTimepickerModule
+    SharedModule,
+    TakeSurveyRoutingModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatCardModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMaterialTimepickerModule
 ];
 
 const store = [
   StoreModule.forFeature(surveyRendererModuleKey, surveyRendererReducer),
-  EffectsModule.forFeature([SurveyRendererEffects])
+  EffectsModule.forFeature([TakeSurveyEffects])
 ];
 
 const components = [
@@ -66,4 +66,4 @@ const materialProviders = [
   declarations: [...components, ...pages],
   imports: [...modules, ...store]
 })
-export class SurveyRendererModule {}
+export class TakeSurveyModule {}

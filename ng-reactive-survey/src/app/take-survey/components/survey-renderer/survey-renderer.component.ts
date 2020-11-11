@@ -56,7 +56,7 @@ export class SurveyRendererComponent implements OnInit {
         const checkboxGroup = value[checkboxId.toString()];
         value[checkboxId.toString()] = Object.keys(checkboxGroup).filter(key => checkboxGroup[key] === true);
       });
-    this._service.addBulkQuestionAnswers(value).subscribe(_ => {
+    this._service.addBulkQuestionAnswers(value, this.surveyStructure.id).subscribe(_ => {
       this._notification.success('Successfully submitted!');
     }, error => {
       this._notification.error(error.message);
