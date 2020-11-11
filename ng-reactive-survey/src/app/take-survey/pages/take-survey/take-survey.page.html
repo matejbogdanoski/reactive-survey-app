@@ -1,2 +1,4 @@
-<app-survey-renderer [surveyStructure$]='surveyStructure$'>
-</app-survey-renderer>
+<div *ngIf='surveyStructure$ | async as surveyStructure'>
+  <app-survey-renderer [surveyStructure]='surveyStructure'>
+  </app-survey-renderer>
+</div>

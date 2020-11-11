@@ -1,10 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Survey } from '../../../interfaces/survey.interface';
 import { QuestionType } from '../../../survey/enum/question-type.enum';
 import { timePickerDarkThemeConfig } from '../../config/time-picker-theme.config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { QuestionAnswerService } from '../../services/question-answer/question-answer.service';
 import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
@@ -12,12 +10,12 @@ import { SurveyQuestionOption } from '../../../interfaces/survey-question-option
 @Component({
   selector: 'app-survey-renderer',
   templateUrl: './survey-renderer.component.html',
-  styleUrls: ['./survey-renderer.component.scss']
+  styleUrls: ['./survey-renderer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SurveyRendererComponent implements OnInit {
 
-  @Input() surveyStructure$: Observable<Survey>;
-  surveyStructure: Survey;
+  @Input() surveyStructure: Survey;
 
   questionType = QuestionType;
   darkTheme = timePickerDarkThemeConfig;
@@ -32,9 +30,7 @@ export class SurveyRendererComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.surveyStructure$.pipe(
-      tap(survey => this.initControls(survey))
-    ).subscribe(surveyStructure => this.surveyStructure = surveyStructure);
+    this.initControls(this.surveyStructure);
   }
 
   initControls(survey: Survey) {
