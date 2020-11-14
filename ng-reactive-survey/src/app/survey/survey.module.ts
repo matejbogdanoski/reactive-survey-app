@@ -25,11 +25,13 @@ import { SurveyQuestionOptionsCreateComponent } from './components/survey-questi
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuestionTypeIconPipe } from './pipes/question-type-icon.pipe';
 import { SurveyQuestionOptionService } from './services/survey-question-option/survey-question-option.service';
+import { SurveyResponsesComponent } from './components/survey-responses/survey-responses.component';
 
 const components = [
   SurveyQuestionCreateComponent,
   SurveyCreateComponent,
-  SurveyQuestionOptionsCreateComponent
+  SurveyQuestionOptionsCreateComponent,
+  SurveyResponsesComponent
 ];
 
 const services = [

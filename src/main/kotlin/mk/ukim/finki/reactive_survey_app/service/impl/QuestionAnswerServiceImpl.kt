@@ -19,7 +19,8 @@ class QuestionAnswerServiceImpl(
         private val postgresListener: PostgresNotificationListener
 ) : QuestionAnswerService {
 
-    override fun createQuestionAnswer(surveyQuestionId: Long, answer: String?, surveyId: Long): Mono<QuestionAnswer> = repository.save(
+    override fun createQuestionAnswer(surveyQuestionId: Long, answer: String?,
+                                      surveyId: Long): Mono<QuestionAnswer> = repository.save(
             QuestionAnswer(id = null,
                            surveyQuestionId = surveyQuestionId,
                            answer = answer,
@@ -41,4 +42,6 @@ class QuestionAnswerServiceImpl(
                     .map { it.parameter?.let { json -> Json.decodeFromString<AnswerDTO>(json) } }
                     .filter { it?.surveyId == surveyId }
 
+    override fun findAllAnswersByQuestionId(questionId: Long): Flux<QuestionAnswer> = repository.findAllByQuestionId(
+            questionId)
 }

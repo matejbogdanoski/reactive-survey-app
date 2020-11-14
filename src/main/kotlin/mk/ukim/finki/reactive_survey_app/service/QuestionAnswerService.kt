@@ -9,4 +9,5 @@ interface QuestionAnswerService {
     fun createQuestionAnswer(surveyQuestionId: Long, answer: String?, surveyId: Long): Mono<QuestionAnswer>
     fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, Any?>, surveyId: Long): Flux<QuestionAnswer>
     fun getAnswerStream(surveyId: Long): Flux<AnswerDTO?>
+    fun findAllAnswersByQuestionId(questionId: Long): Flux<QuestionAnswer>
 }

@@ -19,4 +19,7 @@ class QuestionAnswerController(
 
     @GetMapping("/stream/{surveyId}", produces = [TEXT_EVENT_STREAM_VALUE])
     fun getAnswerStream(@PathVariable surveyId: Long) = service.getAnswerStream(surveyId)
+
+    @GetMapping("/{questionId}")
+    fun findAllAnswersByQuestion(@PathVariable questionId: Long) = service.findAllAnswersByQuestionId(questionId)
 }

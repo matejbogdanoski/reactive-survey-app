@@ -21,7 +21,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { QuestionAnswerService } from './services/question-answer/question-answer.service';
-import { SurveyResponsesComponent } from './components/survey-responses/survey-responses.component';
 
 const modules = [
     SharedModule,
@@ -64,7 +63,7 @@ const materialProviders = [
 
 @NgModule({
   providers: [...services, ...materialProviders],
-  declarations: [...components, ...pages, SurveyResponsesComponent],
+  declarations: [...components, ...pages],
   imports: [...modules, ...store]
 })
 export class TakeSurveyModule {}
