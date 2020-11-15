@@ -31,4 +31,7 @@ class QuestionAnswerServiceImpl(
 
     override fun findAllAnswersByQuestionId(
             questionId: Long): Flux<QuestionAnswer> = repository.findAllBySurveyQuestionId(questionId)
+
+    override fun findAllAnswersByInstanceId(
+            instanceId: Long): Flux<QuestionAnswer> = repository.findAllBySurveyInstanceId(instanceId)
 }

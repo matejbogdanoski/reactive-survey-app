@@ -57,6 +57,8 @@ class SurveyQuestionServiceImpl(
             }
 
 
+    override fun findById(questionId: Long): Mono<SurveyQuestion> = repository.findById(questionId)
+
     private fun updatePositions(surveyId: Long, position: Int, surveyQuestionId: Long): Flux<SurveyQuestion> =
             repository.findAllToIncrementPosition(surveyId, position, surveyQuestionId).flatMap {
                 repository.save(it.copy(position = it.position.plus(1)))

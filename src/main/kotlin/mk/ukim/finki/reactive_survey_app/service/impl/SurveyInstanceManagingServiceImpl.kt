@@ -6,6 +6,8 @@ import mk.ukim.finki.reactive_survey_app.constants.PostgresNotificationNames.ANS
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
 import mk.ukim.finki.reactive_survey_app.domain.dto.AnswerDTO
 import mk.ukim.finki.reactive_survey_app.helper.PostgresNotificationListener
+import mk.ukim.finki.reactive_survey_app.mappers.SurveyInstanceMapper
+import mk.ukim.finki.reactive_survey_app.responses.SurveyInstanceResponse
 import mk.ukim.finki.reactive_survey_app.service.QuestionAnswerService
 import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceManagingService
 import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceService
@@ -18,7 +20,8 @@ import java.time.ZonedDateTime
 class SurveyInstanceManagingServiceImpl(
         private val surveyInstanceService: SurveyInstanceService,
         private val questionAnswerService: QuestionAnswerService,
-        private val postgresListener: PostgresNotificationListener
+        private val postgresListener: PostgresNotificationListener,
+        private val mapper: SurveyInstanceMapper
 ) : SurveyInstanceManagingService {
 
     override fun createInstanceWithAnswers(questionAnswerMap: Map<Long, Any?>, surveyId: Long): Mono<SurveyInstance> {
@@ -41,4 +44,8 @@ class SurveyInstanceManagingServiceImpl(
                     }
                 }
             }
+
+    override fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstanceResponse> =
+            surveyInstanceService.findAllBySurveyId(surveyId).flatMap(mapper::mapSurveyInstanceToResponse)
+
 }

@@ -8,4 +8,5 @@ import reactor.core.publisher.Flux
 @Repository
 interface QuestionAnswerRepository : ReactiveCrudRepository<QuestionAnswer, Long> {
     fun findAllBySurveyQuestionId(questionId: Long): Flux<QuestionAnswer>
+    fun findAllBySurveyInstanceId(instanceId: Long): Flux<QuestionAnswer>
 }
