@@ -4,7 +4,7 @@ import { QuestionType } from '../../../survey/enum/question-type.enum';
 import { timePickerDarkThemeConfig } from '../../config/time-picker-theme.config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { QuestionAnswerService } from '../../services/question-answer/question-answer.service';
+import { SurveyInstanceService } from '../../services/survey-instance/survey-instance.service';
 import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
 
 @Component({
@@ -26,7 +26,7 @@ export class SurveyRendererComponent implements OnInit {
   constructor(
     private _builder: FormBuilder,
     private _notification: ToastrService,
-    private _service: QuestionAnswerService
+    private _service: SurveyInstanceService
   ) { }
 
   ngOnInit(): void {

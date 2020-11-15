@@ -20,7 +20,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { QuestionAnswerService } from './services/question-answer/question-answer.service';
+import { SurveyInstanceService } from './services/survey-instance/survey-instance.service';
 
 const modules = [
     SharedModule,
@@ -54,7 +54,7 @@ const pages = [
 
 const services = [
   SurveyRendererService,
-  QuestionAnswerService
+  SurveyInstanceService
 ];
 
 const materialProviders = [

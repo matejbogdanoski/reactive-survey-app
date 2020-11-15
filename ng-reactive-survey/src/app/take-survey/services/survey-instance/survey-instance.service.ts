@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
-export class QuestionAnswerService {
-  private readonly path = 'api/question-answers';
+export class SurveyInstanceService {
+  private readonly path = 'api/survey-instances';
 
   constructor(
     private _http: HttpClient

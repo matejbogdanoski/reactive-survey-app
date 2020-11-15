@@ -1,11 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import mk.ukim.finki.reactive_survey_app.constants.PostgresNotificationNames.ANSWER_SAVED_NOTIFICATION
 import mk.ukim.finki.reactive_survey_app.domain.QuestionAnswer
-import mk.ukim.finki.reactive_survey_app.domain.dto.AnswerDTO
-import mk.ukim.finki.reactive_survey_app.helper.PostgresNotificationListener
 import mk.ukim.finki.reactive_survey_app.repository.QuestionAnswerRepository
 import mk.ukim.finki.reactive_survey_app.service.QuestionAnswerService
 import org.springframework.stereotype.Service
@@ -15,33 +10,25 @@ import reactor.kotlin.core.publisher.toFlux
 
 @Service
 class QuestionAnswerServiceImpl(
-        private val repository: QuestionAnswerRepository,
-        private val postgresListener: PostgresNotificationListener
+        private val repository: QuestionAnswerRepository
 ) : QuestionAnswerService {
 
     override fun createQuestionAnswer(surveyQuestionId: Long, answer: String?,
-                                      surveyId: Long): Mono<QuestionAnswer> = repository.save(
+                                      surveyInstanceId: Long): Mono<QuestionAnswer> = repository.save(
             QuestionAnswer(id = null,
                            surveyQuestionId = surveyQuestionId,
                            answer = answer,
-                           answeredBy = null,
-                           surveyId = surveyId)
+                           surveyInstanceId = surveyInstanceId)
     )
 
-    override fun bulkCreateQuestionAnswers(
-            questionAnswerMap: Map<Long, Any?>, surveyId: Long): Flux<QuestionAnswer> = questionAnswerMap.entries.map {
+    override fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, Any?>,
+                                           surveyInstanceId: Long): Flux<QuestionAnswer> = questionAnswerMap.entries.map {
         QuestionAnswer(id = null,
                        surveyQuestionId = it.key,
                        answer = it.value.toString(),
-                       answeredBy = null,
-                       surveyId = surveyId)
+                       surveyInstanceId = surveyInstanceId)
     }.toFlux().flatMap(repository::save)
 
-    override fun getAnswerStream(surveyId: Long): Flux<AnswerDTO?> =
-            postgresListener.listen(ANSWER_SAVED_NOTIFICATION)
-                    .map { it.parameter?.let { json -> Json.decodeFromString<AnswerDTO>(json) } }
-                    .filter { it?.surveyId == surveyId }
-
-    override fun findAllAnswersByQuestionId(questionId: Long): Flux<QuestionAnswer> = repository.findAllByQuestionId(
-            questionId)
+    override fun findAllAnswersByQuestionId(
+            questionId: Long): Flux<QuestionAnswer> = repository.findAllBySurveyQuestionId(questionId)
 }

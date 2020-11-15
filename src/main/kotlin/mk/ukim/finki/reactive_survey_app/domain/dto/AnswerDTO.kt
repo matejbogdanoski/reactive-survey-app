@@ -8,9 +8,7 @@ data class AnswerDTO(
         val id: Long,
         @SerialName("survey_question_id")
         val surveyQuestionId: Long,
-        val answer: String,
-        @SerialName("answered_by")
-        val answeredBy: Long?,
-        @SerialName("survey_id")
-        val surveyId: Long
+        @SerialName("survey_instance_id")
+        val surveyInstanceId: Long,
+        val answer: String
 )
