@@ -4,7 +4,7 @@ import { QuestionType } from '../../../survey/enum/question-type.enum';
 import { timePickerDarkThemeConfig } from '../../config/time-picker-theme.config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { SurveyInstanceService } from '../../services/survey-instance/survey-instance.service';
+import { SurveyInstanceService } from '../../../shared/services/survey-instance/survey-instance.service';
 import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
 
 @Component({

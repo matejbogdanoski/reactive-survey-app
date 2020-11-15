@@ -7,3 +7,5 @@ export const selectSurveyState = createFeatureSelector<SurveyState>(surveyModule
 export const selectSurvey = createSelector(selectSurveyState, s => s.survey);
 
 export const selectSurveyQuestions = createSelector(selectSurveyState, s => s.survey.questions);
+
+export const selectSurveyInstances = createSelector(selectSurveyState, s => s.instances);

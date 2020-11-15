@@ -20,23 +20,22 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { SurveyInstanceService } from './services/survey-instance/survey-instance.service';
 
 const modules = [
-    SharedModule,
-    TakeSurveyRoutingModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatCardModule,
-    MatRadioModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    NgxMaterialTimepickerModule
+  SharedModule,
+  TakeSurveyRoutingModule,
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  MatSelectModule,
+  MatInputModule,
+  MatButtonModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatCardModule,
+  MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  NgxMaterialTimepickerModule
 ];
 
 const store = [
@@ -53,8 +52,7 @@ const pages = [
 ];
 
 const services = [
-  SurveyRendererService,
-  SurveyInstanceService
+  SurveyRendererService
 ];
 
 const materialProviders = [

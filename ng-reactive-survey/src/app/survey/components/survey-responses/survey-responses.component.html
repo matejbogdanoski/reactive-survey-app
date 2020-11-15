@@ -1,1 +1,5 @@
-<p>survey-responses works!</p>
+<div *ngIf='surveyInstances$ | async as surveyInstances'>
+  <div *ngIf='!isEmpty(surveyInstances)'>
+    {{surveyInstances | json}}
+  </div>
+</div>

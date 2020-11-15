@@ -1,3 +1,15 @@
 <h1>Survey Edit page !</h1>
-<app-survey-create></app-survey-create>
-<survey-question-create></survey-question-create>
+<mat-tab-group>
+  <mat-tab label='Questions'>
+    <ng-template matTabContent>
+      <app-survey-create></app-survey-create>
+      <survey-question-create></survey-question-create>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label='Responses'>
+    <ng-template matTabContent>
+      <app-survey-responses *ngIf='surveyId'
+                            [surveyId]='surveyId'></app-survey-responses>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

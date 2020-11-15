@@ -16,6 +16,8 @@ export class SurveyEditPage implements OnInit, OnDestroy {
 
   private _destroySubject = new Subject<void>();
 
+  surveyId: number;
+
   constructor(
     private _route: ActivatedRoute,
     private _surveyService: SurveyService,
@@ -28,6 +30,7 @@ export class SurveyEditPage implements OnInit, OnDestroy {
       withLatestFrom(this._route.paramMap),
       tap(([survey, params]) => {
         const id = +params.get('id');
+        this.surveyId = id;
         if (survey.id !== id) {
           //dispatch action to find the survey from backend
           this._state.dispatch(findSurvey({ id }));

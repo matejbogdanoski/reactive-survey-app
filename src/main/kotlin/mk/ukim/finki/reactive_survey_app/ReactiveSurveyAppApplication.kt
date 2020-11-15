@@ -11,6 +11,7 @@ class ReactiveSurveyAppApplication
 fun main(args: Array<String>) {
     BlockHound.install(BlockHoundIntegration {
         it.allowBlockingCallsInside("kotlin.reflect.jvm.ReflectJvmMapping", "getKotlinFunction")
+        it.allowBlockingCallsInside("java.base/java.util.Properties", "load")
     })
     runApplication<ReactiveSurveyAppApplication>(*args)
 }

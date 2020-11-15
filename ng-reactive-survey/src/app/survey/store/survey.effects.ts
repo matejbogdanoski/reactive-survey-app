@@ -58,6 +58,12 @@ import {
   updateQuestionOptionPositionSuccess
 } from '../services/survey-question-option/survey-question-option.actions';
 import { hasOptionsStatic } from '../enum/question-type.enum';
+import { findSurveyInstances } from '../components/survey-responses/survey-responses-component.actions';
+import { SurveyInstanceService } from '../../shared/services/survey-instance/survey-instance.service';
+import {
+  findSurveyInstancesFailure,
+  findSurveyInstancesSuccess
+} from '../../shared/services/survey-instance/survey-instance-service.actions';
 
 @Injectable()
 export class SurveyEffects {
@@ -67,6 +73,7 @@ export class SurveyEffects {
     private _surveyService: SurveyService,
     private _surveyQuestionService: SurveyQuestionService,
     private _surveyQuestionOptionService: SurveyQuestionOptionService,
+    private _surveyInstanceService: SurveyInstanceService,
     private _router: Router,
     private _state: Store<SurveyState>
   ) {}
@@ -250,6 +257,18 @@ export class SurveyEffects {
         this._surveyQuestionOptionService.updateQuestionOptionLabel(action.surveyQuestion, action.optionId, action.changedLabel).pipe(
           map(questionOption => updateQuestionOptionLabelSuccess({ questionOption, surveyQuestion: action.surveyQuestion })),
           catchError(error => of(updateQuestionOptionLabelFailure({ error })))
+        )
+      )
+    )
+  );
+
+  //Survey Instance Effects
+  findSurveyInstances$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findSurveyInstances),
+      mergeMap(action => this._surveyInstanceService.findAllInstancesBySurveyId(action.surveyId).pipe(
+        map(surveyInstances => findSurveyInstancesSuccess({ surveyInstances })),
+        catchError(error => of(findSurveyInstancesFailure({ error })))
         )
       )
     )

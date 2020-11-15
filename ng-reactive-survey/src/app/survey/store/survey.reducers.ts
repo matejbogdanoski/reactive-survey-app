@@ -34,6 +34,7 @@ import {
   updateQuestionOptionPositionFailure,
   updateQuestionOptionPositionSuccess
 } from '../services/survey-question-option/survey-question-option.actions';
+import { findSurveyInstancesSuccess } from '../../shared/services/survey-instance/survey-instance-service.actions';
 
 export const surveyModuleKey = 'survey';
 
@@ -196,6 +197,13 @@ export const reducer = createReducer(
         }
       })
     }
+  })),
+  on(updateQuestionOptionLabelFailure, (state, action) => ({ ...state, error: action.error })),
+
+  //Survey Instances
+  on(findSurveyInstancesSuccess, (state, action) => ({
+    ...state,
+    instances: action.surveyInstances
   })),
   on(updateQuestionOptionLabelFailure, (state, action) => ({ ...state, error: action.error }))
 );

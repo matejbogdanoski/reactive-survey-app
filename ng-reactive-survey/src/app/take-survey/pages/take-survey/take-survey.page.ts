@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 export class TakeSurveyPage implements OnInit {
 
   surveyStructure$: Observable<Survey>;
+  isEmpty = _.isEmpty;
 
   constructor(
     private _route: ActivatedRoute,
@@ -25,10 +26,6 @@ export class TakeSurveyPage implements OnInit {
   ngOnInit(): void {
     this._state.dispatch(findFullSurvey({ naturalKey: this._route.snapshot.paramMap.get('naturalKey') }));
     this.surveyStructure$ = this._state.select(selectFullSurvey);
-  }
-
-  isEmpty(object: any): boolean {
-    return _.isEmpty(object);
   }
 
 }
