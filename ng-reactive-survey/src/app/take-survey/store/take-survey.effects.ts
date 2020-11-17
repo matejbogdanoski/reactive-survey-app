@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
-import { TakeSurveyState } from './take-survey.state';
-import { Store } from '@ngrx/store';
 import { SurveyRendererService } from '../services/survey-renderer/survey-renderer.service';
 import { findFullSurvey } from '../pages/take-survey/take-survey-page.actions';
 import { catchError, map, mergeMap } from 'rxjs/operators';
@@ -14,7 +12,6 @@ export class TakeSurveyEffects {
   constructor(
     private actions$: Actions,
     private _router: Router,
-    private _state: Store<TakeSurveyState>,
     private _surveyRendererService: SurveyRendererService
   ) {}
 

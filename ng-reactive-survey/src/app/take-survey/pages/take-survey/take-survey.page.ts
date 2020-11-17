@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { selectFullSurvey } from '../../store/take-survey.selectors';
 import { findFullSurvey } from './take-survey-page.actions';
 import * as _ from 'lodash';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-take-survey',
@@ -16,16 +17,17 @@ import * as _ from 'lodash';
 export class TakeSurveyPage implements OnInit {
 
   surveyStructure$: Observable<Survey>;
-  isEmpty = _.isEmpty;
 
   constructor(
     private _route: ActivatedRoute,
-    private _state: Store<TakeSurveyState>
+    private _store: Store<TakeSurveyState>
   ) { }
 
   ngOnInit(): void {
-    this._state.dispatch(findFullSurvey({ naturalKey: this._route.snapshot.paramMap.get('naturalKey') }));
-    this.surveyStructure$ = this._state.select(selectFullSurvey);
+    this._store.dispatch(findFullSurvey({ naturalKey: this._route.snapshot.paramMap.get('naturalKey') }));
+    this.surveyStructure$ = this._store.select(selectFullSurvey).pipe(
+      filter(it => !_.isEmpty(it))
+    );
   }
 
 }

@@ -27,12 +27,16 @@ import { QuestionTypeIconPipe } from './pipes/question-type-icon.pipe';
 import { SurveyQuestionOptionService } from './services/survey-question-option/survey-question-option.service';
 import { SurveyResponsesComponent } from './components/survey-responses/survey-responses.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { SurveyResponsesSummaryComponent } from './components/survey-responses-summary/survey-responses-summary.component';
+import { SurveyResponsesIndividualComponent } from './components/survey-responses-individual/survey-responses-individual.component';
 
 const components = [
   SurveyQuestionCreateComponent,
   SurveyCreateComponent,
   SurveyQuestionOptionsCreateComponent,
-  SurveyResponsesComponent
+  SurveyResponsesComponent,
+  SurveyResponsesSummaryComponent,
+  SurveyResponsesIndividualComponent
 ];
 
 const services = [

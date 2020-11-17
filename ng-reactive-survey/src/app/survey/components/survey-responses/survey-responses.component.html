@@ -1,5 +1,16 @@
 <div *ngIf='surveyInstances$ | async as surveyInstances'>
-  <div *ngIf='!isEmpty(surveyInstances)'>
-    {{surveyInstances | json}}
-  </div>
+  <mat-tab-group>
+    <mat-tab label='Summary'>
+      <ng-template matTabContent>
+        <app-survey-responses-summary
+          [surveyInstances]='surveyInstances'></app-survey-responses-summary>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label='Individual'>
+      <ng-template matTabContent>
+        <app-survey-responses-individual
+          [surveyInstances]='surveyInstances'></app-survey-responses-individual>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
 </div>

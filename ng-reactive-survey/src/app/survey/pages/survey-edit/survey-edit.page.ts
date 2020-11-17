@@ -21,11 +21,11 @@ export class SurveyEditPage implements OnInit, OnDestroy {
   constructor(
     private _route: ActivatedRoute,
     private _surveyService: SurveyService,
-    private _state: Store<SurveyState>
+    private _store: Store<SurveyState>
   ) { }
 
   ngOnInit(): void {
-    this._state.select(selectSurvey).pipe(
+    this._store.select(selectSurvey).pipe(
       takeUntil(this._destroySubject),
       withLatestFrom(this._route.paramMap),
       tap(([survey, params]) => {
@@ -33,7 +33,7 @@ export class SurveyEditPage implements OnInit, OnDestroy {
         this.surveyId = id;
         if (survey.id !== id) {
           //dispatch action to find the survey from backend
-          this._state.dispatch(findSurvey({ id }));
+          this._store.dispatch(findSurvey({ id }));
         }
       })
     ).subscribe();

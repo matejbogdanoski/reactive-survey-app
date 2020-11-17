@@ -31,7 +31,7 @@ export class SurveyQuestionOptionsCreateComponent implements OnInit {
 
   ngOnInit(): void {
     //todo make this better
-    this.questionOptions.forEach(qo => {
+    this.questionOptions?.forEach(qo => {
       this.form.addControl(`option_${qo.id}`, new FormControl(qo.label));
     });
   }

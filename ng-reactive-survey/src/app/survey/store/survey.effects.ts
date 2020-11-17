@@ -75,7 +75,7 @@ export class SurveyEffects {
     private _surveyQuestionOptionService: SurveyQuestionOptionService,
     private _surveyInstanceService: SurveyInstanceService,
     private _router: Router,
-    private _state: Store<SurveyState>
+    private _store: Store<SurveyState>
   ) {}
 
   //Survey Effects
@@ -106,7 +106,7 @@ export class SurveyEffects {
   editSurvey$ = createEffect(() =>
     this.actions$.pipe(
       ofType(editSurvey),
-      withLatestFrom(this._state),
+      withLatestFrom(this._store),
       mergeMap(([action, state]) =>
         this._surveyService.editSurveyInfo(state.survey, action.surveyEditInfo).pipe(
           map(survey => editSurveySuccess({ survey })),
@@ -120,7 +120,7 @@ export class SurveyEffects {
   createSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(addSurveyQuestion),
-      withLatestFrom(this._state),
+      withLatestFrom(this._store),
       mergeMap(([_, state]) =>
         this._surveyQuestionService.createSurveyQuestion(state.survey).pipe(
           map(surveyQuestion => addSurveyQuestionSuccess({ surveyQuestion })),
@@ -149,7 +149,7 @@ export class SurveyEffects {
   editSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(editSurveyQuestion),
-      withLatestFrom(this._state),
+      withLatestFrom(this._store),
       mergeMap(([action, state]) =>
         this._surveyQuestionService.editSurveyQuestion(action.id, action.changes, state.survey).pipe(
           map(surveyQuestion => editSurveyQuestionSuccess({ surveyQuestion })),
@@ -162,7 +162,7 @@ export class SurveyEffects {
   updateSurveyQuestionPosition$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateSurveyQuestionPosition),
-      withLatestFrom(this._state),
+      withLatestFrom(this._store),
       mergeMap(([action, state]) =>
         this._surveyQuestionService.updateSurveyQuestionPosition(action.id, action.previousIndex,
           action.currentIndex, state.survey).pipe(
@@ -176,7 +176,7 @@ export class SurveyEffects {
   duplicateSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(duplicateSurveyQuestion),
-      withLatestFrom(this._state),
+      withLatestFrom(this._store),
       mergeMap(([action, state]) =>
         this._surveyQuestionService.duplicateQuestion(action.question, state.survey).pipe(
           map(surveyQuestions => duplicateSurveyQuestionSuccess({ surveyQuestions })),
@@ -187,7 +187,7 @@ export class SurveyEffects {
   deleteSurveyQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(deleteSurveyQuestion),
-      withLatestFrom(this._state),
+      withLatestFrom(this._store),
       mergeMap(([action, state]) =>
         this._surveyQuestionService.deleteSurveyQuestion(action.id, state.survey).pipe(
           map(surveyQuestionId => deleteSurveyQuestionSuccess({ surveyQuestionId })),

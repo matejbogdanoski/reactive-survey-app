@@ -1,5 +1,4 @@
 <div *ngIf='surveyStructure$ | async as surveyStructure'>
-  <app-survey-renderer *ngIf='!isEmpty(surveyStructure)'
-                       [surveyStructure]='surveyStructure'>
+  <app-survey-renderer [surveyStructure]='surveyStructure'>
   </app-survey-renderer>
 </div>
