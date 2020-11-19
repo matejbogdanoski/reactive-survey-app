@@ -2,12 +2,15 @@ import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SurveyInstance } from '../../../interfaces/survey-instance.interface';
+import { QuestionType } from '../../../survey/enum/question-type.enum';
 
 export interface AnswerDTO {
   id: number;
   surveyQuestionId: number;
   surveyInstanceId: number;
   answer: string;
+  questionName: string;
+  questionType: QuestionType;
 }
 
 @Injectable()

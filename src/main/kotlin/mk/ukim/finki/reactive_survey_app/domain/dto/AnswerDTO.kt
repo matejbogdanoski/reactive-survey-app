@@ -10,5 +10,7 @@ data class AnswerDTO(
         val surveyQuestionId: Long,
         @SerialName("survey_instance_id")
         val surveyInstanceId: Long,
-        val answer: String
+        val answer: String,
+        val questionName: String? = null,
+        val questionType: String? = null
 )

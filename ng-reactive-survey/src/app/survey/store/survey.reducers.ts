@@ -35,6 +35,11 @@ import {
   updateQuestionOptionPositionSuccess
 } from '../services/survey-question-option/survey-question-option.actions';
 import { findSurveyInstancesSuccess } from '../../shared/services/survey-instance/survey-instance-service.actions';
+import { aggregateAnswer } from '../components/survey-responses/survey-responses-component.actions';
+import { SurveyInstance } from '../../interfaces/survey-instance.interface';
+import { AnswerDTO } from '../../shared/services/survey-instance/survey-instance.service';
+import * as _ from 'lodash';
+import { QuestionAnswer } from '../../interfaces/question-answer.interface';
 
 export const surveyModuleKey = 'survey';
 
@@ -205,9 +210,45 @@ export const reducer = createReducer(
     ...state,
     instances: action.surveyInstances
   })),
-  on(updateQuestionOptionLabelFailure, (state, action) => ({ ...state, error: action.error }))
+  on(updateQuestionOptionLabelFailure, (state, action) => ({ ...state, error: action.error })),
+
+  on(aggregateAnswer, (state, action) => ({
+    ...state,
+    instances: aggregateInstance(state.instances, action.answer)
+  }))
 );
 
 export function surveyReducer(state: SurveyState | undefined, action: Action) {
   return reducer(state, action);
+}
+
+function aggregateInstance(instances: SurveyInstance[], answer: AnswerDTO): SurveyInstance[] {
+  const instancesCopy = _.cloneDeep(instances);
+  const instance = instancesCopy.find(i => i.id === answer.surveyInstanceId);
+  if (!!instance) {
+    return instancesCopy.map(i => {
+      if (i.id == instance.id) {
+        return {
+          ...i,
+          questionAnswers: [...i.questionAnswers, {
+            answer: answer.answer,
+            questionName: answer.questionName,
+            questionType: answer.questionType
+          } as QuestionAnswer]
+        };
+      } else {
+        return i;
+      }
+    });
+  } else {
+    return [...instancesCopy, {
+      questionAnswers: [{
+                          questionType: answer.questionType,
+                          questionName: answer.questionName,
+                          answer: answer.answer
+                        } as QuestionAnswer],
+      dateTaken: new Date(),
+      id: answer.surveyInstanceId
+    } as SurveyInstance];
+  }
 }

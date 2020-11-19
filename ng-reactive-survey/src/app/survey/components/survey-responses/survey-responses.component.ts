@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { SurveyState } from '../../store/survey.state';
 import { Store } from '@ngrx/store';
-import { findSurveyInstances } from './survey-responses-component.actions';
+import { aggregateAnswer, findSurveyInstances } from './survey-responses-component.actions';
 import * as _ from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { SurveyInstance } from '../../../interfaces/survey-instance.interface';
@@ -34,7 +34,9 @@ export class SurveyResponsesComponent implements OnInit, OnDestroy {
     );
     this._service.streamAnswers(this.surveyId).pipe(
       takeUntil(this._destroySubject)
-    ).subscribe(console.log);
+    ).subscribe(answer => {
+      this._store.dispatch(aggregateAnswer({ answer }));
+    });
   }
 
   ngOnDestroy(): void {
