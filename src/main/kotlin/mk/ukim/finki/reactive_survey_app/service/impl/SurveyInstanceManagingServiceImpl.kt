@@ -27,7 +27,7 @@ class SurveyInstanceManagingServiceImpl(
         private val mapper: SurveyInstanceMapper
 ) : SurveyInstanceManagingService {
 
-    override fun createInstanceWithAnswers(questionAnswerMap: Map<Long, Any?>, surveyId: Long): Mono<SurveyInstance> {
+    override fun createInstanceWithAnswers(questionAnswerMap: Map<Long, String?>, surveyId: Long): Mono<SurveyInstance> {
         val instance = surveyInstanceService.create(surveyId, 0, ZonedDateTime.now())
         return instance.doOnNext {
             questionAnswerService.bulkCreateQuestionAnswers(questionAnswerMap, it.id!!).subscribe()

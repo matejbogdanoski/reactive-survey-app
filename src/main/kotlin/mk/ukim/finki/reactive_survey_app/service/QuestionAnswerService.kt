@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono
 
 interface QuestionAnswerService {
     fun createQuestionAnswer(surveyQuestionId: Long, answer: String?, surveyInstanceId: Long): Mono<QuestionAnswer>
-    fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, Any?>, surveyInstanceId: Long): Flux<QuestionAnswer>
+    fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, String?>, surveyInstanceId: Long): Flux<QuestionAnswer>
     fun findAllAnswersByQuestionId(questionId: Long): Flux<QuestionAnswer>
     fun findAllAnswersByInstanceId(instanceId: Long): Flux<QuestionAnswer>
 }

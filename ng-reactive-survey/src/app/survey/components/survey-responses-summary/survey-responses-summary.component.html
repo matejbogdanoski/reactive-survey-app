@@ -1,3 +1,19 @@
-<div>
-  {{surveyInstances | json}}
-</div>
+<mat-card class='my-2' *ngFor='let question of aggregatedQuestions | keyvalue'>
+  <mat-card-header>
+    <h3>{{question.value[0].questionName}}</h3>
+  </mat-card-header>
+  <div *ngIf='hasOptions(question.value[0].questionType) | async; else noOption'>
+    <div class='chart'>
+      <canvas baseChart
+              [labels]='question.value | chartLabels'
+              [data]='question.value | chartData'
+              [chartType]='"pie"'>
+      </canvas>
+    </div>
+  </div>
+  <ng-template #noOption>
+    <div class='answer' *ngFor='let answer of question.value'>
+      {{answer.answer}}
+    </div>
+  </ng-template>
+</mat-card>

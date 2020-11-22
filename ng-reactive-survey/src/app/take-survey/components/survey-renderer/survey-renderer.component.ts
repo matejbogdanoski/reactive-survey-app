@@ -6,6 +6,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { SurveyInstanceService } from '../../../shared/services/survey-instance/survey-instance.service';
 import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-survey-renderer',
@@ -52,7 +53,12 @@ export class SurveyRendererComponent implements OnInit {
         const checkboxGroup = value[checkboxId.toString()];
         value[checkboxId.toString()] = Object.keys(checkboxGroup).filter(key => checkboxGroup[key] === true);
       });
-    this._service.addBulkQuestionAnswers(value, this.surveyStructure.id).subscribe(_ => {
+    const questionAnswerMap = _.cloneDeep(value)
+    Object.keys(questionAnswerMap).forEach(key => {
+      questionAnswerMap[key] = JSON.stringify(questionAnswerMap[key]);
+    })
+    console.log(questionAnswerMap);
+    this._service.addBulkQuestionAnswers(questionAnswerMap, this.surveyStructure.id).subscribe(() => {
       this._notification.success('Successfully submitted!');
     }, error => {
       this._notification.error(error.message);

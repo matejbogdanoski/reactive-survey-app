@@ -28,7 +28,8 @@ class SurveyInstanceMapper(
     fun mapQuestionAnswerToResponse(questionAnswer: QuestionAnswer): Mono<QuestionAnswerResponse> = with(
             mapQuestionAnswerToResponseStatic(questionAnswer)) {
         questionService.findById(questionAnswer.surveyQuestionId).map {
-            copy(questionName = it.name ?: "",
+            copy(questionId = it.id!!,
+                 questionName = it.name ?: "",
                  questionType = QuestionType.values()[it.questionTypeId.toInt()].name)
         }
     }
@@ -40,7 +41,8 @@ class SurveyInstanceMapper(
     }
 
     private fun mapQuestionAnswerToResponseStatic(questionAnswer: QuestionAnswer) = with(questionAnswer) {
-        QuestionAnswerResponse(questionName = "",
+        QuestionAnswerResponse(questionId = 0,
+                               questionName = "",
                                answer = answer,
                                questionType = "")
     }

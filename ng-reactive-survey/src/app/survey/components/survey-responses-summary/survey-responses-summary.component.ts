@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { SurveyState } from '../../store/survey.state';
 import { SurveyInstance } from '../../../interfaces/survey-instance.interface';
+import * as _ from 'lodash';
+import { QuestionAnswer } from '../../../interfaces/question-answer.interface';
+import { hasOptions } from '../../enum/question-type.enum';
 
 @Component({
   selector: 'app-survey-responses-summary',
@@ -11,11 +12,21 @@ import { SurveyInstance } from '../../../interfaces/survey-instance.interface';
 })
 export class SurveyResponsesSummaryComponent implements OnInit {
 
-  @Input() surveyInstances: SurveyInstance[];
+  aggregatedQuestions: _.Dictionary<QuestionAnswer[]>;
+  private _surveyInstances: SurveyInstance[];
+  hasOptions = hasOptions;
 
-  constructor(
-    private _store: Store<SurveyState>
-  ) { }
+  @Input() set surveyInstances(surveyInstances: SurveyInstance[]) {
+    this._surveyInstances = surveyInstances;
+    const questionAnswers = _.flatMap(this.surveyInstances.map(i => i.questionAnswers));
+    this.aggregatedQuestions = _.groupBy(questionAnswers, 'questionId');
+  };
+
+  get surveyInstances(): SurveyInstance[] {
+    return this._surveyInstances;
+  }
+
+  constructor() { }
 
   ngOnInit(): void {
   }

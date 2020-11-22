@@ -29,6 +29,9 @@ import { SurveyResponsesComponent } from './components/survey-responses/survey-r
 import { MatTabsModule } from '@angular/material/tabs';
 import { SurveyResponsesSummaryComponent } from './components/survey-responses-summary/survey-responses-summary.component';
 import { SurveyResponsesIndividualComponent } from './components/survey-responses-individual/survey-responses-individual.component';
+import { ChartsModule } from 'ng2-charts';
+import { ChartDataPipe } from './pipes/chart/chart-data.pipe';
+import { ChartLabelsPipe } from './pipes/chart/chart-labels.pipe';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -64,11 +67,14 @@ const modules = [
   MatTooltipModule,
   MatSlideToggleModule,
   DragDropModule,
-  MatTabsModule
+  MatTabsModule,
+  ChartsModule
 ];
 
 const pipes = [
-  QuestionTypeIconPipe
+  QuestionTypeIconPipe,
+  ChartDataPipe,
+  ChartLabelsPipe
 ];
 
 const store = [
@@ -79,6 +85,6 @@ const store = [
 @NgModule({
   providers: [...services],
   declarations: [...components, ...pages, ...pipes],
-  imports: [...modules, ...store]
+    imports: [...modules, ...store]
 })
 export class SurveyModule {}

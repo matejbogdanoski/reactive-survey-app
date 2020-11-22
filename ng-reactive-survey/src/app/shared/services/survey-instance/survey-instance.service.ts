@@ -22,7 +22,7 @@ export class SurveyInstanceService {
     private _http: HttpClient
   ) {}
 
-  public addBulkQuestionAnswers(questionAnswerMap: Map<string, any>, surveyId: number) {
+  public addBulkQuestionAnswers(questionAnswerMap: Map<string, string>, surveyId: number) {
     return this._http.post(`${this.path}/${surveyId}`, questionAnswerMap);
   }
 

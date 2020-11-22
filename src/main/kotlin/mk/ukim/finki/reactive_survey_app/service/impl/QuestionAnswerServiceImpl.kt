@@ -21,11 +21,11 @@ class QuestionAnswerServiceImpl(
                            surveyInstanceId = surveyInstanceId)
     )
 
-    override fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, Any?>,
+    override fun bulkCreateQuestionAnswers(questionAnswerMap: Map<Long, String?>,
                                            surveyInstanceId: Long): Flux<QuestionAnswer> = questionAnswerMap.entries.map {
         QuestionAnswer(id = null,
                        surveyQuestionId = it.key,
-                       answer = it.value.toString(),
+                       answer = it.value,
                        surveyInstanceId = surveyInstanceId)
     }.toFlux().flatMap(repository::save)
 

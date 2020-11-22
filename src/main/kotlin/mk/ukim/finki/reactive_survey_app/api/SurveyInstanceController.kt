@@ -23,7 +23,7 @@ class SurveyInstanceController(
     fun findAllBySurvey(@PathVariable surveyId: Long): Flux<SurveyInstanceResponse> = service.findAllBySurveyId(surveyId)
 
     @PostMapping("{surveyId}")
-    fun createInstanceWithAnswers(@RequestBody questionAnswerMap: Map<Long, Any?>,
+    fun createInstanceWithAnswers(@RequestBody questionAnswerMap: Map<Long, String?>,
                                   @PathVariable surveyId: Long): Mono<SurveyInstance> = service.createInstanceWithAnswers(
             questionAnswerMap, surveyId)
 
