@@ -32,6 +32,8 @@ import { SurveyResponsesIndividualComponent } from './components/survey-response
 import { ChartsModule } from 'ng2-charts';
 import { ChartDataPipe } from './pipes/chart/chart-data.pipe';
 import { ChartLabelsPipe } from './pipes/chart/chart-labels.pipe';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { TakeSurveyModule } from '../take-survey/take-survey.module';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -68,7 +70,9 @@ const modules = [
   MatSlideToggleModule,
   DragDropModule,
   MatTabsModule,
-  ChartsModule
+  ChartsModule,
+  MatPaginatorModule,
+  TakeSurveyModule
 ];
 
 const pipes = [

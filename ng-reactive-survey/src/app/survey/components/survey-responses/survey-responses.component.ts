@@ -32,13 +32,12 @@ export class SurveyResponsesComponent implements OnInit, OnDestroy {
     this.surveyInstances$ = this._store.select(selectSurveyInstances).pipe(
       filter(it => !_.isEmpty(it))
     );
-    //todo uncomment this
 
-    // this._service.streamAnswers(this.surveyId).pipe(
-    //   takeUntil(this._destroySubject)
-    // ).subscribe(answer => {
-    //   this._store.dispatch(aggregateAnswer({ answer }));
-    // });
+    this._service.streamAnswers(this.surveyId).pipe(
+      takeUntil(this._destroySubject)
+    ).subscribe(answer => {
+      this._store.dispatch(aggregateAnswer({ answer }));
+    });
   }
 
   ngOnDestroy(): void {

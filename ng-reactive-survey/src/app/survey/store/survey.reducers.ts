@@ -143,7 +143,9 @@ export const reducer = createReducer(
       ...state.survey,
       questions: state.survey.questions.map(q => {
         if (action.surveyQuestion.id === q.id) {
-          return { ...q, options: [...q.options, action.questionOption] };
+          return { ...q,
+            options: [...q.options || [], action.questionOption]
+          };
         } else {
           return q;
         }
@@ -231,6 +233,7 @@ function aggregateInstance(instances: SurveyInstance[], answer: AnswerDTO): Surv
         return {
           ...i,
           questionAnswers: [...i.questionAnswers, {
+            questionId: answer.surveyQuestionId,
             answer: answer.answer,
             questionName: answer.questionName,
             questionType: answer.questionType
@@ -243,6 +246,7 @@ function aggregateInstance(instances: SurveyInstance[], answer: AnswerDTO): Surv
   } else {
     return [...instancesCopy, {
       questionAnswers: [{
+                          questionId: answer.surveyQuestionId,
                           questionType: answer.questionType,
                           questionName: answer.questionName,
                           answer: answer.answer

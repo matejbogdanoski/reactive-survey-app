@@ -1,5 +1,8 @@
-<div *ngIf='surveyInstances$ | async as surveyInstances'>
-  <mat-tab-group>
+<div class='content' *ngIf='surveyInstances$ | async as surveyInstances'>
+  <h2>{{surveyInstances.length}} responses</h2>
+  <mat-tab-group
+    animationDuration='0ms'
+    mat-align-tabs='center'>
     <mat-tab label='Summary'>
       <ng-template matTabContent>
         <app-survey-responses-summary

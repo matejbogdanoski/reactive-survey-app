@@ -3,6 +3,7 @@ import { SurveyInstance } from '../../../interfaces/survey-instance.interface';
 import * as _ from 'lodash';
 import { QuestionAnswer } from '../../../interfaces/question-answer.interface';
 import { hasOptions } from '../../enum/question-type.enum';
+import { chartOptions } from '../../config/chart-theme.config';
 
 @Component({
   selector: 'app-survey-responses-summary',
@@ -15,6 +16,7 @@ export class SurveyResponsesSummaryComponent implements OnInit {
   aggregatedQuestions: _.Dictionary<QuestionAnswer[]>;
   private _surveyInstances: SurveyInstance[];
   hasOptions = hasOptions;
+  options = chartOptions;
 
   @Input() set surveyInstances(surveyInstances: SurveyInstance[]) {
     this._surveyInstances = surveyInstances;

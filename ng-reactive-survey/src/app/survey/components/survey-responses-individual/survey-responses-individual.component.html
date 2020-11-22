@@ -1,1 +1,11 @@
-<p>survey-responses-individual works!</p>
+<mat-paginator
+  class='my-2'
+  (page)='onPageChange($event)'
+  [pageSize]='1'
+  [pageSizeOptions]='[1]'
+  [hidePageSize]='true'
+  [length]='surveyInstances.length'></mat-paginator>
+<app-survey-renderer
+  [disable]='true'
+  [surveyAnswers]='answers'
+  [surveyStructure]='survey$ | async'></app-survey-renderer>

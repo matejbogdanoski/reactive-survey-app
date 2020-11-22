@@ -2,9 +2,14 @@
   <mat-card-header>
     <h3>{{question.value[0].questionName}}</h3>
   </mat-card-header>
+  <mat-card-subtitle>
+    <h5>{{question.value.length}} responses</h5>
+  </mat-card-subtitle>
+
   <div *ngIf='hasOptions(question.value[0].questionType) | async; else noOption'>
     <div class='chart'>
       <canvas baseChart
+              [options]='options'
               [labels]='question.value | chartLabels'
               [data]='question.value | chartData'
               [chartType]='"pie"'>

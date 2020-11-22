@@ -62,6 +62,9 @@ const materialProviders = [
 @NgModule({
   providers: [...services, ...materialProviders],
   declarations: [...components, ...pages],
+  exports: [
+    SurveyRendererComponent
+  ],
   imports: [...modules, ...store]
 })
 export class TakeSurveyModule {}
