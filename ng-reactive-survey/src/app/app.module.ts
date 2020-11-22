@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ToastrModule } from 'ngx-toastr';
+import { NavigationModule } from './navigation/navigation.module';
 
 export const createTranslateLoader = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -33,6 +34,7 @@ export const createTranslateLoader = (http: HttpClient) => {
     }) : [],
     EffectsModule.forRoot([AppEffects]),
     SurveyModule,
+    NavigationModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),

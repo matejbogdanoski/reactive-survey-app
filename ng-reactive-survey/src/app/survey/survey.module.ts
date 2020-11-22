@@ -89,6 +89,6 @@ const store = [
 @NgModule({
   providers: [...services],
   declarations: [...components, ...pages, ...pipes],
-    imports: [...modules, ...store]
+  imports: [...modules, ...store]
 })
 export class SurveyModule {}
