@@ -12,6 +12,8 @@ fun main(args: Array<String>) {
     BlockHound.install(BlockHoundIntegration {
         it.allowBlockingCallsInside("kotlin.reflect.jvm.ReflectJvmMapping", "getKotlinFunction")
         it.allowBlockingCallsInside("java.base/java.util.Properties", "load")
+        //encoding password is a blocking operation and should always be published on parallel worker
+        it.allowBlockingCallsInside("org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder", "encode")
     })
     runApplication<ReactiveSurveyAppApplication>(*args)
 }

@@ -29,6 +29,8 @@ dependencies {
     implementation("io.r2dbc:r2dbc-spi")
     implementation("io.r2dbc:r2dbc-postgresql")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.4.0")
+    
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
