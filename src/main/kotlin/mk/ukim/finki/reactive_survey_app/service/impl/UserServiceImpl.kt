@@ -22,7 +22,7 @@ class UserServiceImpl(
                            firstName = firstName,
                            lastName = lastName,
                            passwordHash = encoder.encode(password)))
-                    .publishOn(Schedulers.parallel()) //todo maybe find a better solution ?
+                    .subscribeOn(Schedulers.parallel())
                     .flatMap(repository::save)
 
     override fun findByUsername(username: String): Mono<User> = repository.findByUsername(username)
