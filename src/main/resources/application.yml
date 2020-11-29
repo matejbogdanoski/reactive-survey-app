@@ -1,0 +1,28 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost/reactive_survey
+    username: reactive_survey
+    password: reactive_survey
+  flyway:
+    url: jdbc:postgresql://localhost/reactive_survey
+    user: reactive_survey
+    password: reactive_survey
+    baseline-on-migrate: true
+
+logging:
+  level:
+    org.springframework:
+      data:
+        r2dbc: DEBUG
+
+jwt:
+  header: Authorization
+  param: token
+  secret: m6sXDUKZSY154e9N
+  expiration: 86400000
+  prefix: Bearer
+  route:
+    authentication:
+      path: auth
+      token: token
+      refresh: refresh

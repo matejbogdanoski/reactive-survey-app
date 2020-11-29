@@ -14,6 +14,11 @@ fun main(args: Array<String>) {
         it.allowBlockingCallsInside("java.base/java.util.Properties", "load")
         //encoding password is a blocking operation and should always be published on parallel worker
         it.allowBlockingCallsInside("org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder", "encode")
+        it.allowBlockingCallsInside("mk.ukim.finki.reactive_survey_app.security.jwt.JwtTokenUtils", "doGenerateToken")
+        it.allowBlockingCallsInside("mk.ukim.finki.reactive_survey_app.security.jwt.JwtTokenUtils",
+                                    "getAllClaimsFromToken")
+        it.allowBlockingCallsInside("com.fasterxml.jackson.module.kotlin.KotlinNamesAnnotationIntrospector",
+                                    "hasCreatorAnnotation")
     })
     runApplication<ReactiveSurveyAppApplication>(*args)
 }

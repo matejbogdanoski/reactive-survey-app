@@ -1,0 +1,45 @@
+<form [formGroup]='form' (ngSubmit)='register()'>
+
+  <mat-form-field>
+    <label>Username:</label>
+    <input
+      formControlName='username'
+      matInput>
+  </mat-form-field>
+
+  <mat-form-field>
+    <label>Email:</label>
+    <input
+      formControlName='email'
+      matInput>
+  </mat-form-field>
+
+  <mat-form-field>
+    <label>Password:</label>
+    <input
+      formControlName='password'
+      type='password'
+      matInput>
+  </mat-form-field>
+
+  <mat-form-field>
+    <label>First Name:</label>
+    <input
+      formControlName='firstName'
+      matInput>
+  </mat-form-field>
+
+  <mat-form-field>
+    <label>Last Name:</label>
+    <input
+      formControlName='lastName'
+      matInput>
+  </mat-form-field>
+
+  <button [disabled]='form.invalid'
+          type='submit'
+          mat-stroked-button>
+    Register!
+  </button>
+
+</form>
