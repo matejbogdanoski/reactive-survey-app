@@ -37,7 +37,6 @@ class SurveyRendererMapper(
                                title = title,
                                description = description,
                                naturalKey = naturalKey,
-                               canTakeAnonymously = canTakeAnonymously,
                                questions = emptyList())
     }
 

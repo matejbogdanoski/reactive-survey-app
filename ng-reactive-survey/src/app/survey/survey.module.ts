@@ -34,6 +34,9 @@ import { ChartDataPipe } from './pipes/chart/chart-data.pipe';
 import { ChartLabelsPipe } from './pipes/chart/chart-labels.pipe';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { TakeSurveyModule } from '../take-survey/take-survey.module';
+import { MySurveysListComponent } from './components/my-surveys-list/my-surveys-list.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -41,7 +44,8 @@ const components = [
   SurveyQuestionOptionsCreateComponent,
   SurveyResponsesComponent,
   SurveyResponsesSummaryComponent,
-  SurveyResponsesIndividualComponent
+  SurveyResponsesIndividualComponent,
+  MySurveysListComponent
 ];
 
 const services = [
@@ -59,6 +63,12 @@ const modules = [
   SharedModule,
   SurveyRoutingModule,
   ReactiveFormsModule,
+  ChartsModule,
+  TakeSurveyModule
+];
+
+const material = [
+  MatTableModule,
   MatFormFieldModule,
   MatSelectModule,
   MatInputModule,
@@ -70,9 +80,8 @@ const modules = [
   MatSlideToggleModule,
   DragDropModule,
   MatTabsModule,
-  ChartsModule,
   MatPaginatorModule,
-  TakeSurveyModule
+  MatProgressSpinnerModule
 ];
 
 const pipes = [
@@ -89,6 +98,6 @@ const store = [
 @NgModule({
   providers: [...services],
   declarations: [...components, ...pages, ...pipes],
-  imports: [...modules, ...store]
+  imports: [...modules, ...store, ...material]
 })
 export class SurveyModule {}

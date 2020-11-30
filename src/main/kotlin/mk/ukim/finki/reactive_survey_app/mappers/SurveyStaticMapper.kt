@@ -14,8 +14,7 @@ object SurveyStaticMapper {
         SurveyResponse(id = id!!,
                        title = title,
                        description = description,
-                       naturalKey = naturalKey,
-                       canTakeAnonymously = canTakeAnonymously)
+                       naturalKey = naturalKey)
     }
 
     fun mapSurveyQuestionToResponseStatic(surveyQuestion: SurveyQuestion) = with(surveyQuestion) {

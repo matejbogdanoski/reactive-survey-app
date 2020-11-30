@@ -40,8 +40,7 @@ export class SurveyCreateComponent implements OnInit, OnDestroy {
   get _formDefinition() {
     return this._builder.group({
       title: [''],
-      description: [''],
-      canTakeAnonymously: ['']
+      description: ['']
     });
   }
 

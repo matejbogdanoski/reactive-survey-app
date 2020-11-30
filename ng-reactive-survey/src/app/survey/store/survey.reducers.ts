@@ -58,8 +58,7 @@ export const reducer = createReducer(
       survey: {
         ...state.survey,
         title: action.survey.title,
-        description: action.survey.description,
-        canTakeAnonymously: action.survey.canTakeAnonymously
+        description: action.survey.description
       }
     })),
   on(editSurveyCreateFailure, (state, action) => ({ ...state, error: action.error })),

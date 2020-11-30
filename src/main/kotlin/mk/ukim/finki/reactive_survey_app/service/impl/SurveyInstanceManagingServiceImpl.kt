@@ -9,10 +9,7 @@ import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
 import mk.ukim.finki.reactive_survey_app.helper.PostgresNotificationListener
 import mk.ukim.finki.reactive_survey_app.mappers.SurveyInstanceMapper
 import mk.ukim.finki.reactive_survey_app.responses.SurveyInstanceResponse
-import mk.ukim.finki.reactive_survey_app.service.QuestionAnswerService
-import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceManagingService
-import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceService
-import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
+import mk.ukim.finki.reactive_survey_app.service.*
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -24,11 +21,15 @@ class SurveyInstanceManagingServiceImpl(
         private val questionAnswerService: QuestionAnswerService,
         private val surveyQuestionService: SurveyQuestionService,
         private val postgresListener: PostgresNotificationListener,
-        private val mapper: SurveyInstanceMapper
+        private val mapper: SurveyInstanceMapper,
+        private val userService: UserService
 ) : SurveyInstanceManagingService {
 
-    override fun createInstanceWithAnswers(questionAnswerMap: Map<Long, String?>, surveyId: Long): Mono<SurveyInstance> {
-        val instance = surveyInstanceService.create(surveyId, 0, ZonedDateTime.now())
+    override fun createInstanceWithAnswers(questionAnswerMap: Map<Long, String?>, surveyId: Long,
+                                           takenBy: String): Mono<SurveyInstance> {
+        val instance = userService.findByUsername(takenBy).flatMap {
+            surveyInstanceService.create(surveyId, it.id!!, ZonedDateTime.now())
+        }
         return instance.doOnNext {
             questionAnswerService.bulkCreateQuestionAnswers(questionAnswerMap, it.id!!).subscribe()
         }

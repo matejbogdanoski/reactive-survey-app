@@ -4,5 +4,5 @@ import mk.ukim.finki.reactive_survey_app.domain.Survey
 import reactor.core.publisher.Mono
 
 interface SurveyManagingService {
-    fun createSurveyWithQuestion(): Mono<Survey>
+    fun createSurveyWithQuestion(createdBy: String): Mono<Survey>
 }

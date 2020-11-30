@@ -5,6 +5,5 @@ export interface Survey {
   title: string;
   description?: string;
   naturalKey: string;
-  canTakeAnonymously: boolean;
   questions: SurveyQuestion[];
 }

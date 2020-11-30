@@ -16,7 +16,7 @@ data class Survey(
 
         val naturalKey: String?,
 
-        val canTakeAnonymously: Boolean
+        val createdBy: Long?
 ) {
     companion object {
         const val TABLE_NAME = "surveys"

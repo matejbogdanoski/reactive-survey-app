@@ -13,7 +13,6 @@ class SurveyManagingServiceImpl(
         private val surveyQuestionService: SurveyQuestionService
 ) : SurveyManagingService {
 
-    override fun createSurveyWithQuestion(): Mono<Survey> = surveyService.createSurvey().doOnNext {
-        surveyQuestionService.createSurveyQuestion(it.id!!).subscribe()
-    }
+    override fun createSurveyWithQuestion(createdBy: String): Mono<Survey> = surveyService.createSurvey(
+            createdBy).doOnNext { surveyQuestionService.createSurveyQuestion(it.id!!).subscribe() }
 }
