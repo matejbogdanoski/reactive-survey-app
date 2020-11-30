@@ -17,7 +17,7 @@ class SurveyInstanceServiceImpl(
                         dateTaken: ZonedDateTime): Mono<SurveyInstance> = repository.save(
             SurveyInstance(
                     id = null,
-                    takenBy = null,
+                    takenBy = takenBy,
                     surveyId = surveyId,
                     dateTaken = ZonedDateTime.now())
     )

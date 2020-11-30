@@ -38,4 +38,8 @@ export class MySurveysListComponent implements OnInit, AfterViewInit {
     this.dataSource.loadSurveys(this.paginator.pageIndex, this.paginator.pageSize);
   }
 
+  getRouterLink(id: number){
+    return `./${id}`;
+  }
+
 }
