@@ -21,7 +21,9 @@ class SurveyController(
     fun findByNaturalKey(@PathVariable naturalKey: String): Mono<Survey> = service.findOneByNaturalKey(naturalKey)
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): Mono<Survey> = service.findById(id)
+    fun findById(@PathVariable id: Long,
+                 @AuthenticationPrincipal principal: JwtAuthenticationToken): Mono<Survey> =
+            service.findById(id, principal.username!!)
 
     @GetMapping("/my-surveys")
     fun findAllSurveysByUserPageable(@AuthenticationPrincipal principal: JwtAuthenticationToken,

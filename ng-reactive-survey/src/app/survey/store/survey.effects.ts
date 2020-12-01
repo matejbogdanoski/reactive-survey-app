@@ -64,6 +64,7 @@ import {
   findSurveyInstancesFailure,
   findSurveyInstancesSuccess
 } from '../../shared/services/survey-instance/survey-instance-service.actions';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class SurveyEffects {
@@ -75,7 +76,8 @@ export class SurveyEffects {
     private _surveyQuestionOptionService: SurveyQuestionOptionService,
     private _surveyInstanceService: SurveyInstanceService,
     private _router: Router,
-    private _store: Store<SurveyState>
+    private _store: Store<SurveyState>,
+    private _toastr: ToastrService
   ) {}
 
   //Survey Effects
@@ -97,7 +99,10 @@ export class SurveyEffects {
       mergeMap(action =>
         this._surveyService.findSurveyById(action.id).pipe(
           switchMap(survey => [findSurveyQuestions({ surveyId: survey.id }), findSurveySuccess({ survey })]),
-          catchError(error => of(findSurveyFailure({ error })))
+          catchError(error => {
+            this._toastr.error(error.error);
+            return of(findSurveyFailure({ error }));
+          })
         )
       )
     )

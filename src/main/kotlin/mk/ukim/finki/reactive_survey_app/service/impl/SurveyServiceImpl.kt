@@ -1,14 +1,11 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
 import mk.ukim.finki.reactive_survey_app.domain.Survey
-import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.SurveyRepository
-import mk.ukim.finki.reactive_survey_app.responses.SurveyResponse
 import mk.ukim.finki.reactive_survey_app.service.SurveyService
 import mk.ukim.finki.reactive_survey_app.service.UserService
+import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -21,7 +18,11 @@ class SurveyServiceImpl(
 
     override fun findOneByNaturalKey(naturalKey: String): Mono<Survey> = repository.findOneByNaturalKey(naturalKey)
 
-    override fun findById(id: Long): Mono<Survey> = repository.findById(id)
+    override fun findById(id: Long, initiatedBy: String): Mono<Survey> {
+        val user = userService.findByUsername(initiatedBy)
+        val survey = repository.findById(id)
+        return AccessValidator.validateCanViewSurvey(survey, user).then(survey)
+    }
 
     override fun findAllByUsernamePage(username: String, page: Int,
                                        size: Int): Flux<Survey> = userService.findByUsername(username).flatMapMany {

@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono
 
 interface SurveyService {
     fun findOneByNaturalKey(naturalKey: String): Mono<Survey>
-    fun findById(id: Long): Mono<Survey>
+    fun findById(id: Long, initiatedBy: String): Mono<Survey>
     fun createSurvey(createdBy: String): Mono<Survey>
     fun updateSurvey(id: Long, title: String?, description: String?, canTakeAnonymously: Boolean?): Mono<Survey>
     fun findAllByUsernamePage(username: String, page: Int, size: Int): Flux<Survey>
