@@ -37,6 +37,7 @@ import { TakeSurveyModule } from '../take-survey/take-survey.module';
 import { MySurveysListComponent } from './components/my-surveys-list/my-surveys-list.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TakenSurveysListPage } from './pages/taken-surveys-list/taken-surveys-list.page';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -56,7 +57,8 @@ const services = [
 
 const pages = [
   SurveyEditPage,
-  HomePage
+  HomePage,
+  TakenSurveysListPage
 ];
 
 const modules = [

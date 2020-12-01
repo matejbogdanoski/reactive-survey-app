@@ -6,9 +6,9 @@
   </button>
   <div *ngIf='user$ | async' class='collapse navbar-collapse' id='navbarNavAltMarkup'>
     <div class='navbar-nav'>
-      <a class='nav-link active' routerLink='/'>My surveys <span class='sr-only'>(current)</span></a>
-      <a class='nav-link' href='#'>Taken surveys</a>
-      <a class='nav-link' href='#'>My profile</a>
+      <a class='nav-link' routerLink='/survey/my-surveys' routerLinkActive='active'>My surveys</a>
+      <a class='nav-link' routerLink='./survey/taken-surveys' routerLinkActive='active'>Taken surveys</a>
+      <a class='nav-link' routerLink='/'>My profile</a>
     </div>
   </div>
   <div *ngIf='user$ | async as user'>

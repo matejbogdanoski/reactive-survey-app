@@ -5,7 +5,7 @@ import { AuthGuard } from './security/guard/auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/survey',
+    redirectTo: '/survey/my-surveys',
     pathMatch: 'full'
   },
   {

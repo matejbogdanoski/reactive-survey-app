@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthGuard } from './guard/auth.guard';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 const services = [
   AuthenticationService,
@@ -38,7 +39,8 @@ const store = [
 
 const components = [
   LoginComponent,
-  RegisterComponent
+  RegisterComponent,
+  EditProfileComponent
 ];
 
 @NgModule({
