@@ -34,7 +34,11 @@ import {
   updateQuestionOptionPositionFailure,
   updateQuestionOptionPositionSuccess
 } from '../services/survey-question-option/survey-question-option.actions';
-import { findSurveyInstancesSuccess } from '../../shared/services/survey-instance/survey-instance-service.actions';
+import {
+  findInstancePreviewFailure,
+  findInstancePreviewSuccess,
+  findSurveyInstancesSuccess
+} from '../../shared/services/survey-instance/survey-instance-service.actions';
 import { aggregateAnswer } from '../components/survey-responses/survey-responses-component.actions';
 import { SurveyInstance } from '../../interfaces/survey-instance.interface';
 import { AnswerDTO } from '../../shared/services/survey-instance/survey-instance.service';
@@ -142,7 +146,8 @@ export const reducer = createReducer(
       ...state.survey,
       questions: state.survey.questions.map(q => {
         if (action.surveyQuestion.id === q.id) {
-          return { ...q,
+          return {
+            ...q,
             options: [...q.options || [], action.questionOption]
           };
         } else {
@@ -216,7 +221,12 @@ export const reducer = createReducer(
   on(aggregateAnswer, (state, action) => ({
     ...state,
     instances: aggregateInstance(state.instances, action.answer)
-  }))
+  })),
+  on(findInstancePreviewSuccess, (state, action) => ({
+    ...state,
+    singlePreviewInstance: action.surveyInstancePreview
+  })),
+  on(findInstancePreviewFailure, (state, action) => ({ ...state, error: action.error }))
 );
 
 export function surveyReducer(state: SurveyState | undefined, action: Action) {

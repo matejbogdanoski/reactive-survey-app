@@ -3,6 +3,7 @@ import { Route, RouterModule } from '@angular/router';
 import { SurveyEditPage } from './pages/survey-edit/survey-edit.page';
 import { HomePage } from './pages/home/home.page';
 import { TakenSurveysListPage } from './pages/taken-surveys-list/taken-surveys-list.page';
+import { SingleInstancePreviewPage } from './pages/single-instance-preview/single-instance-preview.page';
 
 const routes: Route[] = [
   {
@@ -16,6 +17,10 @@ const routes: Route[] = [
   {
     path: 'edit/:id',
     component: SurveyEditPage
+  },
+  {
+    path: 'instance/:id',
+    component: SingleInstancePreviewPage
   }
 ];
 

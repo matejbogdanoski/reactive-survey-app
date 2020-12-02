@@ -24,6 +24,8 @@ class SurveyServiceImpl(
         return AccessValidator.validateCanViewSurvey(survey, user).then(survey)
     }
 
+    override fun findById(id: Long): Mono<Survey> = repository.findById(id)
+
     override fun findAllByUsernamePage(username: String, page: Int,
                                        size: Int): Flux<Survey> = userService.findByUsername(username).flatMapMany {
         repository.findAllByCreatedBy(it.id!!, PageRequest.of(page, size))

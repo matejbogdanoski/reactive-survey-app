@@ -61,10 +61,13 @@ import { hasOptionsStatic } from '../enum/question-type.enum';
 import { findSurveyInstances } from '../components/survey-responses/survey-responses-component.actions';
 import { SurveyInstanceService } from '../../shared/services/survey-instance/survey-instance.service';
 import {
+  findInstancePreviewFailure,
+  findInstancePreviewSuccess,
   findSurveyInstancesFailure,
   findSurveyInstancesSuccess
 } from '../../shared/services/survey-instance/survey-instance-service.actions';
 import { ToastrService } from 'ngx-toastr';
+import { findInstancePreview } from '../pages/single-instance-preview/single-instance-preview.actions';
 
 @Injectable()
 export class SurveyEffects {
@@ -276,6 +279,19 @@ export class SurveyEffects {
         catchError(error => of(findSurveyInstancesFailure({ error })))
         )
       )
+    )
+  );
+
+  findSurveyInstancePreview$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findInstancePreview),
+      mergeMap(action => this._surveyInstanceService.findInstanceById(action.instanceId).pipe(
+        map(surveyInstancePreview => findInstancePreviewSuccess({ surveyInstancePreview })),
+        catchError(error => {
+          this._toastr.error(error.error);
+          return of(findInstancePreviewFailure({ error }));
+        })
+      ))
     )
   );
 

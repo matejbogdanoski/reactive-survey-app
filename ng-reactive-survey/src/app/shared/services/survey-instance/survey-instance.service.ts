@@ -1,8 +1,10 @@
 import { Injectable, NgZone } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SurveyInstance } from '../../../interfaces/survey-instance.interface';
 import { QuestionType } from '../../../survey/enum/question-type.enum';
+import { SurveyInstanceGridRow } from '../../../interfaces/survey-instance-grid.row';
+import { SurveyInstancePreview } from '../../../interfaces/survey-instance-preview.interface';
 
 export interface AnswerDTO {
   id: number;
@@ -38,4 +40,20 @@ export class SurveyInstanceService {
       return () => eventSource.close();
     });
   }
+
+  public findAllByUser(page: number, size: number): Observable<SurveyInstanceGridRow[]> {
+    const params = new HttpParams()
+      .set('size', size.toString())
+      .set('page', page.toString());
+    return this._http.get<SurveyInstanceGridRow[]>(`${this.path}/by-user`, { params });
+  }
+
+  public countAllByUser(): Observable<number> {
+    return this._http.get<number>(`${this.path}/count-by-user`);
+  }
+
+  public findInstanceById(instanceId: number): Observable<SurveyInstancePreview> {
+    return this._http.get<SurveyInstancePreview>(`${this.path}/preview/${instanceId}`);
+  }
+
 }

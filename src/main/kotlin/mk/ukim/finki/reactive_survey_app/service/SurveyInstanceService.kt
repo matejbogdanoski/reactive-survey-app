@@ -10,4 +10,7 @@ interface SurveyInstanceService {
     fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstance>
     fun countAllBySurveyId(surveyId: Long): Mono<Int>
     fun findById(surveyInstanceId: Long): Mono<SurveyInstance>
+    fun findById(surveyInstanceId: Long, initiatedBy: String): Mono<SurveyInstance>
+    fun findAllTakenByPage(takenBy: Long, size: Int, page: Int): Flux<SurveyInstance>
+    fun countAllTakenBy(takenBy: Long): Mono<Int>
 }

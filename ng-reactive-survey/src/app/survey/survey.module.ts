@@ -38,6 +38,7 @@ import { MySurveysListComponent } from './components/my-surveys-list/my-surveys-
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TakenSurveysListPage } from './pages/taken-surveys-list/taken-surveys-list.page';
+import { SingleInstancePreviewPage } from './pages/single-instance-preview/single-instance-preview.page';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -58,7 +59,8 @@ const services = [
 const pages = [
   SurveyEditPage,
   HomePage,
-  TakenSurveysListPage
+  TakenSurveysListPage,
+  SingleInstancePreviewPage
 ];
 
 const modules = [

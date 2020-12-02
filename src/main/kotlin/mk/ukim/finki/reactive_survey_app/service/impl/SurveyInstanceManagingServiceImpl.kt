@@ -7,8 +7,6 @@ import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
 import mk.ukim.finki.reactive_survey_app.domain.dto.AnswerDTO
 import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
 import mk.ukim.finki.reactive_survey_app.helper.PostgresNotificationListener
-import mk.ukim.finki.reactive_survey_app.mappers.SurveyInstanceMapper
-import mk.ukim.finki.reactive_survey_app.responses.SurveyInstanceResponse
 import mk.ukim.finki.reactive_survey_app.service.*
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -21,7 +19,6 @@ class SurveyInstanceManagingServiceImpl(
         private val questionAnswerService: QuestionAnswerService,
         private val surveyQuestionService: SurveyQuestionService,
         private val postgresListener: PostgresNotificationListener,
-        private val mapper: SurveyInstanceMapper,
         private val userService: UserService
 ) : SurveyInstanceManagingService {
 
@@ -53,7 +50,15 @@ class SurveyInstanceManagingServiceImpl(
                 }
             }
 
-    override fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstanceResponse> =
-            surveyInstanceService.findAllBySurveyId(surveyId).flatMap(mapper::mapSurveyInstanceToResponse)
+    override fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstance> =
+            surveyInstanceService.findAllBySurveyId(surveyId)
+
+    override fun findAllTakenByPage(username: String, size: Int, page: Int): Flux<SurveyInstance> =
+            userService.findByUsername(username)
+                    .flatMapMany { surveyInstanceService.findAllTakenByPage(it.id!!, size, page) }
+
+    override fun countAllByUsername(username: String): Mono<Int> = userService.findByUsername(username).flatMap {
+        surveyInstanceService.countAllTakenBy(it.id!!)
+    }
 
 }

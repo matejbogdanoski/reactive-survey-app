@@ -1,0 +1,6 @@
+<div *ngIf='surveyInstancePreview$ | async as preview'>
+  <app-survey-renderer
+    [disable]='true'
+    [surveyAnswers]='preview.surveyInstance.questionAnswers'
+    [surveyStructure]='preview.survey'></app-survey-renderer>
+</div>

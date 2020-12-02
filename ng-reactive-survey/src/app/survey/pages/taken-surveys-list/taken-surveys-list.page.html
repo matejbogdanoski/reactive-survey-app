@@ -1,1 +1,29 @@
-<p>taken-surveys-list works!</p>
+<div class='mat-elevation-z8'>
+
+  <table mat-table [dataSource]='dataSource'>
+
+    <ng-container matColumnDef='rowNumber'>
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef='let element; let i = index'> {{i + 1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef='surveyTitle'>
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef='let element'>
+        <a [routerLink]='getRouterLink(element.id)'>{{element.surveyTitle}}</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef='dateTaken'>
+      <th mat-header-cell *matHeaderCellDef>Date taken</th>
+      <td mat-cell *matCellDef='let element'> {{element.dateTaken | date: 'yyyy-MM-dd'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+    <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
+  </table>
+
+  <mat-paginator [length]='length$ | async'
+                 [pageSize]='5'
+                 [pageSizeOptions]='[5, 10, 20]' showFirstLastButtons></mat-paginator>
+</div>
