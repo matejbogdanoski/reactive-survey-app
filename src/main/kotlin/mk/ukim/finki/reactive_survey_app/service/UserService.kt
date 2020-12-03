@@ -6,4 +6,6 @@ import reactor.core.publisher.Mono
 interface UserService {
     fun createUser(username: String, password: String, email: String, firstName: String, lastName: String): Mono<User>
     fun findByUsername(username: String): Mono<User>
+    fun editUserInfo(userId: Long, initiatedBy: String, firstName: String?, lastName: String?,
+                     email: String?): Mono<User>
 }

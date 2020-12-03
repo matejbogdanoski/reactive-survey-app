@@ -3,6 +3,7 @@ package mk.ukim.finki.reactive_survey_app.service.impl
 import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.UserRepository
 import mk.ukim.finki.reactive_survey_app.service.UserService
+import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -27,4 +28,14 @@ class UserServiceImpl(
 
     override fun findByUsername(username: String): Mono<User> = repository.findByUsername(username)
 
+    override fun editUserInfo(userId: Long, initiatedBy: String, firstName: String?, lastName: String?,
+                              email: String?): Mono<User> =
+            AccessValidator.validateCanEditUserInfo(findByUsername(initiatedBy), userId).flatMap {
+                repository.findById(userId).flatMap {
+                    repository.updateUserInfo(userId = userId,
+                                              firstName = firstName ?: it.firstName,
+                                              lastName = lastName ?: it.lastName,
+                                              email = email ?: it.email)
+                }.then(repository.findById(userId))
+            }
 }

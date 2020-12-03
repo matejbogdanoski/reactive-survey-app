@@ -7,7 +7,13 @@ import {
   loginSuccess,
   logoutFailure,
   logoutSuccess
-} from '../services/authentication-service.actions';
+} from '../services/authentication/authentication-service.actions';
+import {
+  findUserInfoFailure,
+  findUserInfoSuccess,
+  updateUserInfoFailure,
+  updateUserInfoSuccess
+} from '../services/user/user-service.actions';
 
 export const securityModuleKey = 'security';
 
@@ -37,6 +43,22 @@ export const reducer = createReducer(
     token: undefined
   })),
   on(logoutFailure, (state, action) => ({
+    ...state,
+    error: action.error
+  })),
+  on(findUserInfoSuccess, (state, action) => ({
+    ...state,
+    userInfo: action.userInfo
+  })),
+  on(findUserInfoFailure, (state, action) => ({
+    ...state,
+    error: action.error
+  })),
+  on(updateUserInfoSuccess, ((state, action) => ({
+    ...state,
+    userInfo: action.userInfo
+  }))),
+  on(updateUserInfoFailure, (state, action) => ({
     ...state,
     error: action.error
   }))

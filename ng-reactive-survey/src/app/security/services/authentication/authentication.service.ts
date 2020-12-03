@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationRequest } from '../interfaces/request/authentication.request';
+import { AuthenticationRequest } from '../../interfaces/request/authentication.request';
 import { Observable, of } from 'rxjs';
-import { AuthenticationResponse } from '../interfaces/response/authentication.response';
+import { AuthenticationResponse } from '../../interfaces/response/authentication.response';
 import { CookieService } from 'ngx-cookie-service';
 import { tap } from 'rxjs/operators';
-import { UserCreateRequest } from '../interfaces/request/user-create.request';
 
 @Injectable()
 export class AuthenticationService {
 
   private readonly path = `api/auth`;
-  private readonly user = `api/users`;
 
   constructor(
     private _http: HttpClient,
@@ -37,10 +35,6 @@ export class AuthenticationService {
     let tomorrow = new Date();
     tomorrow.setDate(new Date().getDate() + 1);
     return tomorrow;
-  }
-
-  register(request: UserCreateRequest): Observable<UserCreateRequest> {
-    return this._http.post<UserCreateRequest>(`${this.user}/signup`, request);
   }
 
   getUserFromCookies(): Observable<{ username: string, token: string }> {

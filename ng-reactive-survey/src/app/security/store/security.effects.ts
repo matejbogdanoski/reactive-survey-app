@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Store } from '@ngrx/store';
 import { SecurityState } from './security.state';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -14,10 +14,8 @@ import {
   logoutFailure,
   logoutSuccess,
   navigateToLoginFailure,
-  navigateToLoginSuccess,
-  registerUserFailure,
-  registerUserSuccess
-} from '../services/authentication-service.actions';
+  navigateToLoginSuccess
+} from '../services/authentication/authentication-service.actions';
 import { Router } from '@angular/router';
 import { from, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
@@ -25,6 +23,16 @@ import { initUserFromCookie, logoutUser } from '../../navigation/components/nav-
 import { navigateToLogin } from '../guard/guard.actions';
 import { registerUser } from '../components/register/register-component.actions';
 import { ToastrService } from 'ngx-toastr';
+import {
+  findUserInfoFailure,
+  findUserInfoSuccess,
+  registerUserFailure,
+  registerUserSuccess,
+  updateUserInfoFailure,
+  updateUserInfoSuccess
+} from '../services/user/user-service.actions';
+import { UserService } from '../services/user/user.service';
+import { findUserInfo, updateUserInfo } from '../components/edit-profile/edit-profile-component.actions';
 
 @Injectable()
 export class SecurityEffects {
@@ -32,6 +40,7 @@ export class SecurityEffects {
   constructor(
     private actions$: Actions,
     private _authService: AuthenticationService,
+    private _userService: UserService,
     private _store: Store<SecurityState>,
     private _router: Router,
     private _cookie: CookieService,
@@ -63,7 +72,7 @@ export class SecurityEffects {
           this._toast.success('User logged out successfully!');
           return logoutSuccess();
         }),
-        tap(() => this._router.navigate(['authenticate/login'])),
+        tap(() => this._router.navigate(['user/login'])),
         catchError(error => {
           this._toast.error(error.message, 'Logout failed!');
           return of(logoutFailure({ error }));
@@ -75,7 +84,7 @@ export class SecurityEffects {
   navigateToLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(navigateToLogin),
-      mergeMap(() => from(this._router.navigate(['authenticate/login'])).pipe(
+      mergeMap(() => from(this._router.navigate(['user/login'])).pipe(
         map(() => {
           this._toast.warning('You have to login to access this page!');
           return navigateToLoginSuccess();
@@ -88,12 +97,12 @@ export class SecurityEffects {
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(registerUser),
-      mergeMap(action => this._authService.register(action.request).pipe(
+      mergeMap(action => this._userService.register(action.request).pipe(
         map(() => {
           this._toast.success('User registered successfully!');
           return registerUserSuccess();
         }),
-        tap(() => this._router.navigate(['authenticate/login'])),
+        tap(() => this._router.navigate(['user/login'])),
         catchError(error => {
           this._toast.success(error.message, 'User registered failed!');
           return of(registerUserFailure({ error }));
@@ -107,6 +116,32 @@ export class SecurityEffects {
       mergeMap(() => this._authService.getUserFromCookies().pipe(
         map(userInfo => initUserFromCookieSuccess({ username: userInfo.username, token: userInfo.token })),
         catchError(error => of(initUserFromCookieFailure({ error })))
+      ))
+    )
+  );
+
+  findUserInfo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findUserInfo),
+      mergeMap(() => this._userService.findUserInfo().pipe(
+        map(userInfo => findUserInfoSuccess({ userInfo })),
+        catchError(error => of(findUserInfoFailure({ error })))
+      ))
+    )
+  );
+
+  updateUserInfo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateUserInfo),
+      mergeMap(action => this._userService.updateUserInfo(action.userId, action.updateUserInfoRequest).pipe(
+        map(userInfo => {
+          this._toast.success('Successfully updated user info!');
+          return updateUserInfoSuccess({ userInfo });
+        }),
+        catchError(error => {
+          this._toast.error(error.error);
+          return of(updateUserInfoFailure({ error }));
+        })
       ))
     )
   );

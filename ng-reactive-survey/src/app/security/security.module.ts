@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
 import { SharedModule } from '../shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { securityModuleKey, securityReducer } from './store/security.reducers';
@@ -14,10 +14,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthGuard } from './guard/auth.guard';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { UserService } from './services/user/user.service';
 
 const services = [
   AuthenticationService,
-  AuthGuard
+  AuthGuard,
+  UserService
 ];
 
 const modules = [

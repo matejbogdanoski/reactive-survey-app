@@ -19,7 +19,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'authenticate',
+    path: 'user',
     loadChildren: () => import('./security/security.module').then(m => m.SecurityModule)
   }
 ];

@@ -6,3 +6,4 @@ export const selectSecurityState = createFeatureSelector<SecurityState>(security
 
 export const selectToken = createSelector(selectSecurityState, s => s?.token);
 export const selectUsername = createSelector(selectSecurityState, s => s?.username);
+export const selectUserInfo = createSelector(selectSecurityState, s => s.userInfo);

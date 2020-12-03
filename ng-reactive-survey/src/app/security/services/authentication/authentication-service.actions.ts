@@ -11,9 +11,6 @@ export const logoutFailure = createAction(`${source} Logout failure`, props<{ er
 export const navigateToLoginSuccess = createAction(`${source} Navigate to login success`);
 export const navigateToLoginFailure = createAction(`${source} Navigate to login failure`, props<{ error: any }>());
 
-export const registerUserSuccess = createAction(`${source} Register user success`);
-export const registerUserFailure = createAction(`${source} Register user failure`, props<{ error: any }>());
-
 export const initUserFromCookieSuccess = createAction(`${source} Init user from cookie success`,
   props<{ username: string, token: string }>());
 export const initUserFromCookieFailure = createAction(`${source} Init user from cookie failure`, props<{ error: any }>());

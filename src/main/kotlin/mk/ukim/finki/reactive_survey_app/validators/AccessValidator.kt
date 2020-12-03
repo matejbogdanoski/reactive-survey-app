@@ -29,4 +29,13 @@ object AccessValidator {
                             sink.next(it)
                         }
                     }
+
+    fun validateCanEditUserInfo(userMono: Mono<User>,
+                                userId: Long): Mono<User> = userMono.handle { user, sink: SynchronousSink<User> ->
+        if (user.id != userId) {
+            sink.error(AccessDeniedException("You cannot edit others user info!"))
+        } else {
+            sink.next(user)
+        }
+    }
 }
