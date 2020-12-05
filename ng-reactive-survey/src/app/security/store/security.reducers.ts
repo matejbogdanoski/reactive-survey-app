@@ -11,6 +11,8 @@ import {
 import {
   findUserInfoFailure,
   findUserInfoSuccess,
+  updatePasswordFailure,
+  updatePasswordSuccess,
   updateUserInfoFailure,
   updateUserInfoSuccess
 } from '../services/user/user-service.actions';
@@ -59,6 +61,15 @@ export const reducer = createReducer(
     userInfo: action.userInfo
   }))),
   on(updateUserInfoFailure, (state, action) => ({
+    ...state,
+    error: action.error
+  })),
+  on(updatePasswordSuccess, (state, action) => ({
+    ...state,
+    username: action.username,
+    token: action.token
+  })),
+  on(updatePasswordFailure, (state, action) => ({
     ...state,
     error: action.error
   }))

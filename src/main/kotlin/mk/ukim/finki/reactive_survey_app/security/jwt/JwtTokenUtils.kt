@@ -83,7 +83,7 @@ class JwtTokenUtils(
             (!isCreatedBeforeLastPasswordReset(getIssuedAtDateFromToken(token), lastPasswordReset)
                     && (!isTokenExpired(token) || ignoreTokenExpiration(token)))
 
-    fun refreshToken(token: String): String? {
+    fun refreshToken(token: String): String {
         val createdDate = clock.now()
         val expirationDate = calculateExpirationDate(createdDate)
         val claims = getAllClaimsFromToken(token)

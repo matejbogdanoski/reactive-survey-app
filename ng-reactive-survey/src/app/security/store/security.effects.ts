@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { SecurityState } from './security.state';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { loginAction } from '../components/login/login-component.actions';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { AuthenticationRequest } from '../interfaces/request/authentication.request';
 import {
   initUserFromCookieFailure,
@@ -28,11 +28,15 @@ import {
   findUserInfoSuccess,
   registerUserFailure,
   registerUserSuccess,
+  updatePasswordFailure,
+  updatePasswordSuccess,
   updateUserInfoFailure,
   updateUserInfoSuccess
 } from '../services/user/user-service.actions';
 import { UserService } from '../services/user/user.service';
 import { findUserInfo, updateUserInfo } from '../components/edit-profile/edit-profile-component.actions';
+import { updatePassword } from '../components/reset-password/reset-password-component.actions';
+import { selectSecurityState } from './security.selectors';
 
 @Injectable()
 export class SecurityEffects {
@@ -141,6 +145,24 @@ export class SecurityEffects {
         catchError(error => {
           this._toast.error(error.error);
           return of(updateUserInfoFailure({ error }));
+        })
+      ))
+    )
+  );
+
+  updatePassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updatePassword),
+      withLatestFrom(this._store.select(selectSecurityState)),
+      mergeMap(([action, state]) => this._userService.updatePassword(action.updatePasswordRequest, state).pipe(
+        map(authResponse => {
+          this._toast.success('Successfully updated password!');
+          this._authService.updateCookies(authResponse.username, authResponse.token);
+          return updatePasswordSuccess({ username: authResponse.username, token: authResponse.token });
+        }),
+        catchError(error => {
+          this._toast.error(error.error);
+          return of(updatePasswordFailure({ error }));
         })
       ))
     )

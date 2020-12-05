@@ -11,3 +11,6 @@ export const findUserInfoFailure = createAction(`${source} Find user info failur
 
 export const updateUserInfoSuccess = createAction(`${source} Update user info success`, props<{ userInfo: UserInfo }>());
 export const updateUserInfoFailure = createAction(`${source} Update user info failure`, props<{ error: any }>());
+
+export const updatePasswordSuccess = createAction(`${source} Update password info success`, props<{ username: string, token: string }>());
+export const updatePasswordFailure = createAction(`${source} Update password info failure`, props<{ error: any }>());

@@ -15,6 +15,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthGuard } from './guard/auth.guard';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { UserService } from './services/user/user.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { MatListModule } from '@angular/material/list';
 
 const services = [
   AuthenticationService,
@@ -31,7 +34,9 @@ const modules = [
 const material = [
   MatFormFieldModule,
   MatInputModule,
-  MatButtonModule
+  MatButtonModule,
+  MatSidenavModule,
+  MatListModule
 ];
 
 const store = [
@@ -42,7 +47,8 @@ const store = [
 const components = [
   LoginComponent,
   RegisterComponent,
-  EditProfileComponent
+  EditProfileComponent,
+  ResetPasswordComponent
 ];
 
 @NgModule({

@@ -1,36 +1,51 @@
-<form [formGroup]='form' (ngSubmit)='submit()' class='w-50 m-auto'>
-  <mat-form-field>
-    <label>Username:</label>
-    <input
-      formControlName='username'
-      matInput>
-  </mat-form-field>
+<mat-drawer-container class='height'>
+  <mat-drawer mode='side' opened>
+    <mat-selection-list [multiple]='false'>
+      <mat-list-option [value]='tabs.ACCOUNT_INFO' [selected]='!isAccountSecurityTab'>
+        Account Info
+      </mat-list-option>
+      <mat-list-option [value]='tabs.ACCOUNT_SECURITY' [selected]='isAccountSecurityTab'>
+        Account Security
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-drawer>
+  <mat-drawer-content class='p-2'>
+    <form *ngIf='!isAccountSecurityTab' [formGroup]='form' (ngSubmit)='submit()' class='w-50 m-auto'>
+      <mat-form-field>
+        <label>Username:</label>
+        <input
+          formControlName='username'
+          matInput>
+      </mat-form-field>
 
-  <mat-form-field>
-    <label>Email:</label>
-    <input
-      formControlName='email'
-      matInput>
-  </mat-form-field>
+      <mat-form-field>
+        <label>Email:</label>
+        <input
+          formControlName='email'
+          matInput>
+      </mat-form-field>
 
-  <mat-form-field>
-    <label>First Name:</label>
-    <input
-      formControlName='firstName'
-      matInput>
-  </mat-form-field>
+      <mat-form-field>
+        <label>First Name:</label>
+        <input
+          formControlName='firstName'
+          matInput>
+      </mat-form-field>
 
-  <mat-form-field>
-    <label>Last Name:</label>
-    <input
-      formControlName='lastName'
-      matInput>
-  </mat-form-field>
+      <mat-form-field>
+        <label>Last Name:</label>
+        <input
+          formControlName='lastName'
+          matInput>
+      </mat-form-field>
 
-  <button [disabled]='form.pristine'
-          type='submit'
-          mat-stroked-button>
-    Update!
-  </button>
+      <button [disabled]='form.pristine'
+              type='submit'
+              mat-stroked-button>
+        Update!
+      </button>
 
-</form>
+    </form>
+    <app-reset-password *ngIf='isAccountSecurityTab'></app-reset-password>
+  </mat-drawer-content>
+</mat-drawer-container>

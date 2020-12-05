@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SecurityState } from '../../store/security.state';
 import { findUserInfo, updateUserInfo } from './edit-profile-component.actions';
@@ -9,15 +9,25 @@ import { patchFormValues } from '../../../operators/patch-form-values.rx-operato
 import { filter, tap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { UpdateUserInfoRequest } from '../../interfaces/request/update-user-info.request';
+import { MatSelectionList } from '@angular/material/list';
+
+enum AccountInfoTabs {
+  ACCOUNT_INFO = 'ACCOUNT_INFO',
+  ACCOUNT_SECURITY = 'ACCOUNT_SECURITY'
+}
 
 @Component({
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss']
 })
-export class EditProfileComponent implements OnInit, OnDestroy {
+export class EditProfileComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  @ViewChild(MatSelectionList) list: MatSelectionList;
 
   form = this.initForm;
   userId: number;
+
+  tabs = AccountInfoTabs;
 
   private _destroySubject = new Subject<void>();
 
@@ -35,6 +45,15 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     ).subscribe(() =>
       this.form.get('username').disable()
     );
+  }
+
+  ngAfterViewInit(): void {
+    this.list._value = [this.tabs.ACCOUNT_INFO];
+    this.list.tabIndex = 0;
+  }
+
+  get isAccountSecurityTab() {
+    return this.list?._value[0] === this.tabs.ACCOUNT_SECURITY;
   }
 
   submit() {

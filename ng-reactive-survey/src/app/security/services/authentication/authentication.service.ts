@@ -18,10 +18,7 @@ export class AuthenticationService {
 
   public login(request: AuthenticationRequest): Observable<AuthenticationResponse> {
     return this._http.post<AuthenticationResponse>(`${this.path}`, request, { withCredentials: true }).pipe(
-      tap(response => {
-        this._cookie.set('JWT_TOKEN', response.token, this.getTomorrow(), '/');
-        this._cookie.set('USER', response.username, this.getTomorrow(), '/');
-      })
+      tap(response => this.updateCookies(response.username, response.token))
     );
   }
 
@@ -41,5 +38,10 @@ export class AuthenticationService {
     const username = this._cookie.get('USER');
     const token = this._cookie.get('JWT_TOKEN');
     return of({ username, token });
+  }
+
+  updateCookies(username: string, token: string) {
+    this._cookie.set('JWT_TOKEN', token, this.getTomorrow(), '/');
+    this._cookie.set('USER', username, this.getTomorrow(), '/');
   }
 }

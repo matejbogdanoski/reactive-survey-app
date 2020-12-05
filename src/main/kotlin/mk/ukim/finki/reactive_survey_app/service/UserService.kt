@@ -8,4 +8,7 @@ interface UserService {
     fun findByUsername(username: String): Mono<User>
     fun editUserInfo(userId: Long, initiatedBy: String, firstName: String?, lastName: String?,
                      email: String?): Mono<User>
+
+    fun updateUserPassword(username: String, oldPassword: String, newPassword: String,
+                           confirmNewPassword: String): Mono<Int>
 }

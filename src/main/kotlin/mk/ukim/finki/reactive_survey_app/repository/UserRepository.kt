@@ -14,4 +14,8 @@ interface UserRepository : ReactiveCrudRepository<User, Long> {
     @Modifying
     @Query("update access.users set first_name = :firstName, last_name = :lastName, email = :email where id = :userId")
     fun updateUserInfo(userId: Long, firstName: String, lastName: String, email: String): Mono<Int>
+
+    @Modifying
+    @Query("update access.users set password_hash = :password where id = :userId")
+    fun updatePassword(userId: Long, password: String): Mono<Int>
 }
