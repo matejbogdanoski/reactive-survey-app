@@ -50,4 +50,15 @@ object AccessValidator {
                             sink.next(it)
                         }
                     }
+
+    fun validateCanViewSurveyInvitations(surveyMono: Mono<Survey>, userMono: Mono<User>) = userMono.zipWith(surveyMono)
+            .handle { it, sink: SynchronousSink<Tuple2<User, Survey>> ->
+                val (user, survey) = it.t1 to it.t2
+                if (user.id != survey.createdBy) {
+                    sink.error(
+                            AccessDeniedException("You cannot view invitations for a survey that you didn't create!"))
+                } else {
+                    sink.next(it)
+                }
+            }
 }

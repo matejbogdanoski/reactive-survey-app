@@ -54,4 +54,6 @@ class UserServiceImpl(
                 .subscribeOn(Schedulers.parallel())
                 .flatMap { repository.updatePassword(it.first, it.second) }
     }
+
+    override fun findById(userId: Long): Mono<User> = repository.findById(userId)
 }

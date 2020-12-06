@@ -11,4 +11,6 @@ interface UserService {
 
     fun updateUserPassword(username: String, oldPassword: String, newPassword: String,
                            confirmNewPassword: String): Mono<Int>
+
+    fun findById(userId: Long): Mono<User>
 }

@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Send survey!</h2>
+<div class='content' mat-dialog-content>
+  <form [formGroup]='form' (ngSubmit)='submit()' class='d-flex'>
+    <mat-form-field>
+      <label>Username:</label>
+      <input
+        formControlName='username'
+        matInput>
+    </mat-form-field>
+    <button mat-flat-button type='submit' class='pt-2'>Invite user !</button>
+  </form>
+  <hr>
+  <div *ngIf='surveyInvitations$ | async as surveyInvitations'>
+    <h3>Invited users:</h3>
+    <ul>
+      <li *ngFor='let invitation of surveyInvitations' class='d-flex justify-content-between'>
+        <div>{{invitation.username}}</div>
+        <div *ngIf='invitation.taken'>
+          <mat-icon matTooltip='This user has submitted their answers'>checkmark</mat-icon>
+        </div>
+        <div *ngIf='!invitation.taken'>
+          <mat-icon matTooltip="This user hasn't submitted their answers">close</mat-icon>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button (click)='close()' mat-flat-button>Close</button>
+</div>

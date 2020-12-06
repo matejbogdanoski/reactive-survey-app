@@ -44,6 +44,10 @@ import { SurveyInstance } from '../../interfaces/survey-instance.interface';
 import { AnswerDTO } from '../../shared/services/survey-instance/survey-instance.service';
 import * as _ from 'lodash';
 import { QuestionAnswer } from '../../interfaces/question-answer.interface';
+import {
+  findSurveyInvitationsFailure,
+  findSurveyInvitationsSuccess
+} from '../services/survey-invitations/survey-invitations-service.actions';
 
 export const surveyModuleKey = 'survey';
 
@@ -226,7 +230,13 @@ export const reducer = createReducer(
     ...state,
     singlePreviewInstance: action.surveyInstancePreview
   })),
-  on(findInstancePreviewFailure, (state, action) => ({ ...state, error: action.error }))
+  on(findInstancePreviewFailure, (state, action) => ({ ...state, error: action.error })),
+  //Survey invitations
+  on(findSurveyInvitationsSuccess, ((state, action) => ({
+    ...state,
+    surveyInvitations: action.surveyInvitations
+  }))),
+  on(findSurveyInvitationsFailure, (state, action) => ({ ...state, error: action.error }))
 );
 
 export function surveyReducer(state: SurveyState | undefined, action: Action) {

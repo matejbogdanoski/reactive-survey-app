@@ -32,19 +32,20 @@ class SurveyInstanceController(
     fun findAllTakenSurveysPage(@AuthenticationPrincipal principal: JwtAuthenticationToken,
                                 @RequestParam size: Int,
                                 @RequestParam page: Int): Flux<SurveyInstanceGridResponse> =
-            service.findAllTakenByPage(principal.username!!, size, page).flatMap(
-                    mapper::mapSurveyInstanceToGridResponse)
+            service.findAllTakenByPage(principal.username!!, size, page)
+                    .flatMap(mapper::mapSurveyInstanceToGridResponse)
 
     @GetMapping("/count-by-user")
-    fun countAllTakenBy(@AuthenticationPrincipal principal: JwtAuthenticationToken) = service.countAllByUsername(
-            principal.username!!)
+    fun countAllTakenBy(@AuthenticationPrincipal principal: JwtAuthenticationToken) =
+            service.countAllByUsername(principal.username!!)
 
     @GetMapping("/preview/{instanceId}")
     fun findInstanceById(@AuthenticationPrincipal principal: JwtAuthenticationToken,
                          @PathVariable instanceId: Long): Mono<SurveyInstancePreview> =
             service.findById(instanceId, principal.username!!).flatMap(mapper::mapSurveyInstanceToPreviewResponse)
 
-    //todo: can submit answers if the user is invited and hasn't taken the survey yet
+    //todo: can submit answers if the user is invited and hasn't taken the survey yet and is not the creator
+    //todo: mark invitation as taken on instance creation
     @PostMapping("/{surveyId}")
     fun createInstanceWithAnswers(@RequestBody questionAnswerMap: Map<Long, String?>,
                                   @PathVariable surveyId: Long,

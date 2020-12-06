@@ -39,6 +39,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TakenSurveysListPage } from './pages/taken-surveys-list/taken-surveys-list.page';
 import { SingleInstancePreviewPage } from './pages/single-instance-preview/single-instance-preview.page';
+import { InvitationsDialog } from './dialogs/invitations/invitations.dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SurveyInvitationsService } from './services/survey-invitations/survey-invitations.service';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -53,7 +56,8 @@ const components = [
 const services = [
   SurveyQuestionService,
   SurveyService,
-  SurveyQuestionOptionService
+  SurveyQuestionOptionService,
+  SurveyInvitationsService
 ];
 
 const pages = [
@@ -85,13 +89,18 @@ const material = [
   DragDropModule,
   MatTabsModule,
   MatPaginatorModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatDialogModule
 ];
 
 const pipes = [
   QuestionTypeIconPipe,
   ChartDataPipe,
   ChartLabelsPipe
+];
+
+const dialogs = [
+  InvitationsDialog
 ];
 
 const store = [
@@ -101,7 +110,7 @@ const store = [
 
 @NgModule({
   providers: [...services],
-  declarations: [...components, ...pages, ...pipes],
+  declarations: [...components, ...pages, ...pipes, ...dialogs],
   imports: [...modules, ...store, ...material]
 })
 export class SurveyModule {}

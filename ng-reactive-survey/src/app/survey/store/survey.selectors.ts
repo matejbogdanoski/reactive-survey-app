@@ -11,3 +11,5 @@ export const selectSurveyQuestions = createSelector(selectSurveyState, s => s.su
 export const selectSurveyInstances = createSelector(selectSurveyState, s => s.instances);
 
 export const selectSinglePreviewInstance = createSelector(selectSurveyState, s => s.singlePreviewInstance);
+
+export const selectSurveyInvitations = createSelector(selectSurveyState, s => s.surveyInvitations);

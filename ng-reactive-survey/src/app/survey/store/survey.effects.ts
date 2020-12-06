@@ -68,6 +68,14 @@ import {
 } from '../../shared/services/survey-instance/survey-instance-service.actions';
 import { ToastrService } from 'ngx-toastr';
 import { findInstancePreview } from '../pages/single-instance-preview/single-instance-preview.actions';
+import { createInvitation, findInvitations } from '../dialogs/invitations/invitations-dialog.actions';
+import { SurveyInvitationsService } from '../services/survey-invitations/survey-invitations.service';
+import {
+  createSurveyInvitationFailure,
+  createSurveyInvitationSuccess,
+  findSurveyInvitationsFailure,
+  findSurveyInvitationsSuccess
+} from '../services/survey-invitations/survey-invitations-service.actions';
 
 @Injectable()
 export class SurveyEffects {
@@ -78,6 +86,7 @@ export class SurveyEffects {
     private _surveyQuestionService: SurveyQuestionService,
     private _surveyQuestionOptionService: SurveyQuestionOptionService,
     private _surveyInstanceService: SurveyInstanceService,
+    private _surveyInvitationsService: SurveyInvitationsService,
     private _router: Router,
     private _store: Store<SurveyState>,
     private _toastr: ToastrService
@@ -292,6 +301,34 @@ export class SurveyEffects {
           return of(findInstancePreviewFailure({ error }));
         })
       ))
+    )
+  );
+
+  //Survey invitations
+  findSurveyInvitations$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findInvitations),
+      mergeMap(action => this._surveyInvitationsService.findAllSurveyInvitations(action.surveyId).pipe(
+        map(surveyInvitations => findSurveyInvitationsSuccess({ surveyInvitations })),
+        catchError(error => {
+          this._toastr.error(error.error);
+          return of(findSurveyInvitationsFailure({ error }));
+        })
+      ))
+    )
+  );
+
+  createSurveyInvitation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(createInvitation),
+      mergeMap(action => this._surveyInvitationsService.createSurveyInvitations(action.surveyId, action.username).pipe(
+        switchMap(() => [createSurveyInvitationSuccess(), findInvitations({ surveyId: action.surveyId })]),
+        catchError(error => {
+          this._toastr.error(error.error);
+          return of(createSurveyInvitationFailure({ error }));
+        })
+        )
+      )
     )
   );
 
