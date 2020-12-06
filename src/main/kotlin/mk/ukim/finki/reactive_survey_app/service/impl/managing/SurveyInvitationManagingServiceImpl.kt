@@ -32,4 +32,7 @@ class SurveyInvitationManagingServiceImpl(
 
     override fun findSurveyInvitationPage(username: String, page: Int, size: Int): Flux<SurveyInvitation> =
             userService.findByUsername(username).flatMapMany { service.findSurveyInvitationsPage(it.id!!, page, size) }
+
+    override fun countAllSurveyInvitations(username: String): Mono<Int> =
+            userService.findByUsername(username).flatMap { service.countAllByUserId(it.id!!) }
 }

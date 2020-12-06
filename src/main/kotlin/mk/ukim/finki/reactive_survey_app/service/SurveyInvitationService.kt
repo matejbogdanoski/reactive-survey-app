@@ -10,4 +10,5 @@ interface SurveyInvitationService {
     fun createInvitation(surveyMono: Mono<Survey>, creatorMono: Mono<User>, userId: Long): Mono<SurveyInvitation>
     fun findInvitationsBySurvey(surveyMono: Mono<Survey>, userMono: Mono<User>): Flux<SurveyInvitation>
     fun findSurveyInvitationsPage(userId: Long, page: Int, size: Int): Flux<SurveyInvitation>
+    fun countAllByUserId(userId: Long): Mono<Int>
 }

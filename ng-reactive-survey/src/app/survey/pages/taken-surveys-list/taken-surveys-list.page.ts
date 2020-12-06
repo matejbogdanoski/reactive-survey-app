@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { TakenSurveysDatasource } from './datasource/taken-surveys.datasource';
 import { Observable } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SurveyInstanceService } from '../../../shared/services/survey-instance/survey-instance.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './taken-surveys-list.page.html',
   styleUrls: ['./taken-surveys-list.page.scss']
 })
-export class TakenSurveysListPage implements OnInit {
+export class TakenSurveysListPage implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['rowNumber', 'surveyTitle', 'dateTaken'];
   dataSource: TakenSurveysDatasource;
   length$: Observable<number>;
@@ -23,6 +24,12 @@ export class TakenSurveysListPage implements OnInit {
     this.dataSource = new TakenSurveysDatasource(this._surveyInstanceService);
     this.dataSource.loadSurveyInstanceGridRows(0, 5);
     this.length$ = this._surveyInstanceService.countAllByUser();
+  }
+
+  ngAfterViewInit(): void {
+    this.paginator.page.pipe(
+      tap(() => this.loadPage())
+    ).subscribe();
   }
 
   loadPage() {

@@ -8,4 +8,5 @@ interface SurveyInvitationManagingService {
     fun createSurveyInvitation(creator: String, surveyId: Long, username: String): Mono<SurveyInvitation>
     fun findInvitationsBySurvey(surveyId: Long, username: String): Flux<SurveyInvitation>
     fun findSurveyInvitationPage(username: String, page: Int, size: Int): Flux<SurveyInvitation>
+    fun countAllSurveyInvitations(username: String): Mono<Int>
 }

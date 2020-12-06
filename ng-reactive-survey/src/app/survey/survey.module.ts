@@ -42,6 +42,7 @@ import { SingleInstancePreviewPage } from './pages/single-instance-preview/singl
 import { InvitationsDialog } from './dialogs/invitations/invitations.dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SurveyInvitationsService } from './services/survey-invitations/survey-invitations.service';
+import { PendingSurveysListPage } from './pages/pending-surveys-list/pending-surveys-list.page';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -64,7 +65,8 @@ const pages = [
   SurveyEditPage,
   HomePage,
   TakenSurveysListPage,
-  SingleInstancePreviewPage
+  SingleInstancePreviewPage,
+  PendingSurveysListPage
 ];
 
 const modules = [

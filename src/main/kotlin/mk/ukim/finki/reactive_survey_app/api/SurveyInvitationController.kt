@@ -37,4 +37,8 @@ class SurveyInvitationController(
             service.findSurveyInvitationPage(principal.username!!, page, size)
                     .flatMap(mapper::mapSurveyInvitationToGridResponse)
 
+    @GetMapping("/pending/count")
+    fun countSurveyInvitations(@AuthenticationPrincipal principal: JwtAuthenticationToken) =
+            service.countAllSurveyInvitations(principal.username!!)
+
 }

@@ -33,4 +33,6 @@ class SurveyInvitationServiceImpl(
     override fun findSurveyInvitationsPage(userId: Long, page: Int, size: Int): Flux<SurveyInvitation> =
             repository.findAllByUserIdAndTaken(userId, false, PageRequest.of(page, size))
 
+    override fun countAllByUserId(userId: Long): Mono<Int> = repository.countAllByUserId(userId)
+
 }
