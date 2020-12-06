@@ -14,6 +14,7 @@ class SurveyRendererController(
         private val mapper: SurveyRendererMapper
 ) {
 
+    //todo: can view: either the creator or the invited person
     @GetMapping("/{naturalKey}")
     fun findSurveyRendererByNaturalKey(@PathVariable naturalKey: String) = service.findOneByNaturalKey(naturalKey)
             .flatMap(mapper::mapSurveyToResponse)

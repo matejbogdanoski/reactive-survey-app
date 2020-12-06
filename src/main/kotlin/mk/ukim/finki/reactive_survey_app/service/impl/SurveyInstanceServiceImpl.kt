@@ -1,9 +1,9 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
+import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.SurveyInstanceRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceService
-import mk.ukim.finki.reactive_survey_app.service.UserService
 import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -13,8 +13,7 @@ import java.time.ZonedDateTime
 
 @Service
 class SurveyInstanceServiceImpl(
-        private val repository: SurveyInstanceRepository,
-        private val userService: UserService
+        private val repository: SurveyInstanceRepository
 ) : SurveyInstanceService {
 
     override fun create(surveyId: Long, takenBy: Long,
@@ -32,11 +31,10 @@ class SurveyInstanceServiceImpl(
 
     override fun findById(surveyInstanceId: Long): Mono<SurveyInstance> = repository.findById(surveyInstanceId)
 
-    override fun findById(surveyInstanceId: Long, initiatedBy: String): Mono<SurveyInstance> {
-        val surveyInstance = repository.findById(surveyInstanceId)
-        val user = userService.findByUsername(initiatedBy)
-        return AccessValidator.validateCanViewSurveyInstance(surveyInstance, user).then(surveyInstance)
-    }
+    override fun findById(surveyInstanceId: Long, initiatedBy: Mono<User>): Mono<SurveyInstance> =
+            repository.findById(surveyInstanceId).let { surveyInstanceMono ->
+                AccessValidator.validateCanViewSurveyInstance(surveyInstanceMono, initiatedBy).map { it.t1 }
+            }
 
     override fun findAllTakenByPage(takenBy: Long, size: Int, page: Int): Flux<SurveyInstance> =
             repository.findAllByTakenBy(takenBy, PageRequest.of(page, size))

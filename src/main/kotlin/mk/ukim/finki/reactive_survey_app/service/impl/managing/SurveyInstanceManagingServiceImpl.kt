@@ -1,4 +1,4 @@
-package mk.ukim.finki.reactive_survey_app.service.impl
+package mk.ukim.finki.reactive_survey_app.service.impl.managing
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -61,4 +61,6 @@ class SurveyInstanceManagingServiceImpl(
         surveyInstanceService.countAllTakenBy(it.id!!)
     }
 
+    override fun findById(instanceId: Long, username: String): Mono<SurveyInstance> =
+            userService.findByUsername(username).let { surveyInstanceService.findById(instanceId, it) }
 }

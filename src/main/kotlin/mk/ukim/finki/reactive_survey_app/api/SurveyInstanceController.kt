@@ -8,7 +8,6 @@ import mk.ukim.finki.reactive_survey_app.responses.SurveyInstanceResponse
 import mk.ukim.finki.reactive_survey_app.responses.grid.SurveyInstanceGridResponse
 import mk.ukim.finki.reactive_survey_app.security.jwt.dto.JwtAuthenticationToken
 import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceManagingService
-import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceService
 import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -19,8 +18,7 @@ import reactor.core.publisher.Mono
 @RequestMapping("/api/survey-instances")
 class SurveyInstanceController(
         private val service: SurveyInstanceManagingService,
-        private val mapper: SurveyInstanceMapper,
-        private val instanceService: SurveyInstanceService
+        private val mapper: SurveyInstanceMapper
 ) {
 
     @GetMapping("/stream-answers/{surveyId}", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
@@ -44,9 +42,9 @@ class SurveyInstanceController(
     @GetMapping("/preview/{instanceId}")
     fun findInstanceById(@AuthenticationPrincipal principal: JwtAuthenticationToken,
                          @PathVariable instanceId: Long): Mono<SurveyInstancePreview> =
-            instanceService.findById(instanceId, principal.username!!).flatMap(
-                    mapper::mapSurveyInstanceToPreviewResponse)
+            service.findById(instanceId, principal.username!!).flatMap(mapper::mapSurveyInstanceToPreviewResponse)
 
+    //todo: can submit answers if the user is invited and hasn't taken the survey yet
     @PostMapping("/{surveyId}")
     fun createInstanceWithAnswers(@RequestBody questionAnswerMap: Map<Long, String?>,
                                   @PathVariable surveyId: Long,

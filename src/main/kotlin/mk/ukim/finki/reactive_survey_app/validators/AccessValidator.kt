@@ -38,4 +38,16 @@ object AccessValidator {
             sink.next(user)
         }
     }
+
+    fun validateCanCreateSurveyInvitation(userMono: Mono<User>, surveyMono: Mono<Survey>): Mono<Tuple2<User, Survey>> =
+            userMono.switchIfEmpty(Mono.error(IllegalArgumentException("Username does not exist!")))
+                    .zipWith(surveyMono).handle { it, sink: SynchronousSink<Tuple2<User, Survey>> ->
+                        val (user, survey) = it.t1 to it.t2
+                        if (user.id != survey.createdBy) {
+                            sink.error(AccessDeniedException(
+                                    "You cannot send invitation for a survey that you didn't create!"))
+                        } else {
+                            sink.next(it)
+                        }
+                    }
 }

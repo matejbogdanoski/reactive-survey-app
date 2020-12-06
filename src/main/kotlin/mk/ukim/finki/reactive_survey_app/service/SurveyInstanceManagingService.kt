@@ -13,4 +13,5 @@ interface SurveyInstanceManagingService {
     fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstance>
     fun findAllTakenByPage(username: String, size: Int, page: Int): Flux<SurveyInstance>
     fun countAllByUsername(username: String): Mono<Int>
+    fun findById(instanceId: Long, username: String): Mono<SurveyInstance>
 }

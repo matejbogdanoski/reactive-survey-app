@@ -39,7 +39,7 @@ export class MySurveysListComponent implements OnInit, AfterViewInit {
   }
 
   getRouterLink(id: number){
-    return `./edit/${id}`;
+    return `../edit/${id}`;
   }
 
 }
