@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { SurveyService } from '../../services/survey/survey.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
@@ -8,8 +8,7 @@ import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-my-surveys-list',
   templateUrl: './my-surveys-list.component.html',
-  styleUrls: ['./my-surveys-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./my-surveys-list.component.scss']
 })
 export class MySurveysListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['rowNumber', 'title', 'description'];
@@ -38,7 +37,7 @@ export class MySurveysListComponent implements OnInit, AfterViewInit {
     this.dataSource.loadSurveys(this.paginator.pageIndex, this.paginator.pageSize);
   }
 
-  getRouterLink(id: number){
+  getRouterLink(id: number) {
     return `../edit/${id}`;
   }
 

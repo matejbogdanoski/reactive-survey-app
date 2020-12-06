@@ -30,4 +30,8 @@ export class SurveysDataSource implements DataSource<Survey> {
     ).subscribe(surveys => this.surveysSubject.next(surveys));
   }
 
+  count(): number {
+    return this.surveysSubject.value.length;
+  }
+
 }

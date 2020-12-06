@@ -31,4 +31,8 @@ export class TakenSurveysDatasource implements DataSource<SurveyInstanceGridRow>
     ).subscribe(rows => this.surveyInstanceRowsSubject.next(rows));
   }
 
+  count(): number {
+    return this.surveyInstanceRowsSubject.value.length;
+  }
+
 }

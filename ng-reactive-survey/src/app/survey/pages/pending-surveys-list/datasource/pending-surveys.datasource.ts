@@ -31,4 +31,8 @@ export class PendingSurveysDatasource implements DataSource<PendingSurveyGridRow
     ).subscribe(rows => this.pendingSurveyRowsSubject.next(rows));
   }
 
+  count(): number {
+    return this.pendingSurveyRowsSubject.value.length;
+  }
+
 }
