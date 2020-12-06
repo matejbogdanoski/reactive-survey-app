@@ -23,7 +23,7 @@ class UserController(
 
     @GetMapping("/user-info")
     fun findUserInfo(@AuthenticationPrincipal principal: JwtAuthenticationToken): Mono<UserInfo> =
-            service.findByUsername(principal.username!!).map(UserMapper::mapUserToUserInfoResponse)
+            service.findById(principal.userId).map(UserMapper::mapUserToUserInfoResponse)
 
     @PostMapping("/signup")
     fun signUp(@RequestBody request: UserCreateRequest): Mono<User> =
@@ -40,7 +40,7 @@ class UserController(
                      @RequestBody request: UserInfoUpdateRequest,
                      @PathVariable id: Long): Mono<UserInfo> =
             service.editUserInfo(userId = id,
-                                 initiatedBy = principal.username!!,
+                                 initiatedBy = principal.userId,
                                  firstName = request.firstName,
                                  lastName = request.lastName,
                                  email = request.email).map(UserMapper::mapUserToUserInfoResponse)

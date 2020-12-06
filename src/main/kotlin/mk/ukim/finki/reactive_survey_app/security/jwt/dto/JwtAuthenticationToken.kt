@@ -6,7 +6,8 @@ import org.springframework.security.core.GrantedAuthority
 class JwtAuthenticationToken(
         token: String?,
         val username: String?,
-        authorities: Collection<GrantedAuthority>
+        authorities: Collection<GrantedAuthority>,
+        val userId: Long
 ) : UsernamePasswordAuthenticationToken(token, username, authorities) {
 
     override fun getCredentials(): Any? = null

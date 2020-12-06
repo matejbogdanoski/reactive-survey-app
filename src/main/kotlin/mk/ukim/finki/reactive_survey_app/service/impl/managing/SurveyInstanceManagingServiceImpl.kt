@@ -7,7 +7,10 @@ import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
 import mk.ukim.finki.reactive_survey_app.domain.dto.AnswerDTO
 import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
 import mk.ukim.finki.reactive_survey_app.helper.PostgresNotificationListener
-import mk.ukim.finki.reactive_survey_app.service.*
+import mk.ukim.finki.reactive_survey_app.service.QuestionAnswerService
+import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceManagingService
+import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceService
+import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -18,19 +21,14 @@ class SurveyInstanceManagingServiceImpl(
         private val surveyInstanceService: SurveyInstanceService,
         private val questionAnswerService: QuestionAnswerService,
         private val surveyQuestionService: SurveyQuestionService,
-        private val postgresListener: PostgresNotificationListener,
-        private val userService: UserService
+        private val postgresListener: PostgresNotificationListener
 ) : SurveyInstanceManagingService {
 
     override fun createInstanceWithAnswers(questionAnswerMap: Map<Long, String?>, surveyId: Long,
-                                           takenBy: String): Mono<SurveyInstance> {
-        val instance = userService.findByUsername(takenBy).flatMap {
-            surveyInstanceService.create(surveyId, it.id!!, ZonedDateTime.now())
-        }
-        return instance.doOnNext {
-            questionAnswerService.bulkCreateQuestionAnswers(questionAnswerMap, it.id!!).subscribe()
-        }
-    }
+                                           takenBy: Long): Mono<SurveyInstance> =
+            surveyInstanceService.create(surveyId, takenBy, ZonedDateTime.now()).doOnNext {
+                questionAnswerService.bulkCreateQuestionAnswers(questionAnswerMap, it.id!!).subscribe()
+            }
 
     override fun streamInstanceAnswers(surveyId: Long): Flux<AnswerDTO?> = postgresListener.listen(
             ANSWER_SAVED_NOTIFICATION)
@@ -53,14 +51,4 @@ class SurveyInstanceManagingServiceImpl(
     override fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstance> =
             surveyInstanceService.findAllBySurveyId(surveyId)
 
-    override fun findAllTakenByPage(username: String, size: Int, page: Int): Flux<SurveyInstance> =
-            userService.findByUsername(username)
-                    .flatMapMany { surveyInstanceService.findAllTakenByPage(it.id!!, size, page) }
-
-    override fun countAllByUsername(username: String): Mono<Int> = userService.findByUsername(username).flatMap {
-        surveyInstanceService.countAllTakenBy(it.id!!)
-    }
-
-    override fun findById(instanceId: Long, username: String): Mono<SurveyInstance> =
-            userService.findByUsername(username).let { surveyInstanceService.findById(instanceId, it) }
 }

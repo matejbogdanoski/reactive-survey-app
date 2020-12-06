@@ -1,7 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
 import mk.ukim.finki.reactive_survey_app.domain.Survey
-import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.SurveyRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyService
 import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
@@ -17,8 +16,8 @@ class SurveyServiceImpl(
 
     override fun findOneByNaturalKey(naturalKey: String): Mono<Survey> = repository.findOneByNaturalKey(naturalKey)
 
-    override fun findById(id: Long, initiatedBy: Mono<User>): Mono<Survey> = repository.findById(id).let { surveyMono ->
-        AccessValidator.validateCanViewSurvey(surveyMono, initiatedBy).map { it.t1 }
+    override fun findById(id: Long, initiatedBy: Long): Mono<Survey> = repository.findById(id).let { surveyMono ->
+        AccessValidator.validateCanViewSurvey(surveyMono, initiatedBy)
     }
 
     override fun findById(id: Long): Mono<Survey> = repository.findById(id)

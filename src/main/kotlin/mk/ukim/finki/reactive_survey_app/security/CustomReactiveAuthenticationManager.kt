@@ -1,8 +1,9 @@
 package mk.ukim.finki.reactive_survey_app.security
 
+import mk.ukim.finki.reactive_survey_app.security.dto.UserDetailsDto
+import mk.ukim.finki.reactive_survey_app.security.jwt.JwtTokenUtils
 import mk.ukim.finki.reactive_survey_app.security.jwt.dto.JwtAuthenticationToken
 import mk.ukim.finki.reactive_survey_app.security.jwt.dto.JwtPreAuthenticationToken
-import mk.ukim.finki.reactive_survey_app.security.jwt.JwtTokenUtils
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.core.Authentication
@@ -27,7 +28,11 @@ class CustomReactiveAuthenticationManager(
                         .publishOn(Schedulers.parallel())
                         .onErrorResume { raiseBadCredentials() }
                         .map {
-                            JwtAuthenticationToken(token = null, username = it.username, authorities = it.authorities)
+                            val surveyUser = it as UserDetailsDto
+                            JwtAuthenticationToken(token = null,
+                                                   username = it.username,
+                                                   authorities = it.authorities,
+                                                   userId = surveyUser.userId)
                         }
             } else Mono.just(authentication)
 

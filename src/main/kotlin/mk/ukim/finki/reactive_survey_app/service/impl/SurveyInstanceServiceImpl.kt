@@ -1,7 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
-import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.SurveyInstanceRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceService
 import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
@@ -31,9 +30,9 @@ class SurveyInstanceServiceImpl(
 
     override fun findById(surveyInstanceId: Long): Mono<SurveyInstance> = repository.findById(surveyInstanceId)
 
-    override fun findById(surveyInstanceId: Long, initiatedBy: Mono<User>): Mono<SurveyInstance> =
+    override fun findById(surveyInstanceId: Long, initiatedBy: Long): Mono<SurveyInstance> =
             repository.findById(surveyInstanceId).let { surveyInstanceMono ->
-                AccessValidator.validateCanViewSurveyInstance(surveyInstanceMono, initiatedBy).map { it.t1 }
+                AccessValidator.validateCanViewSurveyInstance(surveyInstanceMono, initiatedBy)
             }
 
     override fun findAllTakenByPage(takenBy: Long, size: Int, page: Int): Flux<SurveyInstance> =

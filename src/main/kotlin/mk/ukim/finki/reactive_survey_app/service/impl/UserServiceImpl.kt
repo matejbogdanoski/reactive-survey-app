@@ -30,9 +30,9 @@ class UserServiceImpl(
 
     override fun findByUsername(username: String): Mono<User> = repository.findByUsername(username)
 
-    override fun editUserInfo(userId: Long, initiatedBy: String, firstName: String?, lastName: String?,
+    override fun editUserInfo(userId: Long, initiatedBy: Long, firstName: String?, lastName: String?,
                               email: String?): Mono<User> =
-            AccessValidator.validateCanEditUserInfo(findByUsername(initiatedBy), userId).flatMap {
+            AccessValidator.validateCanEditUserInfo(initiatedBy, userId).flatMap {
                 repository.findById(userId).flatMap {
                     repository.updateUserInfo(userId = userId,
                                               firstName = firstName ?: it.firstName,
