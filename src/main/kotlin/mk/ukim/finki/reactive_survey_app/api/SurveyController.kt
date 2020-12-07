@@ -17,9 +17,6 @@ class SurveyController(
         private val service: SurveyService
 ) {
 
-    @GetMapping("/natural-key/{naturalKey}")
-    fun findByNaturalKey(@PathVariable naturalKey: String): Mono<Survey> = service.findOneByNaturalKey(naturalKey)
-
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long,
                  @AuthenticationPrincipal principal: JwtAuthenticationToken): Mono<Survey> =

@@ -27,9 +27,17 @@ class SurveyInvitationServiceImpl(
             AccessValidator.validateCanViewSurveyInvitations(surveyMono, initiatedBy)
                     .flatMapMany { repository.findAllBySurveyId(it.id!!) }
 
+    override fun findInvitationsBySurveyNaturalKey(naturalKey: String): Flux<SurveyInvitation> =
+            repository.findAllBySurveyNaturalKey(naturalKey)
+
+    override fun findInvitationsBySurveyId(surveyId: Long): Flux<SurveyInvitation> = repository.findAllBySurveyId(
+            surveyId)
+
     override fun findSurveyInvitationsPage(userId: Long, page: Int, size: Int): Flux<SurveyInvitation> =
             repository.findAllByUserIdAndTaken(userId, false, PageRequest.of(page, size))
 
     override fun countAllByUserId(userId: Long): Mono<Int> = repository.countAllByUserId(userId)
+
+    override fun markAsTaken(surveyId: Long, userId: Long): Mono<Int> = repository.markAsTaken(surveyId, userId)
 
 }

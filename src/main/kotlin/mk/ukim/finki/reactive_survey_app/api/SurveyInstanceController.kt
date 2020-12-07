@@ -45,8 +45,6 @@ class SurveyInstanceController(
                          @PathVariable instanceId: Long): Mono<SurveyInstancePreview> =
             service.findById(instanceId, principal.userId).flatMap(mapper::mapSurveyInstanceToPreviewResponse)
 
-    //todo: can submit answers if the user is invited and hasn't taken the survey yet and is not the creator
-    //todo: mark invitation as taken on instance creation
     @PostMapping("/{surveyId}")
     fun createInstanceWithAnswers(@RequestBody questionAnswerMap: Map<Long, String?>,
                                   @PathVariable surveyId: Long,

@@ -22,10 +22,6 @@ export class SurveyService {
     return this._http.patch<Survey>(`${this.path}/${surveyId}`, { ...surveyUpdated });
   }
 
-  public findSurveyByNaturalKey(naturalKey: string): Observable<Survey> {
-    return this._http.get<Survey>(`${this.path}/natural-key/${naturalKey}`);
-  }
-
   public findSurveyById(id: number): Observable<Survey> {
     return this._http.get<Survey>(`${this.path}/${id}`);
   }
