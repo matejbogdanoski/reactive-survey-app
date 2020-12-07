@@ -22,14 +22,16 @@ class SurveyRendererMapper(
         surveyQuestionService.findAllBySurveyId(id)
                 .flatMap(::mapSurveyQuestionToResponse)
                 .collectList()
-                .map { copy(questions = it) }
+                .map { copy(questions = it.sortedBy { q -> q.position }) }
     }
 
     fun mapSurveyQuestionToResponse(surveyQuestion: SurveyQuestion): Mono<SurveyQuestionRendererResponse> = with(
             mapSurveyQuestionRendererToResponse(surveyQuestion)) {
         surveyQuestionOptionService.findAllBySurveyQuestionId(id)
                 .collectList()
-                .map { copy(options = it.map(::mapSurveyQuestionOptionToResponseStatic)) }
+                .map {
+                    copy(options = it.sortedBy { o -> o.position }.map(::mapSurveyQuestionOptionToResponseStatic))
+                }
     }
 
     private fun mapSurveyRendererToResponseStatic(survey: Survey) = with(survey) {

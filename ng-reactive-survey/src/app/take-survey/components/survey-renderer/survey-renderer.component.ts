@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 import { Survey } from '../../../interfaces/survey.interface';
 import { hasOptionsStatic, QuestionType } from '../../../survey/enum/question-type.enum';
 import { timePickerDarkThemeConfig } from '../../config/time-picker-theme.config';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { SurveyInstanceService } from '../../../shared/services/survey-instance/survey-instance.service';
 import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
@@ -58,6 +58,7 @@ export class SurveyRendererComponent implements OnInit {
       if (!!answer) {
         parsedAnswer = JSON.parse(answer);
       }
+      const required = q.isRequired ? [Validators.required] : [];
       if (q.questionType == QuestionType.CHECKBOX) {
         const group = new FormGroup({});
         q.options.forEach(o => {
@@ -74,9 +75,9 @@ export class SurveyRendererComponent implements OnInit {
         if (hasOptionsStatic(q.questionType)) {
           const op = (parsedAnswer as SurveyQuestionOption);
           const surveyQuestionOption = q.options?.find(o => o?.id === op?.id);
-          this.form.addControl(q.id.toString(), new FormControl({ value: surveyQuestionOption, disabled: this.disable }));
+          this.form.addControl(q.id.toString(), new FormControl({ value: surveyQuestionOption, disabled: this.disable }, ...required));
         } else {
-          this.form.addControl(q.id.toString(), new FormControl({ value: parsedAnswer || '', disabled: this.disable }));
+          this.form.addControl(q.id.toString(), new FormControl({ value: parsedAnswer || '', disabled: this.disable }, ...required));
         }
       }
     });
