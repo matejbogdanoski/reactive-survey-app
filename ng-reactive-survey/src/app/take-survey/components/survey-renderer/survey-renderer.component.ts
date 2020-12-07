@@ -8,6 +8,7 @@ import { SurveyInstanceService } from '../../../shared/services/survey-instance/
 import { SurveyQuestionOption } from '../../../interfaces/survey-question-option.interface';
 import * as _ from 'lodash';
 import { QuestionAnswer } from '../../../interfaces/question-answer.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-survey-renderer',
@@ -42,7 +43,8 @@ export class SurveyRendererComponent implements OnInit {
   constructor(
     private _builder: FormBuilder,
     private _notification: ToastrService,
-    private _service: SurveyInstanceService
+    private _service: SurveyInstanceService,
+    private _router: Router
   ) { }
 
   ngOnInit(): void {
@@ -93,8 +95,9 @@ export class SurveyRendererComponent implements OnInit {
     });
     this._service.addBulkQuestionAnswers(questionAnswerMap, this.surveyStructure.id).subscribe(() => {
       this._notification.success('Successfully submitted!');
+      this._router.navigate(['/survey/taken-surveys']);
     }, error => {
-      this._notification.error(error.message);
+      this._notification.error(error.error);
     });
   }
 

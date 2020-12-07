@@ -29,11 +29,6 @@ object AccessValidator {
                 }
             }
 
-    fun validateCanEditUserInfo(initiatedBy: Long, userId: Long): Mono<Void> =
-            if (initiatedBy != userId) Mono.error(
-                    AccessDeniedException("You cannot edit others user info!")) else Mono.empty()
-
-
     fun validateCanCreateSurveyInvitation(initiatedBy: Long, surveyMono: Mono<Survey>): Mono<Survey> =
             surveyMono.handle { it, sink: SynchronousSink<Survey> ->
                 if (initiatedBy != it.createdBy) {

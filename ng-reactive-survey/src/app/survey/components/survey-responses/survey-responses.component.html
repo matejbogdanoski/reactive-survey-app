@@ -1,4 +1,4 @@
-<div class='content' *ngIf='surveyInstances$ | async as surveyInstances'>
+<div class='content' *ngIf='surveyInstances$ | async as surveyInstances; else noResponses'>
   <h2>{{surveyInstances.length}} responses</h2>
   <mat-tab-group
     animationDuration='0ms'
@@ -17,3 +17,6 @@
     </mat-tab>
   </mat-tab-group>
 </div>
+<ng-template #noResponses>
+  <h2>No responses yet!</h2>
+</ng-template>

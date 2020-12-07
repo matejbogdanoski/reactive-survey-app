@@ -61,7 +61,7 @@ export class SecurityEffects {
         }),
         tap(() => this._router.navigate(['/'])),
         catchError(error => {
-          this._toast.error(error.message, 'Log in failed!');
+          this._toast.error(error.error, 'Log in failed!');
           return of(loginFailure({ error }));
         })
       ))
@@ -78,7 +78,7 @@ export class SecurityEffects {
         }),
         tap(() => this._router.navigate(['user/login'])),
         catchError(error => {
-          this._toast.error(error.message, 'Logout failed!');
+          this._toast.error(error.error, 'Logout failed!');
           return of(logoutFailure({ error }));
         })
       ))
@@ -108,7 +108,7 @@ export class SecurityEffects {
         }),
         tap(() => this._router.navigate(['user/login'])),
         catchError(error => {
-          this._toast.success(error.message, 'User registered failed!');
+          this._toast.success(error.error, 'User registered failed!');
           return of(registerUserFailure({ error }));
         })
       ))
@@ -160,6 +160,7 @@ export class SecurityEffects {
           this._authService.updateCookies(authResponse.username, authResponse.token);
           return updatePasswordSuccess({ username: authResponse.username, token: authResponse.token });
         }),
+        tap(() => this._router.navigate(['/'])),
         catchError(error => {
           this._toast.error(error.error);
           return of(updatePasswordFailure({ error }));

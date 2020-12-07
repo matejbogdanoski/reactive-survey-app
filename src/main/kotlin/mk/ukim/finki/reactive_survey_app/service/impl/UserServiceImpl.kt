@@ -3,7 +3,6 @@ package mk.ukim.finki.reactive_survey_app.service.impl
 import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.UserRepository
 import mk.ukim.finki.reactive_survey_app.service.UserService
-import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -31,15 +30,16 @@ class UserServiceImpl(
     override fun findByUsername(username: String): Mono<User> = repository.findByUsername(username)
 
     override fun editUserInfo(userId: Long, initiatedBy: Long, firstName: String?, lastName: String?,
-                              email: String?): Mono<User> =
-            AccessValidator.validateCanEditUserInfo(initiatedBy, userId).flatMap {
-                repository.findById(userId).flatMap {
-                    repository.updateUserInfo(userId = userId,
-                                              firstName = firstName ?: it.firstName,
-                                              lastName = lastName ?: it.lastName,
-                                              email = email ?: it.email)
-                }.then(repository.findById(userId))
-            }
+                              email: String?): Mono<User> {
+        return if (initiatedBy != userId) Mono.error(AccessDeniedException("You cannot edit others user info!"))
+        else repository.findById(userId).flatMap {
+            repository.updateUserInfo(userId = userId,
+                                      firstName = firstName ?: it.firstName,
+                                      lastName = lastName ?: it.lastName,
+                                      email = email ?: it.email)
+        }.then(repository.findById(userId))
+    }
+
 
     override fun updateUserPassword(username: String, oldPassword: String,
                                     newPassword: String, confirmNewPassword: String): Mono<Int> {

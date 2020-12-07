@@ -37,6 +37,7 @@ export class ResetPasswordComponent implements OnInit {
   public submit() {
     const updatePasswordRequest = this.form.getRawValue() as UpdatePasswordRequest;
     this._store.dispatch(updatePassword({ updatePasswordRequest }));
+    this.form.reset();
   }
 
   public get nonMatchingPasswords(): boolean {

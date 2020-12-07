@@ -5,6 +5,8 @@ import { SurveyInstance } from '../../../interfaces/survey-instance.interface';
 import { QuestionType } from '../../../survey/enum/question-type.enum';
 import { SurveyInstanceGridRow } from '../../../interfaces/survey-instance-grid.row';
 import { SurveyInstancePreview } from '../../../interfaces/survey-instance-preview.interface';
+import { EventSourcePolyfill } from 'ng-event-source';
+import { CookieService } from 'ngx-cookie-service';
 
 export interface AnswerDTO {
   id: number;
@@ -21,7 +23,8 @@ export class SurveyInstanceService {
   private zone = new NgZone({ enableLongStackTrace: false });
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
+    private _cookie: CookieService
   ) {}
 
   public addBulkQuestionAnswers(questionAnswerMap: Map<string, string>, surveyId: number) {
@@ -33,7 +36,9 @@ export class SurveyInstanceService {
   }
 
   public streamAnswers(surveyId: number): Observable<AnswerDTO> {
-    const eventSource = new EventSource(`${this.path}/stream-answers/${surveyId}`);
+    const token = this._cookie.get('JWT_TOKEN');
+    const eventSource = new EventSourcePolyfill(`${this.path}/stream-answers/${surveyId}`,
+      { headers: { Authorization: `Bearer ${token}` } });
     return new Observable(observer => {
       eventSource.onmessage = message => this.zone.run(() => observer.next(JSON.parse(message.data) as AnswerDTO));
       eventSource.onerror = error => this.zone.run(() => observer.error(error));

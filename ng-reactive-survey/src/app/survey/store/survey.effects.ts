@@ -98,7 +98,7 @@ export class SurveyEffects {
       ofType(createSurvey),
       mergeMap(_ => this._surveyService.createSurvey().pipe(
         map(survey => createSurveySuccess({ survey })),
-        tap(it => this._router.navigate([`survey/${it.survey.id}`])),
+        tap(it => this._router.navigate([`survey/edit/${it.survey.id}`])),
         catchError(error => of(createSurveyFailure({ error })))
         )
       )
