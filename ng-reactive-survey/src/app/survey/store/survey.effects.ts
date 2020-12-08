@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { SurveyService } from '../services/survey/survey.service';
 import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { from, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { SurveyQuestionService } from '../services/survey-question/survey-question.service';
 import {
@@ -11,9 +11,11 @@ import {
   editSurveyCreateFailure,
   editSurveySuccess,
   findSurveyFailure,
-  findSurveySuccess
+  findSurveySuccess,
+  previewSurveyFailure,
+  previewSurveySuccess
 } from '../services/survey/survey.actions';
-import { findSurvey } from '../pages/survey-edit/survey-edit-page.actions';
+import { findSurvey, previewSurvey } from '../pages/survey-edit/survey-edit-page.actions';
 import {
   addQuestionOption,
   addSurveyQuestion,
@@ -76,6 +78,7 @@ import {
   findSurveyInvitationsFailure,
   findSurveyInvitationsSuccess
 } from '../services/survey-invitations/survey-invitations-service.actions';
+import { selectSurvey } from './survey.selectors';
 
 @Injectable()
 export class SurveyEffects {
@@ -128,6 +131,18 @@ export class SurveyEffects {
         this._surveyService.editSurveyInfo(state.survey, action.surveyEditInfo).pipe(
           map(survey => editSurveySuccess({ survey })),
           catchError(error => of(editSurveyCreateFailure({ error })))
+        )
+      )
+    )
+  );
+
+  previewSurvey$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(previewSurvey),
+      withLatestFrom(this._store.select(selectSurvey)),
+      mergeMap(([_, survey]) => from(this._router.navigate([`/take-survey/${survey.naturalKey}`])).pipe(
+        map(_ => previewSurveySuccess()),
+        catchError(error => of(previewSurveyFailure({ error })))
         )
       )
     )

@@ -2,7 +2,7 @@
      [formGroup]='form'
      cdkDropList
      (cdkDropListDropped)='changeOptionPosition($event)'>
-  <div *ngFor='let option of questionOptions'
+  <div *ngFor='let option of questionOptions; let idx = index'
        cdkDrag
        cdkDragLockAxis='y'
        [cdkDragData]='option'>
@@ -13,7 +13,7 @@
       <div class='d-flex mr-3 w-100'>
         <div [ngSwitch]='questionType' class='mr-2'>
           <div class='pt-3' *ngSwitchCase='QUESTION_TYPES.DROPDOWN'>
-            <h3>{{option.position}}.</h3>
+            <h3>{{idx + 1}}.</h3>
           </div>
           <div class='pt-3' *ngSwitchCase='QUESTION_TYPES.CHECKBOX'>
             <mat-icon>check_box_outline_blank</mat-icon>

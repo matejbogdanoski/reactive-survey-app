@@ -105,4 +105,14 @@ export class SurveyRendererComponent implements OnInit {
   getOptionFormControlName(option: SurveyQuestionOption): string {
     return JSON.stringify(option);
   }
+
+  isControlInvalid(controlName: string) {
+    const control = this.form.get(controlName);
+    return control.invalid;
+  }
+
+  hasRequiredError(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return control.errors.required;
+  }
 }

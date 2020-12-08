@@ -4,7 +4,7 @@ import { SurveyService } from '../../services/survey/survey.service';
 import { SurveyState } from '../../store/survey.state';
 import { Store } from '@ngrx/store';
 import { selectSurvey } from '../../store/survey.selectors';
-import { findSurvey } from './survey-edit-page.actions';
+import { findSurvey, previewSurvey } from './survey-edit-page.actions';
 import { takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ export class SurveyEditPage implements OnInit, OnDestroy {
   private _destroySubject = new Subject<void>();
 
   surveyId: number;
+  surveyNaturalKey: string;
 
   constructor(
     private _route: ActivatedRoute,
@@ -48,6 +49,10 @@ export class SurveyEditPage implements OnInit, OnDestroy {
 
   openInvitationsDialog() {
     this._dialog.open(InvitationsDialog, { data: { surveyId: this.surveyId } });
+  }
+
+  routeToPreview() {
+    this._store.dispatch(previewSurvey());
   }
 
 }

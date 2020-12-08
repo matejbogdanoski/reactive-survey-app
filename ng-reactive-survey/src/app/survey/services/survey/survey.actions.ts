@@ -12,3 +12,5 @@ export const createSurveyFailure = createAction(`${source} Create survey failure
 export const editSurveySuccess = createAction(`${source} Edit survey success`, props<{ survey: Survey }>());
 export const editSurveyCreateFailure = createAction(`${source} Edit survey failure`, props<{ error: any }>());
 
+export const previewSurveySuccess = createAction(`${source} Preview survey success!`);
+export const previewSurveyFailure = createAction(`${source} Preview survey failure!`, props<{ error: any }>());

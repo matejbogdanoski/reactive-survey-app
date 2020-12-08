@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Survey } from '../../../interfaces/survey.interface';
 
-export const source = '[Survey Renderer API]';
+const source = '[Survey Renderer API]';
 
-export const findFullSurveySuccess = createAction(`${source}`, props<{ survey: Survey }>());
-export const findFullSurveyFailure = createAction(`${source}`, props<{ error: any }>());
+export const findFullSurveySuccess = createAction(`${source} Find full survey success!`, props<{ survey: Survey }>());
+export const findFullSurveyFailure = createAction(`${source} Find full survey failure!`, props<{ error: any }>());

@@ -1,6 +1,9 @@
 <div class='d-flex justify-content-between'>
   <div></div>
-  <button mat-raised-button (click)='openInvitationsDialog()'>Send!</button>
+  <div class='d-flex'>
+    <button class='mr-2' mat-raised-button (click)='openInvitationsDialog()'>Send!</button>
+    <button mat-raised-button (click)='routeToPreview()'>Preview!</button>
+  </div>
 </div>
 <mat-tab-group animationDuration='0ms'>
   <mat-tab label='Questions'>

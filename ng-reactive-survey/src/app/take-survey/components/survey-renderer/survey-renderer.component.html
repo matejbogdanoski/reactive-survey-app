@@ -10,6 +10,7 @@
         <h3>{{question.name}}</h3>
       </div>
       <div [ngSwitch]='question.questionType'>
+
         <div class='w-50' *ngSwitchCase='questionType.LONG_TEXT'>
           <mat-form-field>
       <textarea matInput
@@ -17,7 +18,13 @@
                 [formControlName]='question.id.toString()'
                 [placeholder]='question.name'></textarea>
           </mat-form-field>
+          <div *ngIf='isControlInvalid(question.id.toString())'>
+            <small *ngIf='hasRequiredError(question.id.toString())' class='text-danger'>
+              This field is required.
+            </small>
+          </div>
         </div>
+
         <div class='w-25' *ngSwitchCase='questionType.SHORT_TEXT'>
           <mat-form-field>
             <input matInput
@@ -25,7 +32,13 @@
                    [placeholder]='question.name'
                    type='text'>
           </mat-form-field>
+          <div *ngIf='isControlInvalid(question.id.toString())'>
+            <small *ngIf='hasRequiredError(question.id.toString())' class='text-danger'>
+              This field is required.
+            </small>
+          </div>
         </div>
+
         <div class='w-25' *ngSwitchCase='questionType.DROPDOWN'>
           <mat-form-field appearance='outline'>
             <mat-label>{{question.name}}</mat-label>
@@ -38,7 +51,13 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <div *ngIf='isControlInvalid(question.id.toString())'>
+            <small *ngIf='hasRequiredError(question.id.toString())' class='text-danger'>
+              This field is required.
+            </small>
+          </div>
         </div>
+
         <div class='w-25' *ngSwitchCase='questionType.MULTIPLE_CHOICE'>
           <mat-radio-group class='question-option-group'
                            aria-label='{{question.name}}'
@@ -49,7 +68,13 @@
               {{option.label}}
             </mat-radio-button>
           </mat-radio-group>
+          <div *ngIf='isControlInvalid(question.id.toString())'>
+            <small *ngIf='hasRequiredError(question.id.toString())' class='text-danger'>
+              This field is required.
+            </small>
+          </div>
         </div>
+
         <div *ngSwitchCase='questionType.CHECKBOX'>
           <label [formArrayName]='question.id.toString()' class='question-option-group'>
             <mat-checkbox class='question-option'
@@ -58,7 +83,13 @@
               {{option.label}}
             </mat-checkbox>
           </label>
+          <div *ngIf='isControlInvalid(question.id.toString())'>
+            <small *ngIf='hasRequiredError(question.id.toString())' class='text-danger'>
+              This field is required.
+            </small>
+          </div>
         </div>
+
         <div class='w-25' *ngSwitchCase='questionType.DATE'>
           <mat-form-field appearance='outline'>
             <mat-label>{{question.name}}</mat-label>
@@ -67,7 +98,13 @@
             <mat-datepicker-toggle matSuffix [for]='picker'></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+          <div *ngIf='isControlInvalid(question.id.toString())'>
+            <small *ngIf='hasRequiredError(question.id.toString())' class='text-danger'>
+              This field is required.
+            </small>
+          </div>
         </div>
+
         <div class='w-25' *ngSwitchCase='questionType.TIME'>
           <mat-form-field>
             <div class='d-flex justify-content-between'>
@@ -82,7 +119,13 @@
                                      [theme]='darkTheme'>
             </ngx-material-timepicker>
           </mat-form-field>
+          <div *ngIf='isControlInvalid(question.id.toString())'>
+            <small *ngIf='hasRequiredError(question.id.toString())' class='text-danger'>
+              This field is required.
+            </small>
+          </div>
         </div>
+
       </div>
     </mat-card>
   </form>
