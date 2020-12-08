@@ -41,4 +41,10 @@ class SurveyQuestionOptionServiceImpl(
 
     override fun deleteQuestionOption(surveyQuestionId: Long, optionId: Long): Mono<Void> = repository.deleteById(
             optionId)
+
+    override fun duplicateAllBySurveyQuestionId(fromSurveyQuestionId: Long,
+                                                toSurveyQuestionId: Long): Flux<SurveyQuestionOption> =
+            repository.findAllBySurveyQuestionId(fromSurveyQuestionId).flatMap {
+                repository.save(it.copy(id = null, surveyQuestionId = toSurveyQuestionId))
+            }
 }

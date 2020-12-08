@@ -211,7 +211,8 @@ export class SurveyEffects {
       withLatestFrom(this._store),
       mergeMap(([action, state]) =>
         this._surveyQuestionService.duplicateQuestion(action.question, state.survey).pipe(
-          map(surveyQuestions => duplicateSurveyQuestionSuccess({ surveyQuestions })),
+          switchMap(surveyQuestion => [duplicateSurveyQuestionSuccess({ surveyQuestion }),
+                                       findSurveyQuestionOptions({ surveyQuestionId: surveyQuestion.id })]),
           catchError(error => of(duplicateSurveyQuestionFailure({ error })))
         ))
     ));

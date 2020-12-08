@@ -123,7 +123,7 @@ export const reducer = createReducer(
     ...state,
     survey: {
       ...state.survey,
-      questions: action.surveyQuestions
+      questions: [...state.survey.questions, action.surveyQuestion].sort((a, b) => a.position - b.position || b.id - a.id)
     }
   })),
   on(duplicateSurveyQuestionFailure, (state, action) => ({ ...state, error: action.error })),

@@ -23,6 +23,6 @@ export const updateSurveyQuestionPositionFailure = createAction(`${source} Updat
   props<{ error: any }>());
 
 export const duplicateSurveyQuestionSuccess = createAction(`${source} Duplicate Survey Question Success`,
-  props<{ surveyQuestions: SurveyQuestion[] }>());
+  props<{ surveyQuestion: SurveyQuestion }>());
 export const duplicateSurveyQuestionFailure = createAction(`${source} Duplicate Survey Question Failure`,
   props<{ error: any }>());

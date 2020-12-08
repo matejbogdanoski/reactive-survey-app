@@ -10,5 +10,7 @@ interface SurveyQuestionOptionService {
     fun updateQuestionOptionLabel(surveyQuestionId: Long, optionId: Long, newLabel: String): Mono<SurveyQuestionOption>
     fun updateQuestionOptionPosition(surveyQuestionId: Long, optionId: Long,
                                      newPosition: Int): Mono<SurveyQuestionOption>
+
     fun deleteQuestionOption(surveyQuestionId: Long, optionId: Long): Mono<Void>
+    fun duplicateAllBySurveyQuestionId(fromSurveyQuestionId: Long, toSurveyQuestionId: Long): Flux<SurveyQuestionOption>
 }

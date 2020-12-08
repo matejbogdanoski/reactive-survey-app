@@ -48,15 +48,9 @@ export class SurveyQuestionService {
     return this._http.patch<SurveyQuestion>(`${this.path(surveyEntity.id)}/${surveyQuestionId}/update-position/${newPosition}`, {});
   }
 
-  public duplicateQuestion(surveyQuestion: SurveyQuestion, survey: any): Observable<SurveyQuestion[]> {
+  public duplicateQuestion(surveyQuestion: SurveyQuestion, survey: any): Observable<SurveyQuestion> {
     const surveyEntity = survey.survey as Survey;
-    // const surveyQuestions = surveyEntity.questions;
-    // const clonedQuestions = _.cloneDeep(surveyQuestions);
-    // const duplicatedQuestion = { ...surveyQuestion, id: new Date().getMilliseconds(), position: surveyQuestion.position + 1 };
-    // clonedQuestions.push(duplicatedQuestion);
-    // clonedQuestions.sort((q1, q2) => q1.position - q2.position);
-    // return of(clonedQuestions);
-    return this._http.post<SurveyQuestion[]>(`${this.path(surveyEntity.id)}/${surveyQuestion.id}/duplicate`, {});
+    return this._http.post<SurveyQuestion>(`${this.path(surveyEntity.id)}/${surveyQuestion.id}/duplicate`, {});
   }
 
   public deleteSurveyQuestion(surveyQuestionId: number, survey: any): Observable<number> {

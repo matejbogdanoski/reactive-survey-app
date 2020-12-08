@@ -13,6 +13,8 @@ import reactor.core.publisher.Mono
 interface SurveyQuestionOptionRepository : ReactiveCrudRepository<SurveyQuestionOption, Long> {
     fun findAllBySurveyQuestionId(surveyQuestionId: Long, sort: Sort): Flux<SurveyQuestionOption>
 
+    fun findAllBySurveyQuestionId(surveyQuestionId: Long): Flux<SurveyQuestionOption>
+
     @Query("select coalesce(max(position), 0) from survey.survey_question_options where survey_question_id = :surveyQuestionId")
     fun findMaxPosition(surveyQuestionId: Long): Mono<Int>
 

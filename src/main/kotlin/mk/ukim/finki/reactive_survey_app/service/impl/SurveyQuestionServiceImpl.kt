@@ -18,17 +18,17 @@ class SurveyQuestionServiceImpl(
     override fun findAllBySurveyId(surveyId: Long): Flux<SurveyQuestion> =
             repository.findAllBySurveyId(surveyId, Sort.by("position"))
 
-    override fun createSurveyQuestion(surveyId: Long): Mono<SurveyQuestion> = repository.findMaxPosition(
-            surveyId).flatMap {
-        repository.save(
-                SurveyQuestion(id = null,
-                               surveyId = surveyId,
-                               questionTypeId = 0,
-                               name = "Untitled question",
-                               position = it.plus(1),
-                               isRequired = false)
-        )
-    }
+    override fun createSurveyQuestion(surveyId: Long): Mono<SurveyQuestion> = repository.findMaxPosition(surveyId)
+            .flatMap {
+                repository.save(
+                        SurveyQuestion(id = null,
+                                       surveyId = surveyId,
+                                       questionTypeId = 0,
+                                       name = "Untitled question",
+                                       position = it.plus(1),
+                                       isRequired = false)
+                )
+            }
 
     override fun deleteSurveyQuestion(surveyQuestionId: Long): Mono<Void> = repository.deleteById(surveyQuestionId)
 
@@ -45,11 +45,10 @@ class SurveyQuestionServiceImpl(
                                                isRequired = request.isRequired ?: it.isRequired))
             }
 
-    override fun duplicateSurveyQuestion(surveyId: Long, surveyQuestionId: Long): Flux<SurveyQuestion> =
+    override fun duplicateSurveyQuestion(surveyId: Long, surveyQuestionId: Long): Mono<SurveyQuestion> =
             repository.findById(surveyQuestionId)
                     .flatMap { repository.save(it.copy(id = null, position = it.position.plus(1))) }
-                    .flatMapMany { updatePositions(surveyId, it.position, it.id!!) }
-                    .thenMany(findAllBySurveyId(surveyId))
+                    .doOnSuccess { updatePositions(surveyId, it.position, it.id!!).subscribe() }
 
     override fun updateSurveyQuestionPosition(surveyQuestionId: Long, newPosition: Int): Mono<SurveyQuestion> =
             repository.updatePositionForQuestion(surveyQuestionId, newPosition).flatMap {
