@@ -1,6 +1,6 @@
 <h2 *ngIf='dataSource.count() === 0 && (dataSource.loading$ | async) === false'>No taken surveys!</h2>
 
-<div *ngIf='dataSource.count() > 0 && (dataSource.loading$ | async) === false'>
+<div [class.hidden]='!(dataSource.count() > 0 && (dataSource.loading$ | async) === false)'>
   <div class='mat-elevation-z8'>
 
     <table mat-table [dataSource]='dataSource'>
