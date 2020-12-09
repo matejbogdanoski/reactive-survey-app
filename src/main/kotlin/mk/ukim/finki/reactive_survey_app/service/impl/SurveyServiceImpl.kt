@@ -32,7 +32,7 @@ class SurveyServiceImpl(
                    title = "Untitled survey",
                    description = null,
                    naturalKey = null,
-                   createdBy = createdBy))
+                   createdBy = createdBy)).flatMap { findById(it.id!!) }
 
     override fun updateSurvey(id: Long, title: String?, description: String?,
                               canTakeAnonymously: Boolean?): Mono<Survey> = repository.findById(id).flatMap {

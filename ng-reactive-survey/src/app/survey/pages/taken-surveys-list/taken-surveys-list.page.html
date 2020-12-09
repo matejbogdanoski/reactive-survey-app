@@ -1,6 +1,6 @@
-<h2 *ngIf='dataSource.count() === 0 && (dataSource.loading$ | async) === false; else items'>No taken surveys!</h2>
+<h2 *ngIf='dataSource.count() === 0 && (dataSource.loading$ | async) === false'>No taken surveys!</h2>
 
-<ng-template #items>
+<div *ngIf='dataSource.count() > 0 && (dataSource.loading$ | async) === false'>
   <div class='mat-elevation-z8'>
 
     <table mat-table [dataSource]='dataSource'>
@@ -30,5 +30,5 @@
                    [pageSize]='5'
                    [pageSizeOptions]='[5, 10, 20]' showFirstLastButtons></mat-paginator>
   </div>
-</ng-template>
+</div>
 
