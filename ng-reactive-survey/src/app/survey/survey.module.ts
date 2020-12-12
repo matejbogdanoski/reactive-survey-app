@@ -43,6 +43,7 @@ import { InvitationsDialog } from './dialogs/invitations/invitations.dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SurveyInvitationsService } from './services/survey-invitations/survey-invitations.service';
 import { PendingSurveysListPage } from './pages/pending-surveys-list/pending-surveys-list.page';
+import { ReactiveComponentModule } from '@ngrx/component';
 
 const components = [
   SurveyQuestionCreateComponent,
@@ -74,7 +75,8 @@ const modules = [
   SurveyRoutingModule,
   ReactiveFormsModule,
   ChartsModule,
-  TakeSurveyModule
+  TakeSurveyModule,
+  ReactiveComponentModule
 ];
 
 const material = [

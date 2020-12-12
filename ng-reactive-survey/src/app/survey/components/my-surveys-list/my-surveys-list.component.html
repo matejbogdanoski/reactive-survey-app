@@ -1,33 +1,36 @@
-<h2 *ngIf='dataSource.count() === 0 && (dataSource.loading$ | async) === false'>No surveys created!</h2>
+<ng-container *ngrxLet='dataSource.loading$ as loading'>
 
-<div [class.hidden]='!(dataSource.count() > 0 && (dataSource.loading$ | async) === false)'>
-  <div class='mat-elevation-z8'>
+  <h2 *ngIf='dataSource.count() === 0 && loading === false'>No surveys created!</h2>
 
-    <table mat-table [dataSource]='dataSource'>
+  <div [class.hidden]='!(dataSource.count() > 0 && loading === false)'>
+    <div class='mat-elevation-z8'>
 
-      <ng-container matColumnDef='rowNumber'>
-        <th mat-header-cell *matHeaderCellDef> #</th>
-        <td mat-cell *matCellDef='let element; let i = index'> {{i + 1}} </td>
-      </ng-container>
+      <table mat-table [dataSource]='dataSource'>
 
-      <ng-container matColumnDef='title'>
-        <th mat-header-cell *matHeaderCellDef> Title</th>
-        <td mat-cell *matCellDef='let element'>
-          <a [routerLink]='getRouterLink(element.id)'>{{element.title}}</a>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef='rowNumber'>
+          <th mat-header-cell *matHeaderCellDef> #</th>
+          <td mat-cell *matCellDef='let element; let i = index'> {{i + 1}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef='description'>
-        <th mat-header-cell *matHeaderCellDef> Description</th>
-        <td mat-cell *matCellDef='let element'> {{element.description}} </td>
-      </ng-container>
+        <ng-container matColumnDef='title'>
+          <th mat-header-cell *matHeaderCellDef> Title</th>
+          <td mat-cell *matCellDef='let element'>
+            <a [routerLink]='getRouterLink(element.id)'>{{element.title}}</a>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
-      <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
-    </table>
+        <ng-container matColumnDef='description'>
+          <th mat-header-cell *matHeaderCellDef> Description</th>
+          <td mat-cell *matCellDef='let element'> {{element.description}} </td>
+        </ng-container>
 
-    <mat-paginator [length]='length$ | async'
-                   [pageSize]='5'
-                   [pageSizeOptions]='[5, 10, 20]' showFirstLastButtons></mat-paginator>
+        <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+        <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
+      </table>
+
+      <mat-paginator [length]='length$ | async'
+                     [pageSize]='5'
+                     [pageSizeOptions]='[5, 10, 20]' showFirstLastButtons></mat-paginator>
+    </div>
   </div>
-</div>
+</ng-container>
