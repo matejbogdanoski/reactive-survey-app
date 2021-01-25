@@ -5,6 +5,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 interface SurveyInvitationManagingService {
-    fun createSurveyInvitation(creator: Long, surveyId: Long, username: String): Mono<SurveyInvitation>
+    suspend fun createSurveyInvitation(creator: Long, surveyId: Long, username: String): Mono<SurveyInvitation>
     fun findInvitationsBySurvey(surveyId: Long, initiatedBy: Long): Flux<SurveyInvitation>
 }

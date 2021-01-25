@@ -13,7 +13,7 @@ class ReactiveUserDetailsService(
 ) : ReactiveUserDetailsService {
 
     override fun findByUsername(username: String?): Mono<UserDetails> =
-            username?.let(userService::findByUsername)?.map { user ->
+            username?.let(userService::findByUserNameMono)?.map { user ->
                 UserDetailsDto(userName = user.username,
                                passwordHash = user.passwordHash,
                                userId = user.id!!)

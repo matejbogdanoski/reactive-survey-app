@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.switchIfEmpty
 
 
 @RestController
@@ -23,17 +21,15 @@ class AuthenticationController(
 ) {
 
     @PostMapping
-    fun token(@RequestBody request: JwtAuthenticationRequest): Mono<JwtAuthenticationResponse> =
-            userService.findByUsername(request.username)
-                    .flatMap {
-                        if (encoder.matches(request.password, it.passwordHash)) {
-                            Mono.just(JwtAuthenticationResponse(token = util.generateToken(it), username = it.username))
-                        } else {
-                            Mono.error(AccessDeniedException("Wrong password!"))
-                        }
-                    }.switchIfEmpty {
-                        Mono.error(AccessDeniedException("Username does not exist!"))
-                    }
+    suspend fun token(@RequestBody request: JwtAuthenticationRequest): JwtAuthenticationResponse {
+        val user = userService.findByUsername(request.username)
+        checkNotNull(user) { "User with username ${request.username} does not exist!" }
+        return if (encoder.matches(request.password, user.passwordHash)) {
+            JwtAuthenticationResponse(token = util.generateToken(user), username = user.username)
+        } else {
+            throw AccessDeniedException("Wrong password!")
+        }
+    }
 
     @PostMapping("/refresh")
     fun refreshToken(@RequestBody token: String) = util.refreshToken(token)

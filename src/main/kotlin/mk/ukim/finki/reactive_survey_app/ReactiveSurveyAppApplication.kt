@@ -19,6 +19,7 @@ fun main(args: Array<String>) {
                                     "getAllClaimsFromToken")
         it.allowBlockingCallsInside("com.fasterxml.jackson.module.kotlin.KotlinNamesAnnotationIntrospector",
                                     "hasCreatorAnnotation")
+        it.allowBlockingCallsInside("kotlinx.coroutines.reactive.ReactiveFlowKt", "<clinit>")
     })
     runApplication<ReactiveSurveyAppApplication>(*args)
 }

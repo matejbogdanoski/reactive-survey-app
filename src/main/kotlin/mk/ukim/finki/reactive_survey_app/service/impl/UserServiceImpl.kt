@@ -1,5 +1,11 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrDefault
+import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.withContext
 import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.UserRepository
 import mk.ukim.finki.reactive_survey_app.service.UserService
@@ -7,8 +13,6 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
-import reactor.core.publisher.SynchronousSink
-import reactor.core.scheduler.Schedulers
 
 @Service
 class UserServiceImpl(
@@ -16,44 +20,52 @@ class UserServiceImpl(
         private val encoder: PasswordEncoder
 ) : UserService {
 
-    override fun createUser(username: String, password: String, email: String,
-                            firstName: String, lastName: String): Mono<User> =
-            Mono.just(User(id = null,
-                           username = username,
-                           email = email,
-                           firstName = firstName,
-                           lastName = lastName,
-                           passwordHash = encoder.encode(password)))
-                    .subscribeOn(Schedulers.parallel())
-                    .flatMap(repository::save)
-
-    override fun findByUsername(username: String): Mono<User> = repository.findByUsername(username)
-
-    override fun editUserInfo(userId: Long, initiatedBy: Long, firstName: String?, lastName: String?,
-                              email: String?): Mono<User> {
-        return if (initiatedBy != userId) Mono.error(AccessDeniedException("You cannot edit others user info!"))
-        else repository.findById(userId).flatMap {
-            repository.updateUserInfo(userId = userId,
-                                      firstName = firstName ?: it.firstName,
-                                      lastName = lastName ?: it.lastName,
-                                      email = email ?: it.email)
-        }.then(repository.findById(userId))
-    }
-
-
-    override fun updateUserPassword(username: String, oldPassword: String,
-                                    newPassword: String, confirmNewPassword: String): Mono<Int> {
-        if (newPassword != confirmNewPassword) throw IllegalArgumentException("Passwords do not match!")
-        return repository.findByUsername(username).handle { user, sink: SynchronousSink<User> ->
-            if (!encoder.matches(oldPassword, user.passwordHash)) {
-                sink.error(AccessDeniedException("Wrong Password !"))
-            } else {
-                sink.next(user)
+    override suspend fun createUser(username: String, password: String, email: String,
+                                    firstName: String, lastName: String): User =
+            coroutineScope {
+                val encodedPassword = withContext(Dispatchers.Default) { encoder.encode(password) }
+                User(id = null,
+                        username = username,
+                        email = email,
+                        firstName = firstName,
+                        lastName = lastName,
+                        passwordHash = encodedPassword)
+                        .let(repository::save)
+                        .awaitFirst()
             }
-        }.map { it.id!! to encoder.encode(newPassword) }
-                .subscribeOn(Schedulers.parallel())
-                .flatMap { repository.updatePassword(it.first, it.second) }
+
+    override suspend fun findByUsername(username: String): User? = repository.findByUsername(username).awaitFirstOrNull()
+
+    //only used for overriding user details service method
+    override fun findByUserNameMono(username: String): Mono<User> = repository.findByUsername(username)
+
+    override suspend fun editUserInfo(userId: Long, initiatedBy: Long, firstName: String?,
+                                      lastName: String?, email: String?): User =
+            if (initiatedBy != userId) throw AccessDeniedException("You cannot edit others user info!")
+            else {
+                val user = repository.findById(userId).awaitFirstOrNull()
+                checkNotNull(user) { "User with user id $userId does not exist!" }
+                repository.updateUserInfo(userId = userId,
+                        firstName = firstName ?: user.firstName,
+                        lastName = lastName ?: user.lastName,
+                        email = email ?: user.email).awaitFirst()
+                repository.findById(userId).awaitFirstOrDefault(user)
+            }
+
+
+    override suspend fun updateUserPassword(username: String, oldPassword: String,
+                                            newPassword: String, confirmNewPassword: String): Int {
+        if (newPassword != confirmNewPassword) throw IllegalArgumentException("Passwords do not match!")
+        val user = repository.findByUsername(username).awaitFirstOrNull()
+        checkNotNull(user) { "User with username $username does not exist" }
+        if (!encoder.matches(oldPassword, user.passwordHash)) throw AccessDeniedException("Wrong password!")
+        return coroutineScope {
+            val encodedPassword = withContext(Dispatchers.Default) { encoder.encode(newPassword) }
+            repository.updatePassword(user.id!!, encodedPassword).awaitFirst()
+        }
     }
 
-    override fun findById(userId: Long): Mono<User> = repository.findById(userId)
+    override suspend fun findById(userId: Long): User = repository.findById(userId).awaitFirstOrNull()
+            ?: throw NoSuchElementException("User with id $userId does not exist!")
+
 }

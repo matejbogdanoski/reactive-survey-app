@@ -16,11 +16,11 @@ class SurveyInvitationManagingServiceImpl(
         private val userService: UserService
 ) : SurveyInvitationManagingService {
 
-    override fun createSurveyInvitation(creator: Long, surveyId: Long, username: String): Mono<SurveyInvitation> {
+    override suspend fun createSurveyInvitation(creator: Long, surveyId: Long, username: String): Mono<SurveyInvitation> {
         val surveyMono = surveyService.findById(surveyId)
-        return userService.findByUsername(username).flatMap {
-            service.createInvitation(surveyMono, creator, it.id!!)
-        }.switchIfEmpty(Mono.error(IllegalArgumentException("Username does not exist!")))
+        val user = userService.findByUsername(username)
+        checkNotNull(user) { "Username does not exist!" }
+        return service.createInvitation(surveyMono, creator, user.id!!)
     }
 
     override fun findInvitationsBySurvey(surveyId: Long, initiatedBy: Long): Flux<SurveyInvitation> {

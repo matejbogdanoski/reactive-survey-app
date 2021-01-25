@@ -21,10 +21,8 @@ class SurveyInvitationMapper(
                                              surveyDescription = it.description)
             }
 
-    fun mapSurveyInvitationToResponse(surveyInvitation: SurveyInvitation): Mono<SurveyInvitationResponse> =
-            userService.findById(surveyInvitation.userId).map {
-                SurveyInvitationResponse(username = it.username,
-                                         taken = surveyInvitation.taken)
-            }
+    suspend fun mapSurveyInvitationToResponse(surveyInvitation: SurveyInvitation): SurveyInvitationResponse =
+            SurveyInvitationResponse(username = userService.findById(surveyInvitation.userId).username,
+                    taken = surveyInvitation.taken)
 
 }

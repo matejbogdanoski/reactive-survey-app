@@ -1,5 +1,8 @@
 package mk.ukim.finki.reactive_survey_app.api
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInvitation
 import mk.ukim.finki.reactive_survey_app.mappers.SurveyInvitationMapper
 import mk.ukim.finki.reactive_survey_app.requests.SurveyInvitationRequest
@@ -22,15 +25,16 @@ class SurveyInvitationController(
 ) {
 
     @PostMapping
-    fun createSurveyInvitation(@AuthenticationPrincipal principal: JwtAuthenticationToken,
-                               @RequestBody request: SurveyInvitationRequest): Mono<SurveyInvitation> =
+    suspend fun createSurveyInvitation(@AuthenticationPrincipal principal: JwtAuthenticationToken,
+                                       @RequestBody request: SurveyInvitationRequest): Mono<SurveyInvitation> =
             with(request) { managing.createSurveyInvitation(principal.userId, surveyId, username) }
 
     @GetMapping("/{surveyId}")
-    fun findInvitationsBySurvey(@AuthenticationPrincipal principal: JwtAuthenticationToken,
-                                @PathVariable surveyId: Long): Flux<SurveyInvitationResponse> =
+    suspend fun findInvitationsBySurvey(@AuthenticationPrincipal principal: JwtAuthenticationToken,
+                                @PathVariable surveyId: Long): Flow<SurveyInvitationResponse> =
             managing.findInvitationsBySurvey(surveyId, principal.userId)
-                    .flatMap(mapper::mapSurveyInvitationToResponse)
+                    .asFlow()
+                    .map { mapper.mapSurveyInvitationToResponse(it) }
 
     @GetMapping("/pending")
     fun findSurveyInvitationsPage(@AuthenticationPrincipal principal: JwtAuthenticationToken,

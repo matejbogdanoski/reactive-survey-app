@@ -12,7 +12,6 @@ import mk.ukim.finki.reactive_survey_app.security.jwt.dto.JwtAuthenticationToken
 import mk.ukim.finki.reactive_survey_app.service.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
-import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/api/users")
@@ -22,39 +21,37 @@ class UserController(
 ) {
 
     @GetMapping("/user-info")
-    fun findUserInfo(@AuthenticationPrincipal principal: JwtAuthenticationToken): Mono<UserInfo> =
-            service.findById(principal.userId).map(UserMapper::mapUserToUserInfoResponse)
+    suspend fun findUserInfo(@AuthenticationPrincipal principal: JwtAuthenticationToken): UserInfo =
+            service.findById(principal.userId).let(UserMapper::mapUserToUserInfoResponse)
 
     @PostMapping("/signup")
-    fun signUp(@RequestBody request: UserCreateRequest): Mono<User> =
+    suspend fun signUp(@RequestBody request: UserCreateRequest): User =
             with(request) {
                 service.createUser(username = username,
-                                   password = password,
-                                   email = email,
-                                   firstName = firstName,
-                                   lastName = lastName)
+                        password = password,
+                        email = email,
+                        firstName = firstName,
+                        lastName = lastName)
             }
 
     @PatchMapping("/user-info/{id}")
-    fun editUserInfo(@AuthenticationPrincipal principal: JwtAuthenticationToken,
-                     @RequestBody request: UserInfoUpdateRequest,
-                     @PathVariable id: Long): Mono<UserInfo> =
+    suspend fun editUserInfo(@AuthenticationPrincipal principal: JwtAuthenticationToken,
+                             @RequestBody request: UserInfoUpdateRequest,
+                             @PathVariable id: Long): UserInfo =
             service.editUserInfo(userId = id,
-                                 initiatedBy = principal.userId,
-                                 firstName = request.firstName,
-                                 lastName = request.lastName,
-                                 email = request.email).map(UserMapper::mapUserToUserInfoResponse)
+                    initiatedBy = principal.userId,
+                    firstName = request.firstName,
+                    lastName = request.lastName,
+                    email = request.email).let(UserMapper::mapUserToUserInfoResponse)
 
     @PatchMapping("/update-password")
-    fun updatePassword(@AuthenticationPrincipal principal: JwtAuthenticationToken,
-                       @RequestBody request: UpdatePasswordRequest): Mono<JwtAuthenticationResponse> = with(request) {
+    suspend fun updatePassword(@AuthenticationPrincipal principal: JwtAuthenticationToken,
+                               @RequestBody request: UpdatePasswordRequest): JwtAuthenticationResponse = with(request) {
         service.updateUserPassword(username = principal.username!!,
-                                   oldPassword = oldPassword,
-                                   newPassword = newPassword,
-                                   confirmNewPassword = confirmNewPassword).then(
-                Mono.just(JwtAuthenticationResponse(token = tokenUtils.refreshToken(token),
-                                                    username = principal.username))
-        )
+                oldPassword = oldPassword,
+                newPassword = newPassword,
+                confirmNewPassword = confirmNewPassword)
+        JwtAuthenticationResponse(token = tokenUtils.refreshToken(token), username = principal.username)
     }
 
 }
