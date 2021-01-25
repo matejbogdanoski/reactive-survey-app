@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Send survey!</h2>
 <div class='content' mat-dialog-content>
-  <form [formGroup]='form' (ngSubmit)='submit()' class='d-flex'>
+  <form autocomplete="off" [formGroup]='form' (ngSubmit)='submit()' class='d-flex'>
     <mat-form-field>
       <label>Username:</label>
       <input

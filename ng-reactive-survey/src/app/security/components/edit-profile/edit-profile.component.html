@@ -10,7 +10,7 @@
     </mat-selection-list>
   </mat-drawer>
   <mat-drawer-content class='p-2'>
-    <form *ngIf='!isAccountSecurityTab' [formGroup]='form' (ngSubmit)='submit()' class='w-50 m-auto'>
+    <form autocomplete="off" *ngIf='!isAccountSecurityTab' [formGroup]='form' (ngSubmit)='submit()' class='w-50 m-auto'>
       <mat-form-field>
         <label>Username:</label>
         <input
