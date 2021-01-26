@@ -36,8 +36,7 @@ class UserServiceImpl(
                                       lastName: String?, email: String?): User =
             if (initiatedBy != userId) throw AccessDeniedException("You cannot edit others user info!")
             else {
-                val user = repository.findById(userId)
-                checkNotNull(user) { "User with user id $userId does not exist!" }
+                val user = checkNotNull(repository.findById(userId)) { "User with user id $userId does not exist!" }
                 repository.updateUserInfo(userId = userId,
                         firstName = firstName ?: user.firstName,
                         lastName = lastName ?: user.lastName,
