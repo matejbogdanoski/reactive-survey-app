@@ -2,9 +2,6 @@ package mk.ukim.finki.reactive_survey_app.service.impl
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactive.awaitFirstOrDefault
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.withContext
 import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.UserRepository
@@ -12,7 +9,6 @@ import mk.ukim.finki.reactive_survey_app.service.UserService
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Mono
 
 @Service
 class UserServiceImpl(
@@ -24,48 +20,43 @@ class UserServiceImpl(
                                     firstName: String, lastName: String): User =
             coroutineScope {
                 val encodedPassword = withContext(Dispatchers.Default) { encoder.encode(password) }
-                User(id = null,
-                        username = username,
-                        email = email,
-                        firstName = firstName,
-                        lastName = lastName,
-                        passwordHash = encodedPassword)
-                        .let(repository::save)
-                        .awaitFirst()
+                repository.save(
+                        User(id = null,
+                                username = username,
+                                email = email,
+                                firstName = firstName,
+                                lastName = lastName,
+                                passwordHash = encodedPassword)
+                )
             }
 
-    override suspend fun findByUsername(username: String): User? = repository.findByUsername(username).awaitFirstOrNull()
-
-    //only used for overriding user details service method
-    override fun findByUserNameMono(username: String): Mono<User> = repository.findByUsername(username)
+    override suspend fun findByUsername(username: String): User? = repository.findByUsername(username)
 
     override suspend fun editUserInfo(userId: Long, initiatedBy: Long, firstName: String?,
                                       lastName: String?, email: String?): User =
             if (initiatedBy != userId) throw AccessDeniedException("You cannot edit others user info!")
             else {
-                val user = repository.findById(userId).awaitFirstOrNull()
+                val user = repository.findById(userId)
                 checkNotNull(user) { "User with user id $userId does not exist!" }
                 repository.updateUserInfo(userId = userId,
                         firstName = firstName ?: user.firstName,
                         lastName = lastName ?: user.lastName,
-                        email = email ?: user.email).awaitFirst()
-                repository.findById(userId).awaitFirstOrDefault(user)
+                        email = email ?: user.email)
+                repository.findById(userId) ?: user
             }
-
 
     override suspend fun updateUserPassword(username: String, oldPassword: String,
                                             newPassword: String, confirmNewPassword: String): Int {
         if (newPassword != confirmNewPassword) throw IllegalArgumentException("Passwords do not match!")
-        val user = repository.findByUsername(username).awaitFirstOrNull()
-        checkNotNull(user) { "User with username $username does not exist" }
+        val user = checkNotNull(repository.findByUsername(username)) { "User with username $username does not exist" }
         if (!encoder.matches(oldPassword, user.passwordHash)) throw AccessDeniedException("Wrong password!")
         return coroutineScope {
             val encodedPassword = withContext(Dispatchers.Default) { encoder.encode(newPassword) }
-            repository.updatePassword(user.id!!, encodedPassword).awaitFirst()
+            repository.updatePassword(user.id!!, encodedPassword)
         }
     }
 
-    override suspend fun findById(userId: Long): User = repository.findById(userId).awaitFirstOrNull()
+    override suspend fun findById(userId: Long): User = repository.findById(userId)
             ?: throw NoSuchElementException("User with id $userId does not exist!")
 
 }
