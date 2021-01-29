@@ -6,9 +6,13 @@ import mk.ukim.finki.reactive_survey_app.requests.UserCreateRequest
 import mk.ukim.finki.reactive_survey_app.requests.UserInfoUpdateRequest
 import mk.ukim.finki.reactive_survey_app.security.jwt.JwtTokenUtils
 import mk.ukim.finki.reactive_survey_app.security.jwt.dto.JwtAuthenticationResponse
-import mk.ukim.finki.reactive_survey_app.security.jwt.dto.JwtAuthenticationToken
 import mk.ukim.finki.reactive_survey_app.service.UserService
-import org.springframework.web.reactive.function.server.*
+import mk.ukim.finki.reactive_survey_app.utils.activePrincipal
+import org.springframework.web.reactive.function.server.ServerRequest
+import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.ServerResponse.ok
+import org.springframework.web.reactive.function.server.awaitBody
+import org.springframework.web.reactive.function.server.bodyValueAndAwait
 
 
 class UserHandler(
@@ -17,9 +21,9 @@ class UserHandler(
 ) {
 
     suspend fun findUserInfo(request: ServerRequest): ServerResponse {
-        val principal = request.awaitPrincipal() as JwtAuthenticationToken
+        val principal = request.activePrincipal()
         val userInfo = service.findById(principal.userId).let(UserMapper::mapUserToUserInfoResponse)
-        return ServerResponse.ok().bodyValueAndAwait(userInfo)
+        return ok().bodyValueAndAwait(userInfo)
     }
 
     suspend fun signup(request: ServerRequest): ServerResponse {
@@ -30,11 +34,11 @@ class UserHandler(
                     email = email,
                     firstName = firstName,
                     lastName = lastName)
-        }.let { ServerResponse.ok().bodyValueAndAwait(it) }
+        }.let { ok().bodyValueAndAwait(it) }
     }
 
     suspend fun editUserInfo(request: ServerRequest): ServerResponse {
-        val principal = request.awaitPrincipal() as JwtAuthenticationToken
+        val principal = request.activePrincipal()
         val userInfoUpdateRequest = request.awaitBody<UserInfoUpdateRequest>()
         val id = request.pathVariable("id").toLong()
         val userInfo = service.editUserInfo(userId = id,
@@ -42,11 +46,11 @@ class UserHandler(
                 firstName = userInfoUpdateRequest.firstName,
                 lastName = userInfoUpdateRequest.lastName,
                 email = userInfoUpdateRequest.email).let(UserMapper::mapUserToUserInfoResponse)
-        return ServerResponse.ok().bodyValueAndAwait(userInfo)
+        return ok().bodyValueAndAwait(userInfo)
     }
 
     suspend fun updatePassword(request: ServerRequest): ServerResponse {
-        val principal = request.awaitPrincipal() as JwtAuthenticationToken
+        val principal = request.activePrincipal()
         val updatePasswordRequest = request.awaitBody<UpdatePasswordRequest>()
         return with(updatePasswordRequest) {
             service.updateUserPassword(username = principal.username!!,
@@ -54,7 +58,7 @@ class UserHandler(
                     newPassword = newPassword,
                     confirmNewPassword = confirmNewPassword)
             JwtAuthenticationResponse(token = tokenUtils.refreshToken(token), username = principal.username)
-        }.let { ServerResponse.ok().bodyValueAndAwait(it) }
+        }.let { ok().bodyValueAndAwait(it) }
     }
 
 }

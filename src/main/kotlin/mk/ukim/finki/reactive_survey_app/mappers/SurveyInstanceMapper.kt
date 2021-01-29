@@ -1,5 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.mappers
 
+import kotlinx.coroutines.reactor.mono
 import mk.ukim.finki.reactive_survey_app.domain.QuestionAnswer
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
 import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
@@ -41,7 +42,9 @@ class SurveyInstanceMapper(
 
     fun mapSurveyInstanceToPreviewResponse(surveyInstance: SurveyInstance): Mono<SurveyInstancePreview> {
         val surveyInstanceMono = mapSurveyInstanceToResponse(surveyInstance)
-        val renderer = surveyService.findById(surveyInstance.surveyId).flatMap(rendererMapper::mapSurveyToResponse)
+        //todo: change this later
+        val renderer = mono { surveyService.findById(surveyInstance.surveyId) }
+                .flatMap(rendererMapper::mapSurveyToResponse)
         return surveyInstanceMono.zipWith(renderer).map {
             SurveyInstancePreview(survey = it.t2, surveyInstance = it.t1)
         }
@@ -49,7 +52,8 @@ class SurveyInstanceMapper(
 
     fun mapSurveyInstanceToGridResponse(surveyInstance: SurveyInstance) = with(
             mapSurveyInstanceToGridResponseStatic(surveyInstance)) {
-        surveyService.findById(surveyInstance.surveyId).map { copy(surveyTitle = it.title!!) }
+        //todo: change this later
+        mono { surveyService.findById(surveyInstance.surveyId) }.map { copy(surveyTitle = it.title!!) }
     }
 
     private fun mapSurveyInstanceToGridResponseStatic(surveyInstance: SurveyInstance) = with(surveyInstance) {

@@ -1,5 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.mappers
 
+import kotlinx.coroutines.reactor.mono
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInvitation
 import mk.ukim.finki.reactive_survey_app.responses.SurveyInvitationResponse
 import mk.ukim.finki.reactive_survey_app.responses.grid.SurveyInvitationGridResponse
@@ -15,7 +16,8 @@ class SurveyInvitationMapper(
 ) {
 
     fun mapSurveyInvitationToGridResponse(surveyInvitation: SurveyInvitation): Mono<SurveyInvitationGridResponse> =
-            surveyService.findById(surveyInvitation.surveyId).map {
+            //todo: change this later
+            mono { surveyService.findById(surveyInvitation.surveyId) }.map {
                 SurveyInvitationGridResponse(surveyNaturalKey = it.naturalKey,
                                              surveyTitle = it.title,
                                              surveyDescription = it.description)

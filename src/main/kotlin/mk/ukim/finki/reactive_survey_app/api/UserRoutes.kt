@@ -13,7 +13,7 @@ val userRoutes = beans {
         val tokenUtils = ref<JwtTokenUtils>()
         val handler = UserHandler(userService, tokenUtils)
         coRouter {
-            "api/users".nest {
+            "/api/users".nest {
                 GET("/user-info", handler::findUserInfo)
                 POST("/signup", handler::signup)
                 PATCH("/user-info/{id}", handler::editUserInfo)

@@ -11,13 +11,12 @@ import reactor.util.function.Tuple2
 
 object AccessValidator {
 
-    fun validateCanViewSurvey(surveyMono: Mono<Survey>, initiatedBy: Long) =
-            surveyMono.handle { it, sink: SynchronousSink<Survey> ->
+    fun validateCanViewSurvey(survey: Survey, initiatedBy: Long) =
+            survey.let {
                 if (it.createdBy != initiatedBy) {
-                    sink.error(AccessDeniedException("You do not have access to this survey!"))
-                } else {
-                    sink.next(it)
+                    throw AccessDeniedException("You do not have access to this survey!")
                 }
+                it
             }
 
     fun validateCanViewSurveyInstance(surveyInstanceMono: Mono<SurveyInstance>, userId: Long) =

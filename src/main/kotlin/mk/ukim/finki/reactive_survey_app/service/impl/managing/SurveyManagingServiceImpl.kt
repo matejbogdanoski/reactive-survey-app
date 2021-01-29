@@ -1,5 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.service.impl.managing
 
+import kotlinx.coroutines.reactor.mono
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.service.SurveyManagingService
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
@@ -14,7 +15,8 @@ class SurveyManagingServiceImpl(
 ) : SurveyManagingService {
 
     override fun createSurveyWithQuestion(createdBy: Long): Mono<Survey> =
-            surveyService.createSurvey(createdBy)
+            //todo: change this later
+            mono { surveyService.createSurvey(createdBy) }
                     .doOnNext { surveyQuestionService.createSurveyQuestion(it.id!!).subscribe() }
 
 }

@@ -1,6 +1,6 @@
 package mk.ukim.finki.reactive_survey_app
 
-import mk.ukim.finki.reactive_survey_app.api.userRoutes
+import mk.ukim.finki.reactive_survey_app.api.apiRoutes
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import reactor.blockhound.BlockHound
@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
     })
     runApplication<ReactiveSurveyAppApplication>(*args) {
         addInitializers(
-                userRoutes
+                *apiRoutes
         )
     }
 }

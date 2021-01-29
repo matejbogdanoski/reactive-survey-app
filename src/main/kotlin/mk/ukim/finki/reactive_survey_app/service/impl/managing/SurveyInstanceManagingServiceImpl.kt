@@ -1,5 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.service.impl.managing
 
+import kotlinx.coroutines.reactor.mono
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import mk.ukim.finki.reactive_survey_app.constants.PostgresNotificationNames.ANSWER_SAVED_NOTIFICATION
@@ -27,7 +28,8 @@ class SurveyInstanceManagingServiceImpl(
     override fun createInstanceWithAnswers(questionAnswerMap: Map<Long, String?>, surveyId: Long,
                                            takenBy: Long): Mono<SurveyInstance> {
         val invitationsFlux = surveyInvitationService.findInvitationsBySurveyId(surveyId)
-        val surveyMono = surveyService.findById(surveyId)
+        //todo: change this later
+        val surveyMono = mono { surveyService.findById(surveyId) }
         return AccessValidator.validateCanCreateSurveyInstance(surveyMono, invitationsFlux, takenBy).flatMap {
             val survey = it.t1
             surveyInstanceService.create(survey.id!!, takenBy, ZonedDateTime.now()).doOnNext { instance ->

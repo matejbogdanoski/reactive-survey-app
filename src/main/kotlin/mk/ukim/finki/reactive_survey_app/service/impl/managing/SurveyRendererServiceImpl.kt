@@ -1,5 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.service.impl.managing
 
+import kotlinx.coroutines.reactor.mono
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.service.SurveyInvitationService
 import mk.ukim.finki.reactive_survey_app.service.SurveyRendererService
@@ -15,7 +16,7 @@ class SurveyRendererServiceImpl(
 ) : SurveyRendererService {
 
     override fun findSurveyStructure(naturalKey: String, initiatedBy: Long): Mono<Survey> {
-        val surveyMono = surveyService.findOneByNaturalKey(naturalKey)
+        val surveyMono = mono { surveyService.findOneByNaturalKey(naturalKey) }
         val surveyInvitationsFlux = surveyInvitationService.findInvitationsBySurveyNaturalKey(naturalKey)
         return AccessValidator.validateCanViewSurveyStructure(surveyMono, surveyInvitationsFlux, initiatedBy)
                 .map { it.t1 }
