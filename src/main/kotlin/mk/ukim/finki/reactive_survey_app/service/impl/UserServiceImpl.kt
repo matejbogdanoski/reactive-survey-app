@@ -63,13 +63,11 @@ class UserServiceImpl(
 
     override suspend fun token(username: String, password: String): JwtAuthenticationResponse {
         val user = checkNotNull(findByUsername(username)) {
-            System.err.println("user not exist")
             "User with username $username does not exist!"
         }
         if (encoder.matches(password, user.passwordHash)) {
             return JwtAuthenticationResponse(token = util.generateToken(user), username = user.username)
         } else {
-            System.err.println("wrong pass")
             throw AccessDeniedException("Wrong password!")
         }
     }
