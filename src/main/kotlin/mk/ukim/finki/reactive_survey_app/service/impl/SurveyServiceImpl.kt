@@ -1,11 +1,15 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.repository.SurveyRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyService
 import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
 import org.springframework.data.domain.PageRequest
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,9 +21,12 @@ class SurveyServiceImpl(
             repository.findOneByNaturalKey(naturalKey)
                     ?: throw NoSuchElementException("Survey with natural key $naturalKey does not exist!")
 
-    override suspend fun findById(id: Long, initiatedBy: Long): Survey =
-            repository.findById(id)?.let { AccessValidator.validateCanViewSurvey(it, initiatedBy) }
-                    ?: throw NoSuchElementException("Survey with id $id does not exist!")
+    override suspend fun findById(id: Long, initiatedBy: Long): Survey {
+        val survey = repository.findById(id) ?: throw NoSuchElementException("Survey with id $id does not exist!")
+        if (survey.createdBy != initiatedBy)
+            throw AccessDeniedException("You do not have access to this survey!")
+        return survey
+    }
 
     override suspend fun findById(id: Long): Survey = repository.findById(id)
             ?: throw NoSuchElementException("Survey with id $id does not exist!")

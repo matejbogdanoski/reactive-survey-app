@@ -1,13 +1,11 @@
 package mk.ukim.finki.reactive_survey_app.mappers
 
-import kotlinx.coroutines.reactor.mono
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInvitation
 import mk.ukim.finki.reactive_survey_app.responses.SurveyInvitationResponse
 import mk.ukim.finki.reactive_survey_app.responses.grid.SurveyInvitationGridResponse
 import mk.ukim.finki.reactive_survey_app.service.SurveyService
 import mk.ukim.finki.reactive_survey_app.service.UserService
 import org.springframework.stereotype.Component
-import reactor.core.publisher.Mono
 
 @Component
 class SurveyInvitationMapper(
@@ -15,16 +13,17 @@ class SurveyInvitationMapper(
         private val userService: UserService
 ) {
 
-    fun mapSurveyInvitationToGridResponse(surveyInvitation: SurveyInvitation): Mono<SurveyInvitationGridResponse> =
-            //todo: change this later
-            mono { surveyService.findById(surveyInvitation.surveyId) }.map {
+    suspend fun mapSurveyInvitationToGridResponse(surveyInvitation: SurveyInvitation): SurveyInvitationGridResponse =
+            surveyService.findById(surveyInvitation.surveyId).let {
                 SurveyInvitationGridResponse(surveyNaturalKey = it.naturalKey,
-                                             surveyTitle = it.title,
-                                             surveyDescription = it.description)
+                        surveyTitle = it.title,
+                        surveyDescription = it.description)
             }
 
     suspend fun mapSurveyInvitationToResponse(surveyInvitation: SurveyInvitation): SurveyInvitationResponse =
-            SurveyInvitationResponse(username = userService.findById(surveyInvitation.userId).username,
-                    taken = surveyInvitation.taken)
+            SurveyInvitationResponse(
+                    username = userService.findById(surveyInvitation.userId).username,
+                    taken = surveyInvitation.taken
+            )
 
 }

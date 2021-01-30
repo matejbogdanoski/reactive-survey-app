@@ -5,11 +5,8 @@ import mk.ukim.finki.reactive_survey_app.mappers.SurveyStaticMapper
 import mk.ukim.finki.reactive_survey_app.requests.SurveyQuestionUpdateRequest
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionManagingService
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.*
 import org.springframework.web.reactive.function.server.ServerResponse.ok
-import org.springframework.web.reactive.function.server.awaitBody
-import org.springframework.web.reactive.function.server.bodyValueAndAwait
 
 class SurveyQuestionHandler(
         private val service: SurveyQuestionService,
@@ -19,7 +16,7 @@ class SurveyQuestionHandler(
         val surveyId = request.pathVariable("surveyId").toLong()
         val surveyQuestions = service.findAllBySurveyId(surveyId)
                 .map(SurveyStaticMapper::mapSurveyQuestionToResponseStatic)
-        return ok().bodyValueAndAwait(surveyQuestions)
+        return ok().bodyAndAwait(surveyQuestions)
     }
 
     suspend fun createSurveyQuestion(request: ServerRequest): ServerResponse {

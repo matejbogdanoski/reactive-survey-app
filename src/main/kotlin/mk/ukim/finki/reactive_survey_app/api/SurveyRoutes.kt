@@ -11,9 +11,9 @@ val surveyRoutes = beans {
         val handler = SurveyHandler(surveyService)
         coRouter {
             "/api/surveys".nest {
-                GET("/{id}", handler::findById)
                 GET("/my-surveys", handler::findAllSurveysByUserPageable)
                 GET("/my-surveys/count", handler::countAllSurveysByUser)
+                GET("/{id}", handler::findById)
                 POST("/", handler::createSurvey)
                 PATCH("/{surveyId}", handler::updateSurvey)
             }

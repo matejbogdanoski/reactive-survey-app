@@ -5,6 +5,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import mk.ukim.finki.reactive_survey_app.domain.User
 import mk.ukim.finki.reactive_survey_app.repository.UserRepository
+import mk.ukim.finki.reactive_survey_app.security.jwt.JwtTokenUtils
+import mk.ukim.finki.reactive_survey_app.security.jwt.dto.JwtAuthenticationResponse
 import mk.ukim.finki.reactive_survey_app.service.UserService
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Service
 @Service
 class UserServiceImpl(
         private val repository: UserRepository,
-        private val encoder: PasswordEncoder
+        private val encoder: PasswordEncoder,
+        private val util: JwtTokenUtils
 ) : UserService {
 
     override suspend fun createUser(username: String, password: String, email: String,
@@ -58,4 +61,18 @@ class UserServiceImpl(
     override suspend fun findById(userId: Long): User = repository.findById(userId)
             ?: throw NoSuchElementException("User with id $userId does not exist!")
 
+    override suspend fun token(username: String, password: String): JwtAuthenticationResponse {
+        val user = checkNotNull(findByUsername(username)) {
+            System.err.println("user not exist")
+            "User with username $username does not exist!"
+        }
+        if (encoder.matches(password, user.passwordHash)) {
+            return JwtAuthenticationResponse(token = util.generateToken(user), username = user.username)
+        } else {
+            System.err.println("wrong pass")
+            throw AccessDeniedException("Wrong password!")
+        }
+    }
+
+    override fun refreshToken(token: String): String = util.refreshToken(token)
 }

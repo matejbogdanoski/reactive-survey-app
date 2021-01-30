@@ -1,10 +1,9 @@
 package mk.ukim.finki.reactive_survey_app.service
 
+import kotlinx.coroutines.flow.Flow
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInvitation
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 interface SurveyInvitationManagingService {
-    suspend fun createSurveyInvitation(creator: Long, surveyId: Long, username: String): Mono<SurveyInvitation>
-    fun findInvitationsBySurvey(surveyId: Long, initiatedBy: Long): Flux<SurveyInvitation>
+    suspend fun createSurveyInvitation(creator: Long, surveyId: Long, username: String): SurveyInvitation
+    suspend fun findInvitationsBySurvey(surveyId: Long, initiatedBy: Long): Flow<SurveyInvitation>
 }

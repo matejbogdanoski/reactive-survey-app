@@ -1,16 +1,15 @@
 package mk.ukim.finki.reactive_survey_app.service
 
+import kotlinx.coroutines.flow.Flow
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import java.time.ZonedDateTime
 
 interface SurveyInstanceService {
-    fun create(surveyId: Long, takenBy: Long, dateTaken: ZonedDateTime): Mono<SurveyInstance>
-    fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstance>
-    fun countAllBySurveyId(surveyId: Long): Mono<Int>
-    fun findById(surveyInstanceId: Long): Mono<SurveyInstance>
-    fun findById(surveyInstanceId: Long, initiatedBy: Long): Mono<SurveyInstance>
-    fun findAllTakenByPage(takenBy: Long, size: Int, page: Int): Flux<SurveyInstance>
-    fun countAllTakenBy(takenBy: Long): Mono<Int>
+    suspend fun create(surveyId: Long, takenBy: Long, dateTaken: ZonedDateTime): SurveyInstance
+    fun findAllBySurveyId(surveyId: Long): Flow<SurveyInstance>
+    suspend fun countAllBySurveyId(surveyId: Long): Int
+    suspend fun findById(surveyInstanceId: Long): SurveyInstance
+    suspend fun findById(surveyInstanceId: Long, initiatedBy: Long): SurveyInstance
+    fun findAllTakenByPage(takenBy: Long, size: Int, page: Int): Flow<SurveyInstance>
+    suspend fun countAllTakenBy(takenBy: Long): Int
 }

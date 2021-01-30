@@ -1,42 +1,46 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
+import kotlinx.coroutines.flow.Flow
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
 import mk.ukim.finki.reactive_survey_app.repository.SurveyInstanceRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyInstanceService
-import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
 import org.springframework.data.domain.PageRequest
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import java.time.ZonedDateTime
 
 @Service
 class SurveyInstanceServiceImpl(
-        private val repository: SurveyInstanceRepository
+    private val repository: SurveyInstanceRepository
 ) : SurveyInstanceService {
 
-    override fun create(surveyId: Long, takenBy: Long,
-                        dateTaken: ZonedDateTime): Mono<SurveyInstance> = repository.save(
+    override suspend fun create(surveyId: Long, takenBy: Long, dateTaken: ZonedDateTime): SurveyInstance =
+        repository.save(
             SurveyInstance(
-                    id = null,
-                    takenBy = takenBy,
-                    surveyId = surveyId,
-                    dateTaken = ZonedDateTime.now())
-    )
+                id = null,
+                surveyId = surveyId,
+                takenBy = takenBy,
+                dateTaken = dateTaken
+            )
+        )
 
-    override fun findAllBySurveyId(surveyId: Long): Flux<SurveyInstance> = repository.findAllBySurveyId(surveyId)
+    override fun findAllBySurveyId(surveyId: Long): Flow<SurveyInstance> = repository.findAllBySurveyId(surveyId)
 
-    override fun countAllBySurveyId(surveyId: Long): Mono<Int> = repository.countBySurveyId(surveyId)
+    override suspend fun countAllBySurveyId(surveyId: Long): Int = repository.countBySurveyId(surveyId)
 
-    override fun findById(surveyInstanceId: Long): Mono<SurveyInstance> = repository.findById(surveyInstanceId)
+    override suspend fun findById(surveyInstanceId: Long): SurveyInstance = repository.findById(surveyInstanceId)
+        ?: throw NoSuchElementException("Survey instance with id $surveyInstanceId does not exist!")
 
-    override fun findById(surveyInstanceId: Long, initiatedBy: Long): Mono<SurveyInstance> =
-            repository.findById(surveyInstanceId).let { surveyInstanceMono ->
-                AccessValidator.validateCanViewSurveyInstance(surveyInstanceMono, initiatedBy)
-            }
+    override suspend fun findById(surveyInstanceId: Long, initiatedBy: Long): SurveyInstance {
+        val surveyInstance = repository.findById(surveyInstanceId)
+        if (surveyInstance?.takenBy != initiatedBy)
+            throw AccessDeniedException("You do not have access to this survey instance!")
+        return surveyInstance
+    }
 
-    override fun findAllTakenByPage(takenBy: Long, size: Int, page: Int): Flux<SurveyInstance> =
-            repository.findAllByTakenBy(takenBy, PageRequest.of(page, size))
+    override fun findAllTakenByPage(takenBy: Long, size: Int, page: Int): Flow<SurveyInstance> =
+        repository.findAllByTakenBy(takenBy, PageRequest.of(page, size))
 
-    override fun countAllTakenBy(takenBy: Long): Mono<Int> = repository.countByTakenBy(takenBy)
+    override suspend fun countAllTakenBy(takenBy: Long): Int = repository.countByTakenBy(takenBy)
+
 }
