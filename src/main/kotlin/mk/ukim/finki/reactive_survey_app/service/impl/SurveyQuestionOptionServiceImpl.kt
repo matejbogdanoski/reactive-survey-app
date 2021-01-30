@@ -1,5 +1,7 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.reactive.asFlow
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestionOption
 import mk.ukim.finki.reactive_survey_app.repository.SurveyQuestionOptionRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionOptionService
@@ -14,16 +16,16 @@ class SurveyQuestionOptionServiceImpl(
 ) : SurveyQuestionOptionService {
 
     override fun findAllBySurveyQuestionId(
-            surveyQuestionId: Long): Flux<SurveyQuestionOption> = repository.findAllBySurveyQuestionId(surveyQuestionId,
-                                                                                                       Sort.by("position"))
+            surveyQuestionId: Long): Flux<SurveyQuestionOption> =
+            repository.findAllBySurveyQuestionId(surveyQuestionId, Sort.by("position"))
 
     override fun createSurveyQuestionOption(surveyQuestionId: Long): Mono<SurveyQuestionOption> =
             repository.findMaxPosition(surveyQuestionId).flatMap {
                 repository.save(
                         SurveyQuestionOption(id = null,
-                                             surveyQuestionId = surveyQuestionId,
-                                             label = "Option ${it.plus(1)}",
-                                             position = it.plus(1))
+                                surveyQuestionId = surveyQuestionId,
+                                label = "Option ${it.plus(1)}",
+                                position = it.plus(1))
                 )
             }
 
@@ -43,8 +45,9 @@ class SurveyQuestionOptionServiceImpl(
             optionId)
 
     override fun duplicateAllBySurveyQuestionId(fromSurveyQuestionId: Long,
-                                                toSurveyQuestionId: Long): Flux<SurveyQuestionOption> =
+                                                toSurveyQuestionId: Long): Flow<SurveyQuestionOption> =
             repository.findAllBySurveyQuestionId(fromSurveyQuestionId).flatMap {
                 repository.save(it.copy(id = null, surveyQuestionId = toSurveyQuestionId))
-            }
+                //todo: change this
+            }.asFlow()
 }
