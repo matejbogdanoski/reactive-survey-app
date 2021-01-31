@@ -1,17 +1,17 @@
 package mk.ukim.finki.reactive_survey_app.service
 
+import kotlinx.coroutines.flow.Flow
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion
-import mk.ukim.finki.reactive_survey_app.requests.SurveyQuestionUpdateRequest
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 
 interface SurveyQuestionService {
-    fun findAllBySurveyId(surveyId: Long): Flux<SurveyQuestion>
-    fun createSurveyQuestion(surveyId: Long): Mono<SurveyQuestion>
-    fun deleteSurveyQuestion(surveyQuestionId: Long): Mono<Void>
-    fun editSurveyQuestionInfo(surveyQuestionId: Long, request: SurveyQuestionUpdateRequest): Mono<SurveyQuestion>
-    fun duplicateSurveyQuestion(surveyId: Long, surveyQuestionId: Long): Mono<SurveyQuestion>
-    fun updateSurveyQuestionPosition(surveyQuestionId: Long, newPosition: Int): Mono<SurveyQuestion>
-    fun findById(questionId: Long): Mono<SurveyQuestion>
+    fun findAllBySurveyId(surveyId: Long): Flow<SurveyQuestion>
+    suspend fun createSurveyQuestion(surveyId: Long): SurveyQuestion
+    suspend fun deleteSurveyQuestion(surveyQuestionId: Long)
+    suspend fun editSurveyQuestionInfo(surveyQuestionId: Long, questionType: String?,
+                                       name: String?, isRequired: Boolean?): SurveyQuestion
+
+    suspend fun duplicateSurveyQuestion(surveyId: Long, surveyQuestionId: Long): SurveyQuestion
+    suspend fun updateSurveyQuestionPosition(surveyQuestionId: Long, newPosition: Int): SurveyQuestion
+    suspend fun findById(questionId: Long): SurveyQuestion
 }

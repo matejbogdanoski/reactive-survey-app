@@ -1,5 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.security
 
+import kotlinx.coroutines.reactor.mono
 import mk.ukim.finki.reactive_survey_app.security.dto.UserDetailsDto
 import mk.ukim.finki.reactive_survey_app.service.UserService
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
@@ -12,11 +13,14 @@ class ReactiveUserDetailsService(
         private val userService: UserService
 ) : ReactiveUserDetailsService {
 
-    override fun findByUsername(username: String?): Mono<UserDetails> =
-            username?.let(userService::findByUsername)?.map { user ->
-                UserDetailsDto(userName = user.username,
-                               passwordHash = user.passwordHash,
-                               userId = user.id!!)
-            } ?: Mono.empty()
+    override fun findByUsername(username: String?): Mono<UserDetails> = mono {
+        username?.let { userService.findByUsername(it) }
+                ?.let {
+                    UserDetailsDto(userName = it.username,
+                            passwordHash = it.passwordHash,
+                            userId = it.id!!)
+                }
+    }
+
 }
 

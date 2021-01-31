@@ -1,5 +1,7 @@
 package mk.ukim.finki.reactive_survey_app.mappers
 
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import mk.ukim.finki.reactive_survey_app.domain.QuestionAnswer
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
 import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
@@ -11,64 +13,52 @@ import mk.ukim.finki.reactive_survey_app.service.QuestionAnswerService
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
 import mk.ukim.finki.reactive_survey_app.service.SurveyService
 import org.springframework.stereotype.Component
-import reactor.core.publisher.Mono
 
 @Component
 class SurveyInstanceMapper(
-        private val questionAnswerService: QuestionAnswerService,
-        private val questionService: SurveyQuestionService,
-        private val surveyService: SurveyService,
-        private val rendererMapper: SurveyRendererMapper
+    private val questionAnswerService: QuestionAnswerService,
+    private val questionService: SurveyQuestionService,
+    private val surveyService: SurveyService,
+    private val rendererMapper: SurveyRendererMapper
 ) {
 
-    fun mapSurveyInstanceToResponse(surveyInstance: SurveyInstance): Mono<SurveyInstanceResponse> = with(
-            mapSurveyInstanceToResponseStatic(surveyInstance)) {
-        questionAnswerService.findAllAnswersByInstanceId(id)
-                .flatMap(::mapQuestionAnswerToResponse)
-                .collectList()
-                .map { copy(questionAnswers = it) }
-    }
-
-
-    fun mapQuestionAnswerToResponse(questionAnswer: QuestionAnswer): Mono<QuestionAnswerResponse> = with(
-            mapQuestionAnswerToResponseStatic(questionAnswer)) {
-        questionService.findById(questionAnswer.surveyQuestionId).map {
-            copy(questionId = it.id!!,
-                 questionName = it.name ?: "",
-                 questionType = QuestionType.values()[it.questionTypeId.toInt()].name)
+    suspend fun mapSurveyInstanceToResponse(surveyInstance: SurveyInstance): SurveyInstanceResponse =
+        with(surveyInstance) {
+            SurveyInstanceResponse(
+                id = id!!,
+                dateTaken = dateTaken.toString(),
+                questionAnswers = questionAnswerService.findAllAnswersByInstanceId(id)
+                    .map(::mapQuestionAnswerToResponse).toList()
+            )
         }
+
+
+    suspend fun mapQuestionAnswerToResponse(questionAnswer: QuestionAnswer): QuestionAnswerResponse {
+        val question = questionService.findById(questionAnswer.surveyQuestionId)
+        return QuestionAnswerResponse(
+            questionId = question.id!!,
+            questionName = question.name.orEmpty(),
+            answer = questionAnswer.answer,
+            questionType = QuestionType.values()[question.questionTypeId.toInt()].name
+        )
     }
 
-    fun mapSurveyInstanceToPreviewResponse(surveyInstance: SurveyInstance): Mono<SurveyInstancePreview> {
-        val surveyInstanceMono = mapSurveyInstanceToResponse(surveyInstance)
-        val renderer = surveyService.findById(surveyInstance.surveyId).flatMap(rendererMapper::mapSurveyToResponse)
-        return surveyInstanceMono.zipWith(renderer).map {
-            SurveyInstancePreview(survey = it.t2, surveyInstance = it.t1)
-        }
+    suspend fun mapSurveyInstanceToPreviewResponse(surveyInstance: SurveyInstance): SurveyInstancePreview {
+        val surveyInstanceResponse = mapSurveyInstanceToResponse(surveyInstance)
+        val survey = surveyService.findById(surveyInstance.surveyId)
+        return SurveyInstancePreview(
+            survey = rendererMapper.mapSurveyToResponse(survey),
+            surveyInstance = surveyInstanceResponse
+        )
     }
 
-    fun mapSurveyInstanceToGridResponse(surveyInstance: SurveyInstance) = with(
-            mapSurveyInstanceToGridResponseStatic(surveyInstance)) {
-        surveyService.findById(surveyInstance.surveyId).map { copy(surveyTitle = it.title!!) }
-    }
-
-    private fun mapSurveyInstanceToGridResponseStatic(surveyInstance: SurveyInstance) = with(surveyInstance) {
-        SurveyInstanceGridResponse(id = id!!,
-                                   surveyTitle = "",
-                                   dateTaken = dateTaken)
-    }
-
-    private fun mapSurveyInstanceToResponseStatic(surveyInstance: SurveyInstance) = with(surveyInstance) {
-        SurveyInstanceResponse(id = id!!,
-                               dateTaken = dateTaken.toString(),
-                               questionAnswers = listOf())
-    }
-
-    private fun mapQuestionAnswerToResponseStatic(questionAnswer: QuestionAnswer) = with(questionAnswer) {
-        QuestionAnswerResponse(questionId = 0,
-                               questionName = "",
-                               answer = answer,
-                               questionType = "")
+    suspend fun mapSurveyInstanceToGridResponse(surveyInstance: SurveyInstance): SurveyInstanceGridResponse {
+        val survey = surveyService.findById(surveyInstance.surveyId)
+        return SurveyInstanceGridResponse(
+            id = surveyInstance.id!!,
+            surveyTitle = survey.title.orEmpty(),
+            dateTaken = surveyInstance.dateTaken
+        )
     }
 
 }

@@ -1,5 +1,6 @@
 package mk.ukim.finki.reactive_survey_app
 
+import mk.ukim.finki.reactive_survey_app.api.apiRoutes
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import reactor.blockhound.BlockHound
@@ -19,6 +20,11 @@ fun main(args: Array<String>) {
                                     "getAllClaimsFromToken")
         it.allowBlockingCallsInside("com.fasterxml.jackson.module.kotlin.KotlinNamesAnnotationIntrospector",
                                     "hasCreatorAnnotation")
+        it.allowBlockingCallsInside("kotlinx.coroutines.reactive.ReactiveFlowKt", "<clinit>")
     })
-    runApplication<ReactiveSurveyAppApplication>(*args)
+    runApplication<ReactiveSurveyAppApplication>(*args) {
+        addInitializers(
+                *apiRoutes
+        )
+    }
 }

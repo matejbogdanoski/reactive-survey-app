@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.spring") version "1.3.72"
 }
 
+val coroutinesVersion = "1.4.2"
 group = "mk.ukim.finki"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
@@ -24,7 +25,9 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${coroutinesVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:${coroutinesVersion}")
     implementation("org.flywaydb:flyway-core")
     implementation("io.r2dbc:r2dbc-spi")
     implementation("io.r2dbc:r2dbc-postgresql")

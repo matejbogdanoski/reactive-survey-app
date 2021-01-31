@@ -1,15 +1,14 @@
 package mk.ukim.finki.reactive_survey_app.service
 
+import kotlinx.coroutines.flow.Flow
 import mk.ukim.finki.reactive_survey_app.domain.Survey
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 interface SurveyService {
-    fun findOneByNaturalKey(naturalKey: String): Mono<Survey>
-    fun findById(id: Long, initiatedBy: Long): Mono<Survey>
-    fun findById(id: Long): Mono<Survey>
-    fun createSurvey(createdBy: Long): Mono<Survey>
-    fun updateSurvey(id: Long, title: String?, description: String?, canTakeAnonymously: Boolean?): Mono<Survey>
-    fun findAllCreatedByPage(createdBy: Long, page: Int, size: Int): Flux<Survey>
-    fun countAllCreatedBy(createdBy: Long): Mono<Int>
+    suspend fun findOneByNaturalKey(naturalKey: String): Survey
+    suspend fun findById(id: Long, initiatedBy: Long): Survey
+    suspend fun findById(id: Long): Survey
+    suspend fun createSurvey(createdBy: Long): Survey
+    suspend fun updateSurvey(id: Long, title: String?, description: String?, canTakeAnonymously: Boolean?): Survey
+    fun findAllCreatedByPage(createdBy: Long, page: Int, size: Int): Flow<Survey>
+    suspend fun countAllCreatedBy(createdBy: Long): Int
 }

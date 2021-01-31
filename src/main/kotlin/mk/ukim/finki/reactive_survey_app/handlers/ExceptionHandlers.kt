@@ -1,4 +1,4 @@
-package mk.ukim.finki.reactive_survey_app.api
+package mk.ukim.finki.reactive_survey_app.handlers
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

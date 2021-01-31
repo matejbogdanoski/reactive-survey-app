@@ -1,43 +1,49 @@
 package mk.ukim.finki.reactive_survey_app.service.impl
 
+import kotlinx.coroutines.flow.Flow
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInvitation
 import mk.ukim.finki.reactive_survey_app.repository.SurveyInvitationRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyInvitationService
-import mk.ukim.finki.reactive_survey_app.validators.AccessValidator
 import org.springframework.data.domain.PageRequest
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 @Service
 class SurveyInvitationServiceImpl(
-        private val repository: SurveyInvitationRepository
+    private val repository: SurveyInvitationRepository
 ) : SurveyInvitationService {
 
-    override fun createInvitation(surveyMono: Mono<Survey>, creator: Long, userId: Long): Mono<SurveyInvitation> =
-            AccessValidator.validateCanCreateSurveyInvitation(creator, surveyMono).flatMap {
-                repository.save(SurveyInvitation(id = null,
-                                                 surveyId = it.id!!,
-                                                 userId = userId,
-                                                 taken = false))
-            }
+    override suspend fun createInvitation(survey: Survey, creator: Long, userId: Long): SurveyInvitation {
+        if (creator != survey.createdBy)
+            throw AccessDeniedException("You cannot send invitation for a survey that you didn't create!")
+        return repository.save(
+            SurveyInvitation(
+                id = null,
+                surveyId = survey.id!!,
+                userId = userId,
+                taken = false
+            )
+        )
+    }
 
-    override fun findInvitationsBySurvey(surveyMono: Mono<Survey>, initiatedBy: Long): Flux<SurveyInvitation> =
-            AccessValidator.validateCanViewSurveyInvitations(surveyMono, initiatedBy)
-                    .flatMapMany { repository.findAllBySurveyId(it.id!!) }
+    override fun findInvitationsBySurvey(survey: Survey, initiatedBy: Long): Flow<SurveyInvitation> {
+        if (survey.createdBy != initiatedBy)
+            throw AccessDeniedException("You cannot view invitations for a survey that you didn't create!")
+        return repository.findAllBySurveyId(survey.id!!)
+    }
 
-    override fun findInvitationsBySurveyNaturalKey(naturalKey: String): Flux<SurveyInvitation> =
-            repository.findAllBySurveyNaturalKey(naturalKey)
+    override fun findInvitationsBySurveyNaturalKey(naturalKey: String): Flow<SurveyInvitation> =
+        repository.findAllBySurveyNaturalKey(naturalKey)
 
-    override fun findInvitationsBySurveyId(surveyId: Long): Flux<SurveyInvitation> = repository.findAllBySurveyId(
-            surveyId)
+    override fun findInvitationsBySurveyId(surveyId: Long): Flow<SurveyInvitation> =
+        repository.findAllBySurveyId(surveyId)
 
-    override fun findSurveyInvitationsPage(userId: Long, page: Int, size: Int): Flux<SurveyInvitation> =
-            repository.findAllByUserIdAndTaken(userId, false, PageRequest.of(page, size))
+    override fun findSurveyInvitationsPage(userId: Long, page: Int, size: Int): Flow<SurveyInvitation> =
+        repository.findAllByUserIdAndTaken(userId, false, PageRequest.of(page, size))
 
-    override fun countAllByUserId(userId: Long): Mono<Int> = repository.countAllByUserId(userId)
+    override suspend fun countAllByUserId(userId: Long): Int = repository.countAllByUserId(userId)
 
-    override fun markAsTaken(surveyId: Long, userId: Long): Mono<Int> = repository.markAsTaken(surveyId, userId)
+    override suspend fun markAsTaken(surveyId: Long, userId: Long): Int = repository.markAsTaken(surveyId, userId)
 
 }
