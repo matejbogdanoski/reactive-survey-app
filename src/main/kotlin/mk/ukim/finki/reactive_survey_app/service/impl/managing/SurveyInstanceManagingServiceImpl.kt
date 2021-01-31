@@ -1,9 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.service.impl.managing
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import mk.ukim.finki.reactive_survey_app.constants.PostgresNotificationNames.ANSWER_SAVED_NOTIFICATION
@@ -32,7 +29,7 @@ class SurveyInstanceManagingServiceImpl(
         val survey = surveyService.findById(surveyId)
         AccessValidator.validateCanCreateSurveyInstance(survey, invitations, takenBy)
         val surveyInstance = surveyInstanceService.create(survey.id!!, takenBy, ZonedDateTime.now())
-        questionAnswerService.bulkCreateQuestionAnswers(questionAnswerMap, surveyInstance.id!!)
+        questionAnswerService.bulkCreateQuestionAnswers(questionAnswerMap, surveyInstance.id!!).collect()
         surveyInvitationService.markAsTaken(survey.id, takenBy)
         return surveyInstance
     }
