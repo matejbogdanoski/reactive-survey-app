@@ -1,5 +1,14 @@
-create schema if not exists survey;
+create schema if not exists access;
+create table access.users (
+    id bigserial primary key,
+    username text not null unique,
+    email text not null,
+    first_name text,
+    last_name text,
+    password_hash text
+);
 
+create schema if not exists survey;
 create table survey.surveys (
     id bigserial primary key,
     title text,
@@ -7,7 +16,7 @@ create table survey.surveys (
     natural_key text not null unique default uuid_in(
             overlay(overlay(md5(random()::text || ':' || clock_timestamp()::text) placing '4' from 13) placing
                     to_hex(floor(random() * (11 - 8 + 1) + 8)::int)::text from 17)::cstring)::text,
-    can_take_anonymously boolean not null default false
+    created_by bigint references access.users(id)
 );
 
 create table survey.question_types (
@@ -42,18 +51,39 @@ create table survey.survey_question_options (
 
 create table survey.survey_instances (
     id bigserial primary key,
-    survey_id bigint references survey.surveys(id) not null,
-    data jsonb
+    survey_id bigint references survey.surveys(id),
+    taken_by bigint references access.users(id),
+    date_taken timestamp with time zone
 );
 
-----test survey
-insert into survey.surveys(title, description, can_take_anonymously)
-values ('Test survey', 'Survey Description', true);
+create table survey.question_answers(
+    id bigserial primary key,
+    survey_question_id bigint references survey.survey_questions(id) not null,
+    answer text,
+    survey_instance_id bigint references survey.survey_instances(id)
+);
 
-insert into survey.survey_questions(survey_id, question_type_id, name, position, is_required)
-VALUES ((select id from survey.surveys s where s.title = 'Test survey'), 0, 'Question 1', 1, false),
-((select id from survey.surveys s where s.title = 'Test survey'), 2, 'Question 2', 2, false);
+create table survey.survey_invitations (
+    id bigserial,
+    survey_id bigint references survey.surveys(id),
+    user_id bigint references access.users(id),
+    taken bool default false
+);
 
-insert into survey.survey_question_options(label, position, survey_question_id)
-values ('Option 1', 1, (select id from survey.survey_questions where name = 'Question 2')),
-('Option 2', 2, (select id from survey.survey_questions where name = 'Question 2'));
+--notification
+CREATE OR REPLACE FUNCTION notify_event() RETURNS TRIGGER AS
+$$
+DECLARE
+    payload JSON;
+BEGIN
+    payload = row_to_json(NEW);
+    PERFORM pg_notify('answer_saved_notification', payload::text);
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;;
+
+CREATE TRIGGER notify_login_event
+    AFTER INSERT OR UPDATE OR DELETE
+    ON survey.question_answers
+    FOR EACH ROW
+EXECUTE PROCEDURE notify_event();;

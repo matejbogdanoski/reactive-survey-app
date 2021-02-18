@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 import mk.ukim.finki.reactive_survey_app.constants.PostgresNotificationNames.ANSWER_SAVED_NOTIFICATION
 import mk.ukim.finki.reactive_survey_app.domain.SurveyInstance
 import mk.ukim.finki.reactive_survey_app.domain.dto.AnswerDTO
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
+import mk.ukim.finki.reactive_survey_app.domain.enums.QuestionType
 import mk.ukim.finki.reactive_survey_app.helper.PostgresNotificationListener
 import mk.ukim.finki.reactive_survey_app.service.*
 import mk.ukim.finki.reactive_survey_app.validators.AccessValidator

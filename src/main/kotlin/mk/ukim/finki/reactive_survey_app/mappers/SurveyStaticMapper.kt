@@ -3,7 +3,7 @@ package mk.ukim.finki.reactive_survey_app.mappers
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestionOption
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
+import mk.ukim.finki.reactive_survey_app.domain.enums.QuestionType
 import mk.ukim.finki.reactive_survey_app.responses.SurveyQuestionOptionResponse
 import mk.ukim.finki.reactive_survey_app.responses.SurveyQuestionResponse
 import mk.ukim.finki.reactive_survey_app.responses.SurveyResponse

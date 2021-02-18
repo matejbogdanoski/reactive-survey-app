@@ -3,7 +3,7 @@ package mk.ukim.finki.reactive_survey_app.service.impl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
+import mk.ukim.finki.reactive_survey_app.domain.enums.QuestionType
 import mk.ukim.finki.reactive_survey_app.repository.SurveyQuestionRepository
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
 import org.springframework.data.domain.Sort

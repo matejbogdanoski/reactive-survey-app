@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
+import mk.ukim.finki.reactive_survey_app.domain.enums.QuestionType
 import mk.ukim.finki.reactive_survey_app.mappers.SurveyStaticMapper.mapSurveyQuestionOptionToResponseStatic
 import mk.ukim.finki.reactive_survey_app.responses.renderer.SurveyQuestionRendererResponse
 import mk.ukim.finki.reactive_survey_app.responses.renderer.SurveyRendererResponse

@@ -1,6 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.responses.renderer
 
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
+import mk.ukim.finki.reactive_survey_app.domain.enums.QuestionType
 import mk.ukim.finki.reactive_survey_app.responses.SurveyQuestionOptionResponse
 
 data class SurveyQuestionRendererResponse(

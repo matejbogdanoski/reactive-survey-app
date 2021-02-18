@@ -1,4 +1,4 @@
-package mk.ukim.finki.reactive_survey_app.domain.enum
+package mk.ukim.finki.reactive_survey_app.domain.enums
 
 enum class QuestionType {
     SHORT_TEXT,

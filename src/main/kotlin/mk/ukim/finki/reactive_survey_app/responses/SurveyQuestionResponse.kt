@@ -1,6 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.responses
 
-import mk.ukim.finki.reactive_survey_app.domain.enum.QuestionType
+import mk.ukim.finki.reactive_survey_app.domain.enums.QuestionType
 
 data class SurveyQuestionResponse(
         val id: Long,
