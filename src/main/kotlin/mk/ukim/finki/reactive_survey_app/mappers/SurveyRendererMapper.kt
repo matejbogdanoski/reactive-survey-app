@@ -33,7 +33,7 @@ class SurveyRendererMapper(
     suspend fun mapSurveyQuestionToResponse(surveyQuestion: SurveyQuestion): SurveyQuestionRendererResponse =
             with(surveyQuestion) {
                 SurveyQuestionRendererResponse(id = id!!,
-                        questionType = QuestionType.values()[questionTypeId.toInt()],
+                        questionType = QuestionType.fromOrdinal(questionTypeId.toInt()),
                         options = surveyQuestionOptionService.findAllBySurveyQuestionId(id)
                                 .map(::mapSurveyQuestionOptionToResponseStatic).toList(),
                         name = name,

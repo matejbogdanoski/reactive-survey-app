@@ -44,7 +44,7 @@ class SurveyInstanceManagingServiceImpl(
                     }.map { answerDto ->
                         val question = surveyQuestionService.findById(answerDto.surveyQuestionId)
                         answerDto.copy(questionName = question.name,
-                                questionType = QuestionType.values()[question.questionTypeId.toInt()].name)
+                                questionType = QuestionType.fromOrdinal(question.questionTypeId.toInt()).name)
                     }
 
     override fun findAllBySurveyId(surveyId: Long): Flow<SurveyInstance> =

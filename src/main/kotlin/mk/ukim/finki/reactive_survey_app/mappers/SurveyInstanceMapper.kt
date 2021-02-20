@@ -39,7 +39,7 @@ class SurveyInstanceMapper(
             questionId = question.id!!,
             questionName = question.name.orEmpty(),
             answer = questionAnswer.answer,
-            questionType = QuestionType.values()[question.questionTypeId.toInt()].name
+            questionType = QuestionType.fromOrdinal(question.questionTypeId.toInt()).name
         )
     }
 

@@ -7,5 +7,9 @@ enum class QuestionType {
     CHECKBOX,
     DROPDOWN,
     DATE,
-    TIME
+    TIME;
+
+    companion object {
+        fun fromOrdinal(ordinal: Int) = values()[ordinal]
+    }
 }

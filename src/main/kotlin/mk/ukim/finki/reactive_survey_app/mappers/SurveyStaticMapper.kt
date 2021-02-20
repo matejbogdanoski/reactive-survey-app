@@ -19,7 +19,7 @@ object SurveyStaticMapper {
 
     fun mapSurveyQuestionToResponseStatic(surveyQuestion: SurveyQuestion) = with(surveyQuestion) {
         SurveyQuestionResponse(id = id!!,
-                               questionType = QuestionType.values()[questionTypeId.toInt()],
+                               questionType = QuestionType.fromOrdinal(questionTypeId.toInt()),
                                name = name,
                                position = position,
                                isRequired = isRequired)
