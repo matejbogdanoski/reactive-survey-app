@@ -1,6 +1,6 @@
 package mk.ukim.finki.reactive_survey_app.handlers
 
-import mk.ukim.finki.reactive_survey_app.mappers.UserMapper
+import mk.ukim.finki.reactive_survey_app.mappers.toInfoResponse
 import mk.ukim.finki.reactive_survey_app.requests.UpdatePasswordRequest
 import mk.ukim.finki.reactive_survey_app.requests.UserCreateRequest
 import mk.ukim.finki.reactive_survey_app.requests.UserInfoUpdateRequest
@@ -22,19 +22,20 @@ class UserHandler(
 
     suspend fun findUserInfo(request: ServerRequest): ServerResponse {
         val principal = request.activePrincipal()
-        val userInfo = service.findById(principal.userId).let(UserMapper::mapUserToUserInfoResponse)
+        val userInfo = service.findById(principal.userId).toInfoResponse()
         return ok().bodyValueAndAwait(userInfo)
     }
 
     suspend fun signup(request: ServerRequest): ServerResponse {
         val userCreateRequest = request.awaitBody<UserCreateRequest>()
-        return with(userCreateRequest) {
+        val user = with(userCreateRequest) {
             service.createUser(username = username,
-                    password = password,
-                    email = email,
-                    firstName = firstName,
-                    lastName = lastName)
-        }.let { ok().bodyValueAndAwait(it) }
+                               password = password,
+                               email = email,
+                               firstName = firstName,
+                               lastName = lastName)
+        }
+        return ok().bodyValueAndAwait(user)
     }
 
     suspend fun editUserInfo(request: ServerRequest): ServerResponse {
@@ -42,23 +43,24 @@ class UserHandler(
         val userInfoUpdateRequest = request.awaitBody<UserInfoUpdateRequest>()
         val id = request.pathVariable("id").toLong()
         val userInfo = service.editUserInfo(userId = id,
-                initiatedBy = principal.userId,
-                firstName = userInfoUpdateRequest.firstName,
-                lastName = userInfoUpdateRequest.lastName,
-                email = userInfoUpdateRequest.email).let(UserMapper::mapUserToUserInfoResponse)
+                                            initiatedBy = principal.userId,
+                                            firstName = userInfoUpdateRequest.firstName,
+                                            lastName = userInfoUpdateRequest.lastName,
+                                            email = userInfoUpdateRequest.email).toInfoResponse()
         return ok().bodyValueAndAwait(userInfo)
     }
 
     suspend fun updatePassword(request: ServerRequest): ServerResponse {
         val principal = request.activePrincipal()
         val updatePasswordRequest = request.awaitBody<UpdatePasswordRequest>()
-        return with(updatePasswordRequest) {
+        val authentication = with(updatePasswordRequest) {
             service.updateUserPassword(username = principal.username!!,
-                    oldPassword = oldPassword,
-                    newPassword = newPassword,
-                    confirmNewPassword = confirmNewPassword)
+                                       oldPassword = oldPassword,
+                                       newPassword = newPassword,
+                                       confirmNewPassword = confirmNewPassword)
             JwtAuthenticationResponse(token = tokenUtils.refreshToken(token), username = principal.username)
-        }.let { ok().bodyValueAndAwait(it) }
+        }
+        return ok().bodyValueAndAwait(authentication)
     }
 
 }

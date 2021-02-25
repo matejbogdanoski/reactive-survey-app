@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.toList
 import mk.ukim.finki.reactive_survey_app.domain.Survey
 import mk.ukim.finki.reactive_survey_app.domain.SurveyQuestion
 import mk.ukim.finki.reactive_survey_app.domain.enums.QuestionType
-import mk.ukim.finki.reactive_survey_app.mappers.SurveyStaticMapper.mapSurveyQuestionOptionToResponseStatic
 import mk.ukim.finki.reactive_survey_app.responses.renderer.SurveyQuestionRendererResponse
 import mk.ukim.finki.reactive_survey_app.responses.renderer.SurveyRendererResponse
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionOptionService
@@ -33,12 +32,12 @@ class SurveyRendererMapper(
     suspend fun mapSurveyQuestionToResponse(surveyQuestion: SurveyQuestion): SurveyQuestionRendererResponse =
             with(surveyQuestion) {
                 SurveyQuestionRendererResponse(id = id!!,
-                        questionType = QuestionType.fromOrdinal(questionTypeId.toInt()),
-                        options = surveyQuestionOptionService.findAllBySurveyQuestionId(id)
-                                .map(::mapSurveyQuestionOptionToResponseStatic).toList(),
-                        name = name,
-                        position = position,
-                        isRequired = isRequired)
+                                               questionType = QuestionType.fromOrdinal(questionTypeId.toInt()),
+                                               options = surveyQuestionOptionService.findAllBySurveyQuestionId(id)
+                                                       .map { it.toResponse() }.toList(),
+                                               name = name,
+                                               position = position,
+                                               isRequired = isRequired)
             }
 
 }

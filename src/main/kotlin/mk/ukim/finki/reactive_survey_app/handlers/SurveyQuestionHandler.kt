@@ -1,7 +1,7 @@
 package mk.ukim.finki.reactive_survey_app.handlers
 
 import kotlinx.coroutines.flow.map
-import mk.ukim.finki.reactive_survey_app.mappers.SurveyStaticMapper
+import mk.ukim.finki.reactive_survey_app.mappers.toResponse
 import mk.ukim.finki.reactive_survey_app.requests.SurveyQuestionUpdateRequest
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionManagingService
 import mk.ukim.finki.reactive_survey_app.service.SurveyQuestionService
@@ -14,23 +14,20 @@ class SurveyQuestionHandler(
 ) {
     suspend fun findAllBySurvey(request: ServerRequest): ServerResponse {
         val surveyId = request.pathVariable("surveyId").toLong()
-        val surveyQuestions = service.findAllBySurveyId(surveyId)
-                .map(SurveyStaticMapper::mapSurveyQuestionToResponseStatic)
+        val surveyQuestions = service.findAllBySurveyId(surveyId).map { it.toResponse() }
         return ok().bodyAndAwait(surveyQuestions)
     }
 
     suspend fun createSurveyQuestion(request: ServerRequest): ServerResponse {
         val surveyId = request.pathVariable("surveyId").toLong()
-        val surveyQuestion = service.createSurveyQuestion(surveyId)
-                .let(SurveyStaticMapper::mapSurveyQuestionToResponseStatic)
+        val surveyQuestion = service.createSurveyQuestion(surveyId).toResponse()
         return ok().bodyValueAndAwait(surveyQuestion)
     }
 
     suspend fun duplicateSurveyQuestion(request: ServerRequest): ServerResponse {
         val surveyId = request.pathVariable("surveyId").toLong()
         val surveyQuestionId = request.pathVariable("surveyQuestionId").toLong()
-        val duplicateQuestion = managing.duplicateQuestion(surveyId, surveyQuestionId)
-                .let(SurveyStaticMapper::mapSurveyQuestionToResponseStatic)
+        val duplicateQuestion = managing.duplicateQuestion(surveyId, surveyQuestionId).toResponse()
         return ok().bodyValueAndAwait(duplicateQuestion)
     }
 
@@ -44,15 +41,14 @@ class SurveyQuestionHandler(
                     name = name,
                     isRequired = isRequired,
             )
-        }.let(SurveyStaticMapper::mapSurveyQuestionToResponseStatic)
+        }.toResponse()
         return ok().bodyValueAndAwait(surveyQuestionResponse)
     }
 
     suspend fun updateSurveyQuestionPosition(request: ServerRequest): ServerResponse {
         val surveyQuestionId = request.pathVariable("surveyQuestionId").toLong()
         val newPosition = request.pathVariable("newPosition").toInt()
-        val surveyQuestionResponse = service.updateSurveyQuestionPosition(surveyQuestionId, newPosition)
-                .let(SurveyStaticMapper::mapSurveyQuestionToResponseStatic)
+        val surveyQuestionResponse = service.updateSurveyQuestionPosition(surveyQuestionId, newPosition).toResponse()
         return ok().bodyValueAndAwait(surveyQuestionResponse)
     }
 
