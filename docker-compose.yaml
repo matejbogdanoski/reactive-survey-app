@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  reactive-survey-app-postgres:
+    image: "postgres:12-alpine"
+    container_name: reactive-survey-app-postgres
+    volumes:
+    - survey-app-data:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
+    environment:
+      - POSTGRES_DB=reactive_survey
+      - POSTGRES_USER=reactive_survey
+      - POSTGRES_PASSWORD=reactive_survey
+
+  reactive-survey-app:
+    build: .
+    container_name: reactive-survey-app
+    environment:
+      - DB_SERVER=reactive-survey-app-postgres
+      - POSTGRES_DB=reactive_survey
+      - POSTGRES_USER=reactive_survey
+      - POSTGRES_PASSWORD=reactive_survey
+    ports:
+    - 8080:8080
+    depends_on:
+      - reactive-survey-app-postgres
+    links:
+      - reactive-survey-app-postgres
+
+  ng-reactive-survey:
+    build: ./ng-reactive-survey
+    container_name: ng-reactive-survey
+    ports:
+    - 4200:80
+    links:
+      - reactive-survey-app
+
+volumes:
+  survey-app-data:

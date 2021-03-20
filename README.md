@@ -1,4 +1,19 @@
-## How to start the app
+# How to start the app
+
+<details>
+<summary><h2 style='display: inline-block'>Start using Docker</h2></summary>
+
+### Prerequisites
+* docker
+* docker-compose
+### Run the app
+* Run in terminal:
+  ```
+  bash ./start-with-docker.sh
+  ```
+</details>
+
+<hr>
 
 ### Database
 * Install postgresql 12

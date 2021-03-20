@@ -1,12 +1,12 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost/reactive_survey
-    username: reactive_survey
-    password: reactive_survey
+    url: r2dbc:postgresql://${DB_SERVER}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   flyway:
-    url: jdbc:postgresql://localhost/reactive_survey
-    user: reactive_survey
-    password: reactive_survey
+    url: jdbc:postgresql://${DB_SERVER}/${POSTGRES_DB}
+    user: ${POSTGRES_PASSWORD}
+    password: ${POSTGRES_PASSWORD}
     baseline-on-migrate: true
 
 logging:

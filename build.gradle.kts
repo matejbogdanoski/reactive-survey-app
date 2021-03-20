@@ -44,8 +44,6 @@ dependencies {
 
     runtimeOnly("org.postgresql:postgresql")
 
-    implementation("io.projectreactor.tools:blockhound:1.0.4.RELEASE")
-
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
