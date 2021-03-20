@@ -1,7 +1,7 @@
 # How to start the app
 
 <details>
-<summary><h2 style='display: inline-block'>Start using Docker</h2></summary>
+<summary>Docker</summary>
 
 ### Prerequisites
 * docker
